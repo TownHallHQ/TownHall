@@ -7,7 +7,12 @@ edition = "2021"
 
 [dependencies]
 axum = "0.5.16"
+chrono = { version = "0.4.22", features = ["serde"] }
+dotenv = "0.15.0"
+rand = "0.8.5"
 serde = { version = "1.0.144", features = ["derive"] }
+sqlx = { version = "0.6.1", features = [ "chrono", "postgres", "runtime-tokio-rustls", "uuid" ] }
 tokio = { version = "1.21.0", features = ["rt", "rt-multi-thread", "macros"] }
 tracing = "0.1.36"
 tracing-subscriber = "0.3.15"
+uuid = { version = "1.1.2", features = ["serde"] }

@@ -13,6 +13,9 @@ async fn main() {
     tracing_subscriber::fmt::init();
 
     let config = config::Config::new();
+
+    let addr = SocketAddr::from(([127, 0, 0, 1], config.server_port));
+
     let context = context::Context::new(config).await;
 
     context.bootstrap().await;
@@ -21,7 +24,6 @@ async fn main() {
         .route("/:hash", get(handlers::redirect::redirect))
         .route("/new", post(handlers::create_link::create_link))
         .layer(Extension(context));
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())

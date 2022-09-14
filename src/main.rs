@@ -1,8 +1,9 @@
 mod config;
 mod context;
+mod entities;
 mod handlers;
 
-use axum::routing::post;
+use axum::routing::{get, post};
 use axum::{Extension, Router};
 use std::net::SocketAddr;
 
@@ -17,8 +18,9 @@ async fn main() {
     context.bootstrap().await;
 
     let app = Router::new()
-        .layer(Extension(context))
-        .route("/new", post(handlers::create_link::create_link));
+        .route("/:hash", get(handlers::redirect::redirect))
+        .route("/new", post(handlers::create_link::create_link))
+        .layer(Extension(context));
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
 
     axum::Server::bind(&addr)

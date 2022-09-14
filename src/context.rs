@@ -33,6 +33,9 @@ impl Context {
         let path = Path::new("./migrations");
         let migrator = Migrator::new(path).await.unwrap();
 
-        migrator.run(&self.db).await;
+        migrator
+            .run(&self.db)
+            .await
+            .expect("Failed to run migrations");
     }
 }

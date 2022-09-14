@@ -21,7 +21,7 @@ async fn main() {
         .route("/:hash", get(handlers::redirect::redirect))
         .route("/new", post(handlers::create_link::create_link))
         .layer(Extension(context));
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr = SocketAddr::from(([127, 0, 0, 1], &config.server_port));
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())

@@ -13,9 +13,7 @@ async fn main() {
     tracing_subscriber::fmt::init();
 
     let config = config::Config::new();
-
     let addr = SocketAddr::from(([127, 0, 0, 1], config.server_port));
-
     let context = context::Context::new(config).await;
 
     context.bootstrap().await;

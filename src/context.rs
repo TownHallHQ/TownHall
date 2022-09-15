@@ -1,41 +1,37 @@
-use sqlx::migrate::Migrator;
-use sqlx::postgres::PgPoolOptions;
-use sqlx::PgPool;
-use std::path::Path;
+use anyhow::{Error, Result};
+use sea_orm::{ConnectOptions, Database, DatabaseConnection};
+use std::time::Duration;
 
 use crate::config::Config;
 
 #[derive(Clone)]
 pub struct Context {
-    db: PgPool,
+    db: DatabaseConnection,
 }
 
 impl Context {
-    pub async fn new(config: Config) -> Self {
-        let db = PgPoolOptions::new()
-            .max_connections(10)
-            .connect(&config.database_url)
-            .await
-            .expect("Failed to establish a connection with the database");
+    pub async fn new(config: Config) -> Result<Self> {
+        let db = Self::make_database_connection(&config).await?;
 
-        Self { db }
+        Ok(Self { db })
     }
 
     pub async fn bootstrap(&self) {
-        self.run_migrations().await;
+        // self.bootstrap();
     }
 
-    pub fn conn(&self) -> PgPool {
-        self.db.clone()
-    }
+    async fn make_database_connection(config: &Config) -> Result<DatabaseConnection> {
+        let mut opt = ConnectOptions::new(config.database_url.clone());
 
-    async fn run_migrations(&self) {
-        let path = Path::new("./migrations");
-        let migrator = Migrator::new(path).await.unwrap();
+        opt.max_connections(100)
+            .min_connections(5)
+            .connect_timeout(Duration::from_secs(8))
+            .idle_timeout(Duration::from_secs(8))
+            .max_lifetime(Duration::from_secs(8))
+            .sqlx_logging(true);
 
-        migrator
-            .run(&self.db)
+        Database::connect(opt)
             .await
-            .expect("Failed to run migrations");
+            .map_err(|err| Error::msg(err.to_string()))
     }
 }

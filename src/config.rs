@@ -10,6 +10,9 @@ impl Config {
         let database_url = env::var("DATABASE_URL").unwrap();
         let server_port = env::var("PORT").unwrap().parse::<u16>().unwrap();
 
-        Self { database_url, server_port }
+        Self {
+            database_url,
+            server_port,
+        }
     }
 }

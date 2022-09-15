@@ -1,5 +1,5 @@
 use axum::http::Uri;
-use chrono::prelude::*;
+use chrono::{prelude::*, Duration};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
 use serde::Serialize;
@@ -21,8 +21,7 @@ impl Link {
             .take(16)
             .map(char::from)
             .collect::<String>();
-        let utc: DateTime<Utc> = Utc::now();
-
+        let utc: DateTime<Utc> = Utc::now() + Duration::days(10);
         let link = sqlx::query_as(
             r#"INSERT INTO links (
                 hash,
@@ -47,13 +46,19 @@ impl Link {
     }
 
     pub async fn get_by_hash(conn: PgPool, hash: &str) -> Option<Self> {
-        println!("{}", hash);
         // This actually fails silently because we are treating every possible
         // error as a none blindly.
         //
         // This must be improved in the future.
         sqlx::query_as(
-            r#"SELECT * FROM links WHERE "links".hash = $1
+            r#"
+            SELECT
+                *
+            FROM
+                links
+            WHERE
+                "links".hash = $1
+                AND NOW() < "links".expires_at
             "#,
         )
         .bind(hash)

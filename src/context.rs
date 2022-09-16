@@ -11,7 +11,7 @@ pub struct Context {
 }
 
 impl Context {
-    pub async fn new(config: Config) -> Self {
+    pub async fn new(config: &Config) -> Self {
         let db = PgPoolOptions::new()
             .max_connections(10)
             .connect(&config.database_url)

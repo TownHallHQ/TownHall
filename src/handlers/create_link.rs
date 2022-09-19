@@ -1,5 +1,4 @@
-use anyhow::{Error, Result};
-use axum::response::IntoResponse;
+use axum::http::StatusCode;
 use axum::{Extension, Json};
 use chrono::{prelude::*, Duration};
 use entity::Link;
@@ -11,6 +10,8 @@ use serde::{Deserialize, Serialize};
 use url::Url;
 
 use crate::context::Context;
+
+use super::{ApiError, Result};
 
 #[derive(Debug, Deserialize)]
 pub struct CreateLinkInput {
@@ -28,8 +29,11 @@ pub struct CreateLinkOutput {
 pub async fn create_link(
     ctx: Extension<Context>,
     Json(payload): Json<CreateLinkInput>,
-) -> impl IntoResponse {
-    let original_url = parse_url(&payload.url).unwrap();
+) -> std::result::Result<Json<CreateLinkOutput>, ApiError> {
+    if let Err(api_err) = parse_url(&payload.url) {
+        return Err(api_err);
+    }
+
     let expires_at: DateTime<Utc> = Utc::now() + Duration::days(10);
     let naive_expires_at = expires_at.naive_utc();
     let link = Link {
@@ -42,12 +46,12 @@ pub async fn create_link(
     };
     let link = link.save(&ctx.conn()).await.unwrap();
 
-    Json(CreateLinkOutput {
+    Ok(Json(CreateLinkOutput {
         id: link.id.unwrap(),
         hash: link.hash.unwrap(),
         original_url: link.original_url.unwrap(),
         expires_at,
-    })
+    }))
 }
 
 fn create_hash() -> String {
@@ -59,7 +63,12 @@ fn create_hash() -> String {
 }
 
 fn parse_url(raw: &str) -> Result<Url> {
-    Url::parse(raw).map_err(|_| Error::msg(format!("Provided URL is not valid: {}", raw)))
+    Url::parse(raw).map_err(|_| {
+        ApiError::new(
+            &format!("Provided URL is not valid: {}", raw),
+            StatusCode::BAD_REQUEST,
+        )
+    })
 }
 
 #[cfg(test)]

@@ -1,13 +1,13 @@
-use axum::body::Full;
-use axum::http::{Response, StatusCode};
+use axum::http::StatusCode;
 use axum::response::IntoResponse;
+use axum::Json;
 use serde::Serialize;
 
 pub mod create_link;
 
 pub type Result<T> = std::result::Result<T, ApiError>;
 
-#[derive(Debug, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct ApiError {
     message: String,
     status: u16,
@@ -33,10 +33,11 @@ impl From<anyhow::Error> for ApiError {
 
 impl IntoResponse for ApiError {
     fn into_response(self) -> axum::response::Response {
-        Response::builder()
-            .status(self.status)
-            .body(Full::from(self.message))
-            .unwrap()
-            .into_response()
+        let mut response = Json(self.clone()).into_response();
+
+        // Here we `unwrap` explicitly because the `status` is validated
+        // on `struct` initialization when calling (`ApiError::new`).
+        *response.status_mut() = StatusCode::from_u16(self.status).unwrap();
+        response
     }
 }

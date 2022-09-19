@@ -29,11 +29,8 @@ pub struct CreateLinkOutput {
 pub async fn create_link(
     ctx: Extension<Context>,
     Json(payload): Json<CreateLinkInput>,
-) -> std::result::Result<Json<CreateLinkOutput>, ApiError> {
-    if let Err(api_err) = parse_url(&payload.url) {
-        return Err(api_err);
-    }
-
+) -> Result<Json<CreateLinkOutput>> {
+    let _ = parse_url(&payload.url)?;
     let expires_at: DateTime<Utc> = Utc::now() + Duration::days(10);
     let naive_expires_at = expires_at.naive_utc();
     let link = Link {

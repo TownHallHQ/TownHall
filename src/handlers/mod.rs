@@ -1,2 +1,2 @@
 pub mod create_link;
-pub mod redirect;
+// pub mod redirect;

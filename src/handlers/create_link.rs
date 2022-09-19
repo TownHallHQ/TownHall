@@ -1,8 +1,13 @@
 use axum::http::Uri;
 use axum::response::IntoResponse;
 use axum::{Extension, Json};
-use entity::prelude::*;
-use serde::Deserialize;
+use chrono::{prelude::*, Duration};
+use entity::Link;
+use rand::distributions::Alphanumeric;
+use rand::Rng;
+use sea_orm::ActiveModelTrait;
+use sea_orm::ActiveValue::{NotSet, Set};
+use serde::{Deserialize, Serialize};
 
 use crate::context::Context;
 
@@ -11,10 +16,43 @@ pub struct CreateLinkInput {
     url: String,
 }
 
+#[derive(Debug, Serialize)]
+pub struct CreateLinkOutput {
+    id: i32,
+    hash: String,
+    original_url: String,
+    expires_at: DateTime<Utc>,
+}
+
 pub async fn create_link(
     ctx: Extension<Context>,
     Json(payload): Json<CreateLinkInput>,
 ) -> impl IntoResponse {
     let original_url = payload.url.parse::<Uri>().unwrap();
-    Json(link)
+    let expires_at: DateTime<Utc> = Utc::now() + Duration::days(10);
+    let naive_expires_at = expires_at.naive_utc();
+    let link = Link {
+        id: NotSet,
+        hash: Set(create_hash()),
+        original_url: Set(payload.url),
+        expires_at: Set(naive_expires_at),
+        created_at: NotSet,
+        updated_at: NotSet,
+    };
+    let link = link.save(&ctx.conn()).await.unwrap();
+
+    Json(CreateLinkOutput {
+        id: link.id.unwrap(),
+        hash: link.hash.unwrap(),
+        original_url: link.original_url.unwrap(),
+        expires_at,
+    })
+}
+
+fn create_hash() -> String {
+    rand::thread_rng()
+        .sample_iter(&Alphanumeric)
+        .take(16)
+        .map(char::from)
+        .collect::<String>()
 }

@@ -24,7 +24,13 @@ impl MigrationTrait for Migration {
                 Table::create()
                     .table(Link::Table)
                     .if_not_exists()
-                    .col(ColumnDef::new(Link::Id).uuid().not_null().primary_key())
+                    .col(
+                        ColumnDef::new(Link::Id)
+                            .integer()
+                            .not_null()
+                            .primary_key()
+                            .auto_increment(),
+                    )
                     .col(
                         ColumnDef::new(Link::Hash)
                             .string()
@@ -41,12 +47,14 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(Link::CreatedAt)
                             .timestamp_with_time_zone()
-                            .not_null(),
+                            .not_null()
+                            .extra(String::from("DEFAULT NOW()::timestamp")),
                     )
                     .col(
                         ColumnDef::new(Link::UpdatedAt)
                             .timestamp_with_time_zone()
-                            .not_null(),
+                            .not_null()
+                            .extra(String::from("DEFAULT NOW()::timestamp")),
                     )
                     .to_owned(),
             )

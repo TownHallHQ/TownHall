@@ -10,14 +10,14 @@ pub struct Context {
 }
 
 impl Context {
-    pub async fn new(config: Config) -> Result<Self> {
+    pub async fn new(config: &Config) -> Result<Self> {
         let db = Self::make_database_connection(&config).await?;
 
         Ok(Self { db })
     }
 
-    pub async fn bootstrap(&self) {
-        // self.bootstrap();
+    pub fn conn(&self) -> DatabaseConnection {
+        self.db.clone()
     }
 
     async fn make_database_connection(config: &Config) -> Result<DatabaseConnection> {

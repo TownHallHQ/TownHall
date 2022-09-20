@@ -20,7 +20,7 @@ async fn main() {
         .expect("Failed to build context.");
 
     let app = Router::new()
-        // .route("/:hash", get(handlers::redirect::redirect))
+        .route("/:hash", get(handlers::redirect::redirect))
         .route("/new", post(handlers::create_link::create_link))
         .layer(Extension(context))
         .layer(

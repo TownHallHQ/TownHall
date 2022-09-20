@@ -11,7 +11,7 @@ pub struct Context {
 
 impl Context {
     pub async fn new(config: &Config) -> Result<Self> {
-        let db = Self::make_database_connection(&config).await?;
+        let db = Self::make_database_connection(config).await?;
 
         Ok(Self { db })
     }

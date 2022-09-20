@@ -1,6 +1,5 @@
 mod config;
 mod context;
-mod entities;
 mod handlers;
 
 use axum::http::{header, HeaderValue, Method};
@@ -16,9 +15,9 @@ async fn main() {
 
     let config = config::Config::new();
     let addr = SocketAddr::from(([127, 0, 0, 1], config.server_port));
-    let context = context::Context::new(&config).await;
-
-    context.bootstrap().await;
+    let context = context::Context::new(&config)
+        .await
+        .expect("Failed to build context.");
 
     let app = Router::new()
         .route("/:hash", get(handlers::redirect::redirect))

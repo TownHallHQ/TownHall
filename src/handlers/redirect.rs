@@ -3,14 +3,18 @@ use axum::extract::Path;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Redirect, Response};
 use axum::Extension;
+use entity::link::Entity as Link;
+use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 
 use crate::context::Context;
-use crate::entities::link::Link;
 
 pub async fn redirect(ctx: Extension<Context>, Path(hash): Path<String>) -> impl IntoResponse {
-    let conn = ctx.conn();
-
-    if let Some(link) = Link::get_by_hash(conn, &hash).await {
+    if let Some(link) = Link::find()
+        .filter(entity::link::Column::Hash.eq(hash))
+        .one(&ctx.conn())
+        .await
+        .unwrap()
+    {
         return Redirect::to(&link.original_url).into_response();
     }
 

@@ -4,6 +4,7 @@ use axum::Json;
 use serde::Serialize;
 
 pub mod create_link;
+pub mod graphql;
 pub mod redirect;
 
 pub type Result<T> = std::result::Result<T, ApiError>;

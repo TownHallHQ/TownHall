@@ -3,17 +3,20 @@ use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 use std::time::Duration;
 
 use crate::config::Config;
+use crate::services::Services;
 
 #[derive(Clone)]
 pub struct Context {
     db: DatabaseConnection,
+    services: Services,
 }
 
 impl Context {
     pub async fn new(config: &Config) -> Result<Self> {
         let db = Self::make_database_connection(config).await?;
+        let services = Services::new(config);
 
-        Ok(Self { db })
+        Ok(Self { db, services })
     }
 
     pub fn conn(&self) -> DatabaseConnection {

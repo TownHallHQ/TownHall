@@ -1,7 +1,10 @@
 mod config;
 mod context;
+mod graphql;
 mod handlers;
+mod services;
 
+use async_graphql::{EmptyMutation, EmptySubscription, Schema};
 use axum::http::{header, HeaderValue, Method};
 use axum::routing::{get, post};
 use axum::{Extension, Router};
@@ -18,11 +21,16 @@ async fn main() {
     let context = context::Context::new(&config)
         .await
         .expect("Failed to build context.");
-
+    let schema = Schema::new(graphql::QueryRoot, EmptyMutation, EmptySubscription);
     let app = Router::new()
         .route("/:hash", get(handlers::redirect::redirect))
         .route("/new", post(handlers::create_link::create_link))
+        .route(
+            "/graphql",
+            get(handlers::graphql::playground).post(handlers::graphql::schema),
+        )
         .layer(Extension(context))
+        .layer(Extension(schema))
         .layer(
             CorsLayer::new()
                 .allow_origin(config.cors_allow_origin.parse::<HeaderValue>().unwrap())

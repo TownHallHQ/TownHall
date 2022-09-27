@@ -1,8 +1,19 @@
-use anyhow::Error;
+use anyhow::{Error, Result};
+use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
+use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
+const JWT_AUDIENCE: &str = "linx";
+
 /// JWT Token Abstaction
+#[derive(Debug)]
 pub struct Token(pub String);
+
+impl ToString for Token {
+    fn to_string(&self) -> String {
+        self.0.clone()
+    }
+}
 
 impl FromStr for Token {
     type Err = Error;
@@ -22,12 +33,50 @@ impl FromStr for Token {
 
 #[derive(Clone)]
 pub struct AuthService {
-    jwt_secret: String,
+    encoding_key: EncodingKey,
+    decoding_key: DecodingKey,
+    validation: Validation,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Claims {
+    pub aud: String,
+    pub exp: usize,
+    pub uid: String,
 }
 
 impl AuthService {
     pub fn new(jwt_secret: String) -> Self {
-        Self { jwt_secret }
+        let encoding_key = EncodingKey::from_secret(jwt_secret.as_bytes());
+        let decoding_key = DecodingKey::from_secret(jwt_secret.as_bytes());
+        let mut validation = Validation::new(Algorithm::HS256);
+
+        validation.set_audience(JWT_AUDIENCE.as_bytes());
+
+        Self {
+            encoding_key,
+            decoding_key,
+            validation,
+        }
+    }
+
+    pub fn sign_token(&self, uid: &str) -> Result<Token> {
+        let claims = Claims {
+            aud: String::from("linx"),
+            exp: 100_000_000,
+            uid: uid.into(),
+        };
+        let jwt = encode(&Header::default(), &claims, &self.encoding_key)
+            .map_err(|e| Error::msg(e.to_string()))?;
+
+        Ok(Token(jwt))
+    }
+
+    pub fn verify_token(&self, token: &Token) -> Result<Claims> {
+        let token_data = decode::<Claims>(&token.0, &self.decoding_key, &self.validation)
+            .map_err(|e| Error::msg(e.to_string()))?;
+
+        Ok(token_data.claims)
     }
 }
 

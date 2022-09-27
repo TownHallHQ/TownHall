@@ -1,14 +1,18 @@
 use anyhow::{Error, Result};
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
+use std::sync::Arc;
 use std::time::Duration;
 
 use crate::config::Config;
 use crate::services::Services;
 
+/// Wraps a `Context` into a `Arc` to allow sharing between treads
+pub type SharedContext = Arc<Context>;
+
 #[derive(Clone)]
 pub struct Context {
     db: DatabaseConnection,
-    services: Services,
+    pub services: Services,
 }
 
 impl Context {

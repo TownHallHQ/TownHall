@@ -4,11 +4,12 @@ mod graphql;
 mod handlers;
 mod services;
 
-use async_graphql::{EmptyMutation, EmptySubscription, Schema};
+use async_graphql::{EmptySubscription, Schema};
 use axum::http::{header, HeaderValue, Method};
 use axum::routing::{get, post};
 use axum::{Extension, Router};
 use std::net::SocketAddr;
+use std::sync::Arc;
 use tower_http::cors::CorsLayer;
 
 #[tokio::main]
@@ -21,7 +22,10 @@ async fn main() {
     let context = context::Context::new(&config)
         .await
         .expect("Failed to build context.");
-    let schema = Schema::new(graphql::QueryRoot, EmptyMutation, EmptySubscription);
+    let context = Arc::new(context);
+    let schema = Schema::build(graphql::QueryRoot, graphql::MutationRoot, EmptySubscription)
+        .data(Arc::clone(&context))
+        .finish();
     let app = Router::new()
         .route("/:hash", get(handlers::redirect::redirect))
         .route("/new", post(handlers::create_link::create_link))

@@ -1,14 +1,18 @@
 # linx
 Headless URL Shortener written in Rust
 
-## Getting Started
+## Development
 
 ### Requirements
 
 - [Rust](https://rustup.rs)
 - [Docker](https://docs.docker.com/engine/install/)
 
-### Development
+### Setup for Local Development
+
+Before running any of the further commands, being database management or
+executing the server for local development, its important you follow the
+following setup steps before.
 
 ```bash
 # clone this repository
@@ -22,13 +26,43 @@ cp .env.example .env
 
 # spawn a terminal with docker for postgresql
 docker compose up
-
-# spawn another terminal with `cargo run` when the database is ready for
-# connections
-cargo run
 ```
 
 > Note: As of today migrations runs when bootstrapping the server automatically
+
+### Database Management
+
+The following commands are used to manage the database used by linx. It's
+important to follow on the [Setup for Local Development](#setup-for-local-development) before.
+
+Command | Usage
+--- | ---
+`cargo run --bin migration -- up` | Run all pending migrations
+`cargo run --bin migration -- down` | Rollback last applied migrations
+`cargo run --bin migration -- status` | Check migrations status
+`cargo run --bin migration -- fresh` | Drops all tables and apply migrations
+`cargo run --bin migration -- reset` | Rollback all applied migrations
+`cargo run --bin migration -- refresh` | Rollback all migrations and reapply them
+
+### Entities
+
+Entities live in the `entity` crate. These are generated structs from the
+database state. To generate these structs you must have `sea-orm-cli` installed.
+
+> In future versions this no longer be required due to the availabilty of [this feature][1].
+
+Install `sea-orm-cli` if not yet installed:
+
+```bash
+cargo install sea-orm-cli
+```
+
+Finally run the `sea-orm-cli` providing the `-u` option with the database url.
+Make sure you run this command inside the `entity/src` directory.
+
+```bash
+sea-orm-cli generate entity -u postgresql://linx:linx@localhost:5432/linx
+```
 
 ## Contributions
 
@@ -37,3 +71,6 @@ All contributions to this project are welcome. Feel free to open a PR or issue
 ## License
 
 Licensed under the MIT License
+
+[1]: https://github.com/SeaQL/sea-orm/pull/1054
+

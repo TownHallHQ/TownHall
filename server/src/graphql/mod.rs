@@ -1,3 +1,5 @@
+mod user;
+
 use async_graphql::{Context, EmptySubscription, Object, Schema};
 
 use crate::context::SharedContext;

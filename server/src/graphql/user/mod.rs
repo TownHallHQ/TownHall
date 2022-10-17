@@ -7,6 +7,7 @@ use entity::{self, prelude::User as UserEntity};
 use crate::context::SharedContext;
 use crate::services::auth::Token;
 
+#[derive(Debug, Default)]
 pub struct UserQueryRoot;
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]

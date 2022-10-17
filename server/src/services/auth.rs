@@ -43,7 +43,7 @@ pub struct AuthService {
 pub struct Claims {
     pub aud: String,
     pub exp: usize,
-    pub uid: String,
+    pub uid: i32,
 }
 
 impl AuthService {
@@ -61,11 +61,11 @@ impl AuthService {
         }
     }
 
-    pub fn sign_token(&self, uid: &str) -> Result<Token> {
+    pub fn sign_token(&self, uid: i32) -> Result<Token> {
         let claims = Claims {
             aud: String::from("linx"),
             exp: 100_000_000,
-            uid: uid.into(),
+            uid,
         };
         let jwt = encode(&Header::default(), &claims, &self.encoding_key)
             .map_err(|e| Error::msg(e.to_string()))?;

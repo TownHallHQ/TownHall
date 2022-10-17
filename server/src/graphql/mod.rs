@@ -15,7 +15,7 @@ pub type GraphQLSchema = Schema<QueryRoot, MutationRoot, EmptySubscription>;
 impl MutationRoot {
     async fn token_create<'a>(&self, ctx: &'a Context<'_>) -> Option<String> {
         let context = ctx.data_unchecked::<SharedContext>();
-        let token = context.services.auth.sign_token("1").unwrap();
+        let token = context.services.auth.sign_token(1).unwrap();
 
         Some(token.to_string())
     }
@@ -23,7 +23,7 @@ impl MutationRoot {
 
 #[Object]
 impl QueryRoot {
-    async fn token_verify<'a>(&self, ctx: &'a Context<'_>) -> Option<String> {
+    async fn token_verify<'a>(&self, ctx: &'a Context<'_>) -> Option<i32> {
         let context = ctx.data_unchecked::<SharedContext>();
 
         if let Some(jwt) = ctx.data_opt::<Token>() {

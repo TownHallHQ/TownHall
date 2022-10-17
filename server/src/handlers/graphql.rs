@@ -1,10 +1,11 @@
+use std::str::FromStr;
+
 use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql::ServerError;
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::http::HeaderMap;
 use axum::response::{Html, IntoResponse};
 use axum::Extension;
-use std::str::FromStr;
 
 use crate::graphql::GraphQLSchema;
 use crate::services::auth::Token;

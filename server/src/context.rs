@@ -1,7 +1,8 @@
-use anyhow::{Error, Result};
-use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 use std::sync::Arc;
 use std::time::Duration;
+
+use anyhow::{Error, Result};
+use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 
 use crate::config::Config;
 use crate::services::Services;

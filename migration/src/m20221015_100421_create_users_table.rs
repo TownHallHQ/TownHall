@@ -50,7 +50,8 @@ impl MigrationTrait for Migration {
                             .string_len(512)
                             .not_null(),
                     )
-                    .col(ColumnDef::new(User::Hash)
+                    .col(
+                        ColumnDef::new(User::Hash)
                             .string()
                             .string_len(512)
                             .not_null(),

@@ -4,12 +4,13 @@ mod graphql;
 mod handlers;
 mod services;
 
+use std::net::SocketAddr;
+use std::sync::Arc;
+
 use async_graphql::{EmptySubscription, Schema};
 use axum::http::{header, HeaderValue, Method};
 use axum::routing::{get, post};
 use axum::{Extension, Router};
-use std::net::SocketAddr;
-use std::sync::Arc;
 use tower_http::cors::CorsLayer;
 
 #[tokio::main]

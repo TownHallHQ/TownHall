@@ -1,7 +1,8 @@
+use std::str::FromStr;
+
 use anyhow::{Error, Result};
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
-use std::str::FromStr;
 
 const JWT_AUDIENCE: &str = "linx";
 

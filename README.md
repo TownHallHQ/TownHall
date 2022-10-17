@@ -21,6 +21,9 @@ Finally use `make run` to start docker containers using Docker Compose detached
 mode and then execute the HTTP server by running `cargo run` against the `server`
 crate.
 
+Remember to run `make stop` when you are done to shut down running containers
+and apply cleanup routines.
+
 **Manual**
 
 Before running any of the further commands, being database management or

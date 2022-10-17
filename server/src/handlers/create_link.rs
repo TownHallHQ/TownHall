@@ -1,7 +1,6 @@
 use axum::http::StatusCode;
 use axum::{Extension, Json};
 use chrono::{prelude::*, Duration};
-use entity::Link;
 use rand::distributions::Alphanumeric;
 use rand::Rng;
 use sea_orm::ActiveModelTrait;
@@ -9,9 +8,10 @@ use sea_orm::ActiveValue::{NotSet, Set};
 use serde::{Deserialize, Serialize};
 use url::Url;
 
-use crate::context::Context;
+use entity;
 
 use super::{ApiError, Result};
+use crate::context::Context;
 
 #[derive(Debug, Deserialize)]
 pub struct CreateLinkInput {
@@ -33,7 +33,7 @@ pub async fn create_link(
     let _ = parse_url(&payload.url)?;
     let expires_at: DateTime<Utc> = Utc::now() + Duration::days(10);
     let naive_expires_at = expires_at.naive_utc();
-    let link = Link {
+    let link = entity::link::ActiveModel {
         id: NotSet,
         hash: Set(create_hash()),
         original_url: Set(payload.url),

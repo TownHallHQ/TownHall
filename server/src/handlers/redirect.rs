@@ -3,7 +3,7 @@ use axum::extract::Path;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Redirect, Response};
 use axum::Extension;
-use entity::link::Entity as Link;
+use entity::{self, prelude::Link};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 
 use crate::context::Context;

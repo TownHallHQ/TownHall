@@ -10,6 +10,19 @@ Headless URL Shortener written in Rust
 
 ### Setup for Local Development
 
+**Makefile**
+
+A `Makefile` is included to help setting up the environment and running the
+application with ease. Execute `make env` to create a copy of the `.env.example`
+file in the project directory. Then use `make install` to build Docker images,
+install SeaORM CLI and run migrations.
+
+Finally use `make run` to start docker containers using Docker Compose detached
+mode and then execute the HTTP server by running `cargo run` against the `server`
+crate.
+
+**Manual**
+
 Before running any of the further commands, being database management or
 executing the server for local development, its important you follow the
 following setup steps before.
@@ -73,4 +86,3 @@ All contributions to this project are welcome. Feel free to open a PR or issue
 Licensed under the MIT License
 
 [1]: https://github.com/SeaQL/sea-orm/pull/1054
-

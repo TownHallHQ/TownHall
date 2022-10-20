@@ -24,9 +24,13 @@ async fn main() {
         .await
         .expect("Failed to build context.");
     let context = Arc::new(context);
-    let schema = Schema::build(graphql::QueryRoot, graphql::MutationRoot, EmptySubscription)
-        .data(Arc::clone(&context))
-        .finish();
+    let schema = Schema::build(
+        graphql::QueryRoot::default(),
+        graphql::MutationRoot,
+        EmptySubscription,
+    )
+    .data(Arc::clone(&context))
+    .finish();
     let app = Router::new()
         .route("/:hash", get(handlers::redirect::redirect))
         .route("/new", post(handlers::create_link::create_link))

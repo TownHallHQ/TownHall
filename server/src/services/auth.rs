@@ -1,10 +1,19 @@
 use std::str::FromStr;
 
 use anyhow::{Error, Result};
+use bcrypt_pbkdf;
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
+use rand::distributions::Alphanumeric;
 use serde::{Deserialize, Serialize};
 
 const JWT_AUDIENCE: &str = "linx";
+const CRYPTO_ROUNDS: u32 = 10;
+const CRYPTO_SALT_LENGTH: usize = 32;
+
+pub struct SecretFormula {
+    hash: String,
+    salt: String,
+}
 
 /// JWT Token Abstaction
 #[derive(Debug)]
@@ -78,6 +87,24 @@ impl AuthService {
             .map_err(|e| Error::msg(e.to_string()))?;
 
         Ok(token_data.claims)
+    }
+
+    pub fn encrypt(&self, pwd: &str) -> Result<SecretFormula> {
+        let mut kdf_opts = ();
+        let salt = self.make_salt();
+        let key: &mut [u8] = &[];
+
+        bcrypt_pbkdf::bcrypt_pbkdf(pwd, salt, CRYPTO_ROUNDS, key);
+
+        todo!()
+    }
+
+    fn make_salt(&self) -> String {
+        rand::thread_rng()
+            .sample_iter(&Alphanumeric)
+            .take(CRYPTO_SALT_LENGTH)
+            .map(char::from)
+            .collect::<String>()
     }
 }
 

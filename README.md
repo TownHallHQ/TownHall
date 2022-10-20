@@ -40,11 +40,25 @@ cd ./linx
 # copy the `.env.example` file into a `.env` file
 cp .env.example .env
 
-# spawn a terminal with docker for postgresql
-docker compose up
+# run docker compose containers
+docker compose up -d
+
+# run migrations
+cargo run --bin migration -- up
+
+# run server
+cargo run --bin server
 ```
 
 > Note: As of today migrations runs when bootstrapping the server automatically
+
+### Crates
+
+This project uses Rust's [Cargo Workspaces][2] structure.
+
+- Entity: SeaORM Generated Entities
+- Migration: Database Migrations
+- Server: HTTP Server Application
 
 ### Database Management
 
@@ -89,3 +103,4 @@ All contributions to this project are welcome. Feel free to open a PR or issue
 Licensed under the MIT License
 
 [1]: https://github.com/SeaQL/sea-orm/pull/1054
+[2]: https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html

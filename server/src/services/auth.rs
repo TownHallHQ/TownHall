@@ -1,9 +1,10 @@
 use std::str::FromStr;
 
 use anyhow::{Error, Result};
-use bcrypt_pbkdf;
+use argon2::{hash_encoded, Config};
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use rand::distributions::Alphanumeric;
+use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 
 const JWT_AUDIENCE: &str = "linx";
@@ -89,22 +90,15 @@ impl AuthService {
         Ok(token_data.claims)
     }
 
-    pub fn encrypt(&self, pwd: &str) -> Result<SecretFormula> {
-        let mut kdf_opts = ();
-        let salt = self.make_salt();
-        let key: &mut [u8] = &[];
-
-        bcrypt_pbkdf::bcrypt_pbkdf(pwd, salt, CRYPTO_ROUNDS, key);
-
-        todo!()
-    }
-
-    fn make_salt(&self) -> String {
-        rand::thread_rng()
+    pub fn hash_password(&self, raw: &str) -> Result<String> {
+        let salt: String = thread_rng()
             .sample_iter(&Alphanumeric)
-            .take(CRYPTO_SALT_LENGTH)
+            .take(30)
             .map(char::from)
-            .collect::<String>()
+            .collect();
+        let hash = hash_encoded(raw.as_bytes(), salt.as_bytes(), &Config::default()).unwrap();
+
+        Ok(hash)
     }
 }
 

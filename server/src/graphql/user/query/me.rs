@@ -1,4 +1,4 @@
-use async_graphql::{Context, Object, Result, SimpleObject};
+use async_graphql::{Context, Result, SimpleObject};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 
@@ -14,13 +14,8 @@ pub struct Me {
     error: Option<UserError>,
 }
 
-#[derive(Debug, Default)]
-pub struct UserQueryRoot;
-
-#[Object]
-impl UserQueryRoot {
-    #[graphql(name = "me")]
-    async fn me(&self, ctx: &Context<'_>) -> Result<Me> {
+impl Me {
+    pub async fn exec(ctx: &Context<'_>) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
 
         if let Some(jwt) = ctx.data_opt::<Token>() {
@@ -44,7 +39,7 @@ impl UserQueryRoot {
             }
         }
 
-        Ok(Me {
+        Ok(Self {
             user: None,
             error: Some(UserError {
                 code: UserErrorCode::Unauthorized,

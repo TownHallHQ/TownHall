@@ -20,3 +20,8 @@ pub struct User {
     pub last_name: String,
     pub email: String,
 }
+
+#[derive(Debug, Deserialize, Serialize, SimpleObject)]
+pub struct AccessToken {
+    pub access_token: String,
+}

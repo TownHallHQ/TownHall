@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
 use anyhow::{Error, Result};
-use argon2::{hash_encoded, Config};
+use argon2::{hash_encoded, verify_encoded, Config};
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
@@ -88,6 +88,10 @@ impl AuthService {
             .map_err(|e| Error::msg(e.to_string()))?;
 
         Ok(token_data.claims)
+    }
+
+    pub fn validate_password(&self, raw: &str, hash: &str) -> bool {
+        verify_encoded(hash.as_bytes(), raw.as_bytes())?
     }
 
     pub fn hash_password(&self, raw: &str) -> Result<String> {

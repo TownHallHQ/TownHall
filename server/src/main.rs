@@ -26,7 +26,7 @@ async fn main() {
     let context = Arc::new(context);
     let schema = Schema::build(
         graphql::QueryRoot::default(),
-        graphql::MutationRoot,
+        graphql::MutationRoot::default(),
         EmptySubscription,
     )
     .data(Arc::clone(&context))

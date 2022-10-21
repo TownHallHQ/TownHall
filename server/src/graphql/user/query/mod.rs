@@ -9,7 +9,6 @@ pub struct UserQueryRoot;
 
 #[Object]
 impl UserQueryRoot {
-    #[graphql(name = "me")]
     async fn me(&self, ctx: &Context<'_>) -> Result<Me> {
         Me::exec(ctx).await
     }

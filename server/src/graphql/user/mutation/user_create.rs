@@ -1,6 +1,6 @@
 use async_graphql::{Context, InputObject, Object, Result, SimpleObject};
 use sea_orm::ActiveModelTrait;
-use sea_orm::ActiveValue::{NotSet, Set};
+use sea_orm::ActiveValue::Set;
 use serde::{Deserialize, Serialize};
 
 use crate::context::SharedContext;

@@ -1,10 +1,11 @@
+pub mod create_link;
+pub mod graphql;
+pub mod redirect;
+
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::Json;
 use serde::Serialize;
-
-pub mod create_link;
-pub mod redirect;
 
 pub type Result<T> = std::result::Result<T, ApiError>;
 

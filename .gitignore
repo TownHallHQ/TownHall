@@ -2,3 +2,4 @@
 /target
 
 !.env.example
+.DS_Store

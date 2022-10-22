@@ -4,6 +4,7 @@ use std::str::FromStr;
 pub struct Config {
     pub cors_allow_origin: String,
     pub database_url: String,
+    pub jwt_secret: String,
     pub server_port: u16,
 }
 
@@ -11,11 +12,13 @@ impl Config {
     pub fn new() -> Self {
         let cors_allow_origin = Config::env_var::<String>("CORS_ALLOW_ORIGIN");
         let database_url = Config::env_var::<String>("DATABASE_URL");
+        let jwt_secret = Config::env_var::<String>("JWT_SECRET");
         let server_port = Config::env_var::<u16>("PORT");
 
         Self {
             cors_allow_origin,
             database_url,
+            jwt_secret,
             server_port,
         }
     }

@@ -1,4 +1,4 @@
-use async_graphql::{Context, Error, InputObject, Result, SimpleObject};
+use async_graphql::{Context, InputObject, Result, SimpleObject};
 use migration::DbErr;
 use sea_orm::ActiveModelTrait;
 use sea_orm::ActiveValue::Set;

@@ -2,19 +2,13 @@ use std::str::FromStr;
 
 use anyhow::{Error, Result};
 use argon2::{hash_encoded, verify_encoded, Config};
+use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 
 const JWT_AUDIENCE: &str = "linx";
-const CRYPTO_ROUNDS: u32 = 10;
-const CRYPTO_SALT_LENGTH: usize = 32;
-
-pub struct SecretFormula {
-    hash: String,
-    salt: String,
-}
 
 /// JWT Token Abstaction
 #[derive(Debug)]
@@ -51,9 +45,9 @@ pub struct AuthService {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
-    pub aud: String,
     pub exp: usize,
     pub uid: i32,
+    pub iat: usize,
 }
 
 impl AuthService {
@@ -72,11 +66,12 @@ impl AuthService {
     }
 
     pub fn sign_token(&self, uid: i32) -> Result<Token> {
-        let claims = Claims {
-            aud: String::from("linx"),
-            exp: 100_000_000,
-            uid,
-        };
+        let iat = Utc::now().timestamp() as usize;
+        let exp = Utc::now()
+            .checked_add_signed(Duration::days(30))
+            .unwrap()
+            .timestamp() as usize;
+        let claims = Claims { exp, iat, uid };
         let jwt = encode(&Header::default(), &claims, &self.encoding_key)
             .map_err(|e| Error::msg(e.to_string()))?;
 

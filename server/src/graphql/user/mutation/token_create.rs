@@ -1,13 +1,11 @@
-use async_graphql::{Context, InputObject, Object, Result, SimpleObject};
-use sea_orm::ActiveModelTrait;
+use async_graphql::{Context, Result, SimpleObject};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 
 use entity::{self, prelude::User as UserEntity};
 
 use crate::context::SharedContext;
-use crate::graphql::user::{AccessToken, User, UserError, UserErrorCode};
-use crate::services::auth::Token;
+use crate::graphql::user::{AccessToken, UserError, UserErrorCode};
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
 pub struct TokenCreate {
@@ -25,15 +23,20 @@ impl TokenCreate {
             .await
             .unwrap()
         {
-            let are_valid_credentials = context.services.auth.verify_token(token)
-            let access_token = context.services.auth.sign_token(user.id)?;
+            if context
+                .services
+                .auth
+                .validate_password(&user.hash, &password)
+            {
+                let access_token = context.services.auth.sign_token(user.id)?;
 
-            return Ok(Self {
-                token: Some(AccessToken {
-                    access_token: access_token.0,
-                }),
-                error: None,
-            });
+                return Ok(Self {
+                    token: Some(AccessToken {
+                        access_token: access_token.0,
+                    }),
+                    error: None,
+                });
+            }
         }
 
         return Ok(Self {

@@ -90,8 +90,10 @@ impl AuthService {
         Ok(token_data.claims)
     }
 
-    pub fn validate_password(&self, raw: &str, hash: &str) -> bool {
-        verify_encoded(hash.as_bytes(), raw.as_bytes())?
+    pub fn validate_password(&self, encoded: &str, raw: &str) -> bool {
+        let raw = raw.as_bytes();
+
+        verify_encoded(encoded, raw).unwrap()
     }
 
     pub fn hash_password(&self, raw: &str) -> Result<String> {

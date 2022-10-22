@@ -1,4 +1,5 @@
-use async_graphql::{Context, InputObject, Object, Result, SimpleObject};
+use async_graphql::{Context, Error, InputObject, Result, SimpleObject};
+use migration::DbErr;
 use sea_orm::ActiveModelTrait;
 use sea_orm::ActiveValue::Set;
 use serde::{Deserialize, Serialize};
@@ -31,19 +32,36 @@ impl UserCreate {
             hash: Set(hash),
             ..Default::default()
         };
-        let user = user.save(&context.conn()).await.unwrap();
 
-        Ok(Self {
-            user: Some(User {
-                id: user.id.unwrap(),
-                name: user.name.unwrap(),
-                last_name: user.last_name.unwrap(),
-                email: user.email.unwrap(),
+        match user.save(&context.conn()).await {
+            Ok(user) => Ok(Self {
+                user: Some(User {
+                    id: user.id.unwrap(),
+                    name: user.name.unwrap(),
+                    last_name: user.last_name.unwrap(),
+                    email: user.email.unwrap(),
+                }),
+                ..Default::default()
             }),
-            error: Some(UserError {
-                code: UserErrorCode::Unauthorized,
-                message: String::from("Invalid token provided"),
-            }),
-        })
+            Err(db_error) => {
+                if matches!(db_error, DbErr::Query(_)) {
+                    return Ok(Self {
+                        error: Some(UserError {
+                            code: UserErrorCode::EmailTaken,
+                            message: db_error.to_string(),
+                        }),
+                        ..Default::default()
+                    });
+                }
+
+                Ok(Self {
+                    error: Some(UserError {
+                        code: UserErrorCode::Unknown,
+                        message: db_error.to_string(),
+                    }),
+                    ..Default::default()
+                })
+            }
+        }
     }
 }

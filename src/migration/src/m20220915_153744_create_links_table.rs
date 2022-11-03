@@ -2,11 +2,12 @@ use sea_orm_migration::prelude::*;
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum Link {
+pub enum Link {
     Table,
     Id,
     Hash,
     OriginalUrl,
+    OwnerId,
     ExpiresAt,
     CreatedAt,
     UpdatedAt,

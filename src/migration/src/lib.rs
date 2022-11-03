@@ -1,5 +1,6 @@
 mod m20220915_153744_create_links_table;
 mod m20221015_100421_create_users_table;
+mod m20221103_002242_links_table_ownership;
 
 pub use sea_orm_migration::prelude::*;
 
@@ -11,6 +12,7 @@ impl MigratorTrait for Migrator {
         vec![
             Box::new(m20221015_100421_create_users_table::Migration),
             Box::new(m20220915_153744_create_links_table::Migration),
+            Box::new(m20221103_002242_links_table_ownership::Migration),
         ]
     }
 }

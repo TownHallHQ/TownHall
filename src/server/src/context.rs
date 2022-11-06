@@ -3,6 +3,9 @@ use std::time::Duration;
 
 use anyhow::{Error, Result};
 use sea_orm::{Database, DatabaseConnection};
+use tracing::info;
+
+use migration::{Migrator, MigratorTrait};
 
 use crate::config::Config;
 use crate::services::Services;
@@ -20,6 +23,12 @@ impl Context {
     pub async fn new(config: &Config) -> Result<Self> {
         let db = Self::make_database_connection(config).await?;
         let services = Services::new(config);
+
+        if cfg!(debug_assertions) && config.use_sqlite {
+            info!("Running SQLite Migrations Automatically");
+            Migrator::install(&db).await.unwrap();
+            Migrator::up(&db, Some(10)).await.unwrap();
+        }
 
         Ok(Self { db, services })
     }

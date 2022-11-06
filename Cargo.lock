@@ -1265,7 +1265,6 @@ name = "migration"
 version = "0.1.0"
 dependencies = [
  "async-std",
- "dotenv",
  "sea-orm-migration",
 ]
 
@@ -2017,6 +2016,7 @@ dependencies = [
  "rand",
  "rust-argon2",
  "sea-orm",
+ "sea-orm-migration",
  "serde",
  "tokio",
  "tower-http",

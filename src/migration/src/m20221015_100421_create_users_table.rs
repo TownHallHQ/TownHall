@@ -60,14 +60,12 @@ impl MigrationTrait for Migration {
                     .col(
                         ColumnDef::new(User::CreatedAt)
                             .timestamp_with_time_zone()
-                            .not_null()
-                            .extra(String::from("DEFAULT NOW()::timestamp")),
+                            .not_null(),
                     )
                     .col(
                         ColumnDef::new(User::UpdatedAt)
                             .timestamp_with_time_zone()
-                            .not_null()
-                            .extra(String::from("DEFAULT NOW()::timestamp")),
+                            .not_null(),
                     )
                     .to_owned(),
             )

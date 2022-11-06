@@ -39,12 +39,12 @@ impl TokenCreate {
             }
         }
 
-        return Ok(Self {
+        Ok(Self {
             token: None,
             error: Some(UserError {
                 code: UserErrorCode::Unauthorized,
                 message: String::from("Invalid credentials"),
             }),
-        });
+        })
     }
 }

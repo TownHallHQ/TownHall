@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "entity",
-    "migration",
-    "server",
+    "src/entity",
+    "src/migration",
+    "src/server",
 ]

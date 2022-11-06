@@ -2,7 +2,7 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use anyhow::{Error, Result};
-use sea_orm::{ConnectOptions, Database, DatabaseConnection};
+use sea_orm::{Database, DatabaseConnection};
 
 use crate::config::Config;
 use crate::services::Services;
@@ -29,7 +29,7 @@ impl Context {
     }
 
     async fn make_database_connection(config: &Config) -> Result<DatabaseConnection> {
-        let mut opt = ConnectOptions::new(config.database_url.clone());
+        let mut opt = config.dbconnect_options.clone();
 
         opt.max_connections(100)
             .min_connections(5)

@@ -12,6 +12,7 @@ use axum::http::{header, HeaderValue, Method};
 use axum::routing::{get, post};
 use axum::{Extension, Router};
 use tower_http::cors::CorsLayer;
+use tracing::info;
 
 #[tokio::main]
 async fn main() {
@@ -46,6 +47,9 @@ async fn main() {
                 .allow_headers([header::CONTENT_TYPE])
                 .allow_methods([Method::GET, Method::POST]),
         );
+
+    info!("Configuration {:#?}", config);
+    info!("Listening on {:#?}", addr);
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())

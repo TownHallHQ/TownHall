@@ -28,8 +28,6 @@ crate.
 Remember to run `make stop` when you are done to shut down running containers
 and apply cleanup routines.
 
-**Manual (Using PostgreSQL)**
-
 Before running any of the further commands, being database management or
 executing the server for local development, its important you follow the
 following setup steps before.
@@ -55,11 +53,6 @@ cargo run --bin server
 ```
 
 > Note: As of today migrations runs when bootstrapping the server automatically
-
-**Manual (Using SQLite)**
-
-You can run this application without Docker relying on SQLite instead of PSQL.
-To do this set the `USE_SQLITE` environment variable to `1` in your `.env` file.
 
 ### Crates
 

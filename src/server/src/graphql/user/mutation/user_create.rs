@@ -1,4 +1,5 @@
 use async_graphql::{Context, InputObject, Result, SimpleObject};
+use chrono::DateTime;
 use migration::DbErr;
 use sea_orm::ActiveModelTrait;
 use sea_orm::ActiveValue::Set;
@@ -30,6 +31,8 @@ impl UserCreate {
             last_name: Set(input.last_name),
             email: Set(input.email),
             hash: Set(hash),
+            created_at: Set(DateTime::default()),
+            updated_at: Set(DateTime::default()),
             ..Default::default()
         };
 

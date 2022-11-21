@@ -10,26 +10,25 @@ pub struct Migration;
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // https://docs.rs/sea-orm-migration/0.9.2/sea_orm_migration/prelude/struct.ColumnDef.html
-        let owner_id_fk = TableForeignKey::new()
-            .name("FK_link_owner")
-            .from_tbl(User::Table)
-            .from_col(User::Id)
-            .to_tbl(Link::Table)
-            .to_col(Link::OwnerId)
-            .on_delete(ForeignKeyAction::Cascade)
-            .on_update(ForeignKeyAction::Cascade)
-            .to_owned();
-
-        manager
-            .create_foreign_key(sea_query::ForeignKey::create())
-            .await
-            .unwrap();
-
         manager
             .alter_table(
                 Table::alter()
                     .table(Link::Table)
-                    .add_foreign_key(&owner_id_fk)
+                    .add_column(ColumnDef::new(User::OwnerId).integer())
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .create_foreign_key(
+                ForeignKeyCreateStatement::new()
+                    .name("FK_link_owner")
+                    .from_tbl(User::Table)
+                    .from_col(User::Id)
+                    .to_tbl(Link::Table)
+                    .to_col(Link::OwnerId)
+                    .on_delete(ForeignKeyAction::Cascade)
+                    .on_update(ForeignKeyAction::Cascade)
                     .to_owned(),
             )
             .await

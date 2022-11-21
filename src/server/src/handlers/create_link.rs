@@ -38,6 +38,7 @@ pub async fn create_link(
         hash: Set(create_hash()),
         original_url: Set(payload.url),
         expires_at: Set(naive_expires_at),
+        owner_id: NotSet,
         created_at: NotSet,
         updated_at: NotSet,
     };

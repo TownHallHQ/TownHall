@@ -1,3 +1,4 @@
+mod link;
 mod user;
 
 use async_graphql::{EmptySubscription, MergedObject, Schema};

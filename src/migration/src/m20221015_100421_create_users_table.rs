@@ -9,6 +9,7 @@ pub enum User {
     LastName,
     Email,
     Hash,
+    OwnerId,
     CreatedAt,
     UpdatedAt,
 }
@@ -30,7 +31,8 @@ impl MigrationTrait for Migration {
                             .integer()
                             .not_null()
                             .primary_key()
-                            .auto_increment(),
+                            .auto_increment()
+                            .unique_key(),
                     )
                     .col(
                         ColumnDef::new(User::Name)

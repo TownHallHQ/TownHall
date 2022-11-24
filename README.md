@@ -49,7 +49,7 @@ docker compose up -d
 cargo run --bin migration -- up
 
 # run server
-cargo run --bin server
+RUST_LOG='server=debug' cargo run --bin server
 ```
 
 > Note: As of today migrations runs when bootstrapping the server automatically

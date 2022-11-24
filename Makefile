@@ -26,7 +26,7 @@ run:
 	echo "Starting Containers"
 	docker compose up -d
 	echo "Running Server"
-	cargo run --bin server
+	RUST_LOG='server=debug' cargo run --bin server
 
 stop:
 	echo "Stopping Containers"

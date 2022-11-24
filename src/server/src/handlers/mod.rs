@@ -1,4 +1,3 @@
-pub mod create_link;
 pub mod graphql;
 pub mod redirect;
 

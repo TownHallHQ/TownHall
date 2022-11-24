@@ -6,6 +6,8 @@ use super::m20221015_100421_create_users_table::User;
 #[derive(DeriveMigrationName)]
 pub struct Migration;
 
+pub const LINK_OWNER_FK: &str = "FK_link_owner";
+
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
@@ -19,16 +21,20 @@ impl MigrationTrait for Migration {
             )
             .await?;
 
+        let fk_link_owner = TableForeignKey::new()
+            .name(LINK_OWNER_FK)
+            .from_col(Link::OwnerId)
+            .to_tbl(User::Table)
+            .to_col(User::Id)
+            .on_delete(ForeignKeyAction::Cascade)
+            .on_update(ForeignKeyAction::Cascade)
+            .to_owned();
+
         manager
-            .create_foreign_key(
-                ForeignKeyCreateStatement::new()
-                    .name("FK_link_owner")
-                    .from_tbl(User::Table)
-                    .from_col(User::Id)
-                    .to_tbl(Link::Table)
-                    .to_col(Link::OwnerId)
-                    .on_delete(ForeignKeyAction::Cascade)
-                    .on_update(ForeignKeyAction::Cascade)
+            .alter_table(
+                Table::alter()
+                    .table(Link::Table)
+                    .add_foreign_key(&fk_link_owner)
                     .to_owned(),
             )
             .await

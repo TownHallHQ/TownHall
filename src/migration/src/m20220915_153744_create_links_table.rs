@@ -2,11 +2,12 @@ use sea_orm_migration::prelude::*;
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum Link {
+pub enum Link {
     Table,
     Id,
     Hash,
     OriginalUrl,
+    OwnerId,
     ExpiresAt,
     CreatedAt,
     UpdatedAt,
@@ -29,7 +30,8 @@ impl MigrationTrait for Migration {
                             .integer()
                             .not_null()
                             .primary_key()
-                            .auto_increment(),
+                            .auto_increment()
+                            .unique_key(),
                     )
                     .col(
                         ColumnDef::new(Link::Hash)

@@ -9,7 +9,7 @@ use std::sync::Arc;
 
 use async_graphql::{EmptySubscription, Schema};
 use axum::http::{header, HeaderValue, Method};
-use axum::routing::{get, post};
+use axum::routing::get;
 use axum::{Extension, Router};
 use tower_http::cors::CorsLayer;
 use tracing::info;
@@ -34,7 +34,6 @@ async fn main() {
     .finish();
     let app = Router::new()
         .route("/:hash", get(handlers::redirect::redirect))
-        .route("/new", post(handlers::create_link::create_link))
         .route(
             "/graphql",
             get(handlers::graphql::playground).post(handlers::graphql::schema),
@@ -48,8 +47,7 @@ async fn main() {
                 .allow_methods([Method::GET, Method::POST]),
         );
 
-    info!("Configuration {:#?}", config);
-    info!("Listening on {:#?}", addr);
+    info!("Listening on: {}", addr);
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())

@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.65"
 rust-argon2 = "1.0.0"
-async-graphql = "4.0.14"
+async-graphql = { version = "4.0.14", features = ["chrono"] }
 async-graphql-axum = "4.0.14"
 axum = "0.5.16"
 chrono = { version = "0.4.22", features = ["serde"] }

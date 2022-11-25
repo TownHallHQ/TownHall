@@ -2,13 +2,14 @@ use sea_orm_migration::prelude::*;
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum User {
+pub enum User {
     Table,
     Id,
     Name,
     LastName,
     Email,
     Hash,
+    OwnerId,
     CreatedAt,
     UpdatedAt,
 }
@@ -30,7 +31,8 @@ impl MigrationTrait for Migration {
                             .integer()
                             .not_null()
                             .primary_key()
-                            .auto_increment(),
+                            .auto_increment()
+                            .unique_key(),
                     )
                     .col(
                         ColumnDef::new(User::Name)

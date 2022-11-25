@@ -1,4 +1,3 @@
-pub mod create_link;
 pub mod graphql;
 pub mod redirect;
 
@@ -7,21 +6,10 @@ use axum::response::IntoResponse;
 use axum::Json;
 use serde::Serialize;
 
-pub type Result<T> = std::result::Result<T, ApiError>;
-
 #[derive(Clone, Debug, Serialize)]
 pub struct ApiError {
     message: String,
     status: u16,
-}
-
-impl ApiError {
-    pub fn new(message: &str, status: StatusCode) -> Self {
-        Self {
-            message: message.to_string(),
-            status: status.as_u16(),
-        }
-    }
 }
 
 impl From<anyhow::Error> for ApiError {

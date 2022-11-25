@@ -23,6 +23,7 @@ pub struct LinkCreate {
 #[derive(Debug, Default, InputObject)]
 pub struct LinkCreateInput {
     pub url: String,
+    pub custom_hash: Option<String>,
 }
 
 impl LinkCreate {
@@ -56,6 +57,12 @@ impl LinkCreate {
             });
         }
 
+        let hash: String = if let Some(custom_hash) = input.custom_hash {
+            custom_hash
+        } else {
+            LinkCreate::create_hash()
+        };
+
         let owner_id = if let Some(owner) = owner {
             Set(Some(owner.id))
         } else {
@@ -66,12 +73,12 @@ impl LinkCreate {
         let naive_expires_at = expires_at.naive_utc();
         let link = entity::link::ActiveModel {
             id: NotSet,
-            hash: Set(LinkCreate::create_hash()),
+            hash: Set(hash),
             original_url: Set(input.url),
             expires_at: Set(naive_expires_at),
             owner_id,
-            created_at: NotSet,
-            updated_at: NotSet,
+            created_at: Set(DateTime::default()),
+            updated_at: Set(DateTime::default()),
         };
 
         match link.save(&context.conn()).await {

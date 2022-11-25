@@ -9,7 +9,6 @@ pub enum User {
     LastName,
     Email,
     Hash,
-    OwnerId,
     CreatedAt,
     UpdatedAt,
 }

@@ -24,7 +24,6 @@ impl MigrationTrait for Migration {
             .create_table(
                 Table::create()
                     .table(Link::Table)
-                    .if_not_exists()
                     .col(
                         ColumnDef::new(Link::Id)
                             .integer()

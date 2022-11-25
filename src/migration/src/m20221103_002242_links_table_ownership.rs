@@ -16,7 +16,7 @@ impl MigrationTrait for Migration {
             .alter_table(
                 Table::alter()
                     .table(Link::Table)
-                    .add_column(ColumnDef::new(User::OwnerId).integer())
+                    .add_column(ColumnDef::new(Link::OwnerId).integer())
                     .to_owned(),
             )
             .await?;

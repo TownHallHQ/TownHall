@@ -10,8 +10,8 @@ pub struct Migrator;
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
         vec![
-            Box::new(m20221015_100421_create_users_table::Migration),
             Box::new(m20220915_153744_create_links_table::Migration),
+            Box::new(m20221015_100421_create_users_table::Migration),
             Box::new(m20221103_002242_links_table_ownership::Migration),
         ]
     }

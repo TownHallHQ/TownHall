@@ -6,21 +6,30 @@ use axum::Extension;
 use entity::{self, prelude::Link};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 
-use crate::context::Context;
+use crate::context::SharedContext;
 
-pub async fn redirect(ctx: Extension<Context>, Path(hash): Path<String>) -> impl IntoResponse {
-    if let Some(link) = Link::find()
+pub async fn redirect(
+    ctx: Extension<SharedContext>,
+    Path(hash): Path<String>,
+) -> impl IntoResponse {
+    let Ok(maybe_link) = Link::find()
         .filter(entity::link::Column::Hash.eq(hash))
         .one(&ctx.conn())
-        .await
-        .unwrap()
+        .await else
     {
-        return Redirect::to(&link.original_url).into_response();
-    }
+        return Response::builder()
+           .status(StatusCode::INTERNAL_SERVER_ERROR)
+            .body(Full::from("An error ocurred fetching from database"))
+            .unwrap()
+            .into_response()
+    };
 
-    Response::builder()
-        .status(StatusCode::NOT_FOUND)
-        .body(Full::from("not found"))
-        .unwrap()
-        .into_response()
+    match maybe_link {
+        Some(link) => Redirect::to(&link.original_url).into_response(),
+        None => Response::builder()
+            .status(StatusCode::NOT_FOUND)
+            .body(Full::from("Not Found"))
+            .unwrap()
+            .into_response(),
+    }
 }

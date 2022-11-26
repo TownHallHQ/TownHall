@@ -3,8 +3,10 @@ use axum::extract::Path;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Redirect, Response};
 use axum::Extension;
-use entity::{self, prelude::Link};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
+use tracing::info;
+
+use entity::{self, prelude::Link};
 
 use crate::context::SharedContext;
 
@@ -25,11 +27,20 @@ pub async fn redirect(
     };
 
     match maybe_link {
-        Some(link) => Redirect::to(&link.original_url).into_response(),
-        None => Response::builder()
-            .status(StatusCode::NOT_FOUND)
-            .body(Full::from("Not Found"))
-            .unwrap()
-            .into_response(),
+        Some(link) => {
+            info!(
+                "Found link for: {} redirecting to: {}",
+                link.hash, link.original_url
+            );
+            Redirect::to(&link.original_url).into_response()
+        }
+        None => {
+            info!("No link found");
+            Response::builder()
+                .status(StatusCode::NOT_FOUND)
+                .body(Full::from("Not Found"))
+                .unwrap()
+                .into_response()
+        }
     }
 }

@@ -87,7 +87,7 @@ impl LinkCreate {
                     id: created_link.id.unwrap(),
                     hash: created_link.hash.unwrap(),
                     original_url: created_link.original_url.unwrap(),
-                    expires_at: DateTime::default(),
+                    expires_at: created_link.expires_at.unwrap(),
                 }),
                 error: None,
             }),

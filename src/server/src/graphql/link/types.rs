@@ -1,5 +1,5 @@
 use async_graphql::{Enum, SimpleObject};
-use chrono::{DateTime, Utc};
+use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]
@@ -20,5 +20,5 @@ pub struct Link {
     pub id: i32,
     pub hash: String,
     pub original_url: String,
-    pub expires_at: DateTime<Utc>,
+    pub expires_at: NaiveDateTime,
 }

@@ -8,8 +8,6 @@ use serde::{Deserialize, Serialize};
 use tracing::error;
 use url::Url;
 
-use entity::{self, prelude::User as UserEntity};
-
 use crate::context::SharedContext;
 use crate::graphql::link::{Link, LinkError, LinkErrorCode};
 use crate::services::auth::Token;

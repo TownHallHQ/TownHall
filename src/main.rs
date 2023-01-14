@@ -1,7 +1,8 @@
 mod config;
 mod context;
-mod graphql;
+// mod graphql;
 mod handlers;
+mod models;
 mod services;
 
 use std::net::SocketAddr;
@@ -20,26 +21,27 @@ async fn main() {
     tracing_subscriber::fmt::init();
 
     let config = config::Config::new();
+    let _ = sled::open(&config.database_path).expect("Failed to create database directory");
     let addr = SocketAddr::from((config.server_host, config.server_port));
     let context = context::Context::new(&config)
         .await
         .expect("Failed to build context.");
     let context = Arc::new(context);
-    let schema = Schema::build(
-        graphql::QueryRoot::default(),
-        graphql::MutationRoot::default(),
-        EmptySubscription,
-    )
-    .data(Arc::clone(&context))
-    .finish();
+    // let schema = Schema::build(
+    //     // graphql::QueryRoot::default(),
+    //     // graphql::MutationRoot::default(),
+    //     EmptySubscription,
+    // )
+    // .data(Arc::clone(&context))
+    // .finish();
     let app = Router::new()
         .route("/:hash", get(handlers::redirect::redirect))
-        .route(
-            "/graphql",
-            get(handlers::graphql::playground).post(handlers::graphql::schema),
-        )
+        // .route(
+        //     "/graphql",
+        //     get(handlers::graphql::playground).post(handlers::graphql::schema),
+        // )
         .layer(Extension(context))
-        .layer(Extension(schema))
+        // .layer(Extension(schema))
         .layer(
             CorsLayer::new()
                 .allow_origin(config.cors_allow_origin.parse::<HeaderValue>().unwrap())

@@ -2,8 +2,6 @@ use async_graphql::{Context, Result, SimpleObject};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 
-use entity::{self, prelude::Link as LinkEntity};
-
 use crate::context::SharedContext;
 use crate::graphql::link::{Link, LinkError, LinkErrorCode};
 use crate::services::auth::Token;

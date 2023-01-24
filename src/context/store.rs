@@ -11,7 +11,7 @@ impl Store {
         let sled_config = Config::new()
             .path(path)
             .temporary(false)
-            .use_compression(true);
+            .use_compression(false);
 
         let db = sled_config.open().expect("Failed to create Sled instance");
 

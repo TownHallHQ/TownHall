@@ -31,19 +31,32 @@ impl UserService {
         Self { store }
     }
 
+    pub fn get_all(&self) -> Vec<User> {
+        let user_tree = self.store.db.open_tree("users").unwrap();
+        user_tree
+            .iter()
+            .map(|item| {
+                let (_, v) = item.unwrap();
+                bincode::deserialize::<User>(&v).unwrap()
+            })
+            .collect()
+    }
+
     pub fn get(&self, id: String) {
-        let user = self.store.db.get(id.as_bytes()).unwrap().unwrap();
+        let user_tree = self.store.db.open_tree("users").unwrap();
+        let user = user_tree.get(id.as_bytes()).unwrap().unwrap();
         let decode: User = bincode::deserialize(&user).unwrap();
 
         println!("{:?}", decode);
     }
 
     pub fn create(&self, user_dto: CreateUserDto) -> String {
+        let user_tree = self.store.db.open_tree("users").unwrap();
         let id = self.store.generate_id();
         let mut user = User::from(user_dto);
         user.id = id;
         let encoded = bincode::serialize(&user).unwrap();
-        self.store.db.insert(&user.id, encoded).unwrap();
+        user_tree.insert(&user.id, encoded).unwrap();
 
         println!("User created!");
         return user.id;

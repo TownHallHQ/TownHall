@@ -35,6 +35,16 @@ async fn main() {
         email: String::from("dave136@gmail.com"),
     };
 
-    let user_id = context.services.user.create(new_user);
-    context.services.user.get(user_id);
+    let new_user2 = CreateUserDto {
+        name: String::from("Dave2"),
+        last_name: String::from("Arenas2"),
+        email: String::from("dave1362@gmail.com"),
+    };
+
+    context.services.user.create(new_user);
+    context.services.user.create(new_user2);
+
+    let all = context.services.user.get_all();
+    println!("{:?}", all);
+    // context.services.user.get(user_id);
 }

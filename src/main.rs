@@ -13,6 +13,8 @@ mod modules;
 // use tower_http::cors::CorsLayer;
 // use tracing::info;
 
+use modules::user::service::CreateUserDto;
+
 use crate::context::Config;
 use crate::context::Context;
 
@@ -27,6 +29,12 @@ async fn main() {
         .await
         .expect("Failed to build context.");
 
-    context.services.user.create();
-    context.services.user.get();
+    let new_user = CreateUserDto {
+        name: String::from("Dave"),
+        last_name: String::from("Arenas"),
+        email: String::from("dave136@gmail.com"),
+    };
+
+    let user_id = context.services.user.create(new_user);
+    context.services.user.get(user_id);
 }

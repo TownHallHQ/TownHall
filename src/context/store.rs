@@ -3,7 +3,7 @@ use std::path::Path;
 use sled::{Config, Db};
 
 pub struct Store {
-    db: Db,
+    pub db: Db,
 }
 
 impl Store {

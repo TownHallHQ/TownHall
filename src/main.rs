@@ -28,4 +28,5 @@ async fn main() {
         .expect("Failed to build context.");
 
     context.services.user.create();
+    context.services.user.get();
 }

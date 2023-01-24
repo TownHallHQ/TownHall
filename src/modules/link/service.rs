@@ -30,6 +30,17 @@ impl LinkService {
         Self { store }
     }
 
+    pub fn get_all(&self) -> Vec<Link> {
+        let link_tree = self.store.db.open_tree("links").unwrap();
+        link_tree
+            .iter()
+            .map(|item| {
+                let (_, v) = item.unwrap();
+                bincode::deserialize(&v).unwrap()
+            })
+            .collect()
+    }
+
     pub fn get(&self, id: String) -> Link {
         let link_tree = self.store.db.open_tree("links").unwrap();
         let link = link_tree.get(id).unwrap().unwrap();

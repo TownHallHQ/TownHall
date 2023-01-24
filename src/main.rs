@@ -30,18 +30,21 @@ async fn main() {
         .await
         .expect("Failed to build context.");
 
-    let new_link = CreateLinkDto {
-        original_url: String::from("http://whizzes.com"),
-        owner_id: Some(String::from("6CKGl7zNyYxVGPnB")),
-    };
+    // let new_link = CreateLinkDto {
+    //     original_url: String::from("http://whizzes.com"),
+    //     owner_id: Some(String::from("6CKGl7zNyYxVGPnB")),
+    // };
 
     // let link_id = context.services.link.create(new_link);
 
     // println!("{link_id}");
 
-    let link = context.services.link.get(String::from("NMEBbr9qrK6OaLol"));
+    // let link = context.services.link.get(String::from("NMEBbr9qrK6OaLol"));
 
-    println!("{:?}", link);
+    // println!("{:?}", link);
+
+    let links = context.services.link.get_all();
+    println!("{:?}", links);
 
     // let new_user = CreateUserDto {
     //     name: String::from("Dave"),
@@ -58,7 +61,7 @@ async fn main() {
     // context.services.user.create(new_user);
     // context.services.user.create(new_user2);
 
-    // let all = context.services.user.get_all();
-    // println!("{:?}", all);
+    let users = context.services.user.get_all();
+    println!("{:?}", users);
     // context.services.user.get(user_id);
 }

@@ -1,5 +1,5 @@
 // pub mod auth;
-// pub mod link;
+pub mod link;
 pub mod user;
 
 // use async_graphql::{EmptySubscription, MergedObject, Schema};

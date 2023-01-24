@@ -17,6 +17,7 @@ use modules::user::service::CreateUserDto;
 
 use crate::context::Config;
 use crate::context::Context;
+use crate::modules::link::service::CreateLinkDto;
 
 #[tokio::main]
 async fn main() {
@@ -29,22 +30,31 @@ async fn main() {
         .await
         .expect("Failed to build context.");
 
-    let new_user = CreateUserDto {
-        name: String::from("Dave"),
-        last_name: String::from("Arenas"),
-        email: String::from("dave136@gmail.com"),
+    let new_link = CreateLinkDto {
+        original_url: String::from("http://whizzes.com"),
+        owner_id: Some(String::from("6CKGl7zNyYxVGPnB")),
     };
 
-    let new_user2 = CreateUserDto {
-        name: String::from("Dave2"),
-        last_name: String::from("Arenas2"),
-        email: String::from("dave1362@gmail.com"),
-    };
+    let link_id = context.services.link.create(new_link);
 
-    context.services.user.create(new_user);
-    context.services.user.create(new_user2);
+    println!("{link_id}");
 
-    let all = context.services.user.get_all();
-    println!("{:?}", all);
+    // let new_user = CreateUserDto {
+    //     name: String::from("Dave"),
+    //     last_name: String::from("Arenas"),
+    //     email: String::from("dave136@gmail.com"),
+    // };
+
+    // let new_user2 = CreateUserDto {
+    //     name: String::from("Dave2"),
+    //     last_name: String::from("Arenas2"),
+    //     email: String::from("dave1362@gmail.com"),
+    // };
+
+    // context.services.user.create(new_user);
+    // context.services.user.create(new_user2);
+
+    // let all = context.services.user.get_all();
+    // println!("{:?}", all);
     // context.services.user.get(user_id);
 }

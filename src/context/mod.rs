@@ -1,4 +1,10 @@
-pub mod store;
+mod config;
+mod services;
+mod store;
+
+pub use config::Config;
+pub use services::Services;
+pub use store::Store;
 
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -6,8 +12,8 @@ use std::sync::Arc;
 use anyhow::Result;
 
 use crate::config::Config;
-use crate::services::Services;
 
+use self::services::Services;
 use self::store::Store;
 
 /// Wraps a `Context` into a `Arc` to allow sharing between treads

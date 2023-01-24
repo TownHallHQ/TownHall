@@ -1,9 +1,7 @@
-mod config;
 mod context;
 // mod graphql;
 mod handlers;
-mod models;
-mod services;
+mod modules;
 
 use std::net::SocketAddr;
 use std::sync::Arc;

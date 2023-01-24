@@ -9,5 +9,3 @@ pub struct User {
     pub created_at: DateTime<Local>,
     pub updated_at: DateTime<Local>,
 }
-
-impl User {}

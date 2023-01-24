@@ -1,10 +1,14 @@
-use std::sync::Arc;
-use std::time::Duration;
+pub mod store;
 
-use anyhow::{Error, Result};
+use std::path::PathBuf;
+use std::sync::Arc;
+
+use anyhow::Result;
 
 use crate::config::Config;
 use crate::services::Services;
+
+use self::store::Store;
 
 /// Wraps a `Context` into a `Arc` to allow sharing between treads
 pub type SharedContext = Arc<Context>;
@@ -16,7 +20,9 @@ pub struct Context {
 
 impl Context {
     pub async fn new(config: &Config) -> Result<Self> {
-        let services = Services::new(config);
+        let db_path = PathBuf::from(config.database_path.clone());
+        let store = Store::new(db_path);
+        let services = Services::new(config, store);
 
         Ok(Self { services })
     }

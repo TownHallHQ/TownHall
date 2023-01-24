@@ -35,9 +35,13 @@ async fn main() {
         owner_id: Some(String::from("6CKGl7zNyYxVGPnB")),
     };
 
-    let link_id = context.services.link.create(new_link);
+    // let link_id = context.services.link.create(new_link);
 
-    println!("{link_id}");
+    // println!("{link_id}");
+
+    let link = context.services.link.get(String::from("NMEBbr9qrK6OaLol"));
+
+    println!("{:?}", link);
 
     // let new_user = CreateUserDto {
     //     name: String::from("Dave"),

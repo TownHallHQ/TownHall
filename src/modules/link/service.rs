@@ -30,6 +30,14 @@ impl LinkService {
         Self { store }
     }
 
+    pub fn get(&self, id: String) -> Link {
+        let link_tree = self.store.db.open_tree("links").unwrap();
+        let link = link_tree.get(id).unwrap().unwrap();
+        let decoded = bincode::deserialize(&link).unwrap();
+
+        return decoded;
+    }
+
     pub fn create(&self, link: CreateLinkDto) -> String {
         let link_tree = self.store.db.open_tree("links").unwrap();
         let id = self.store.generate_id();

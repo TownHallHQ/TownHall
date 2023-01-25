@@ -26,12 +26,13 @@ async fn main() {
     let context = Context::new(&config)
         .await
         .expect("Failed to build context.");
+    let context = Arc::new(context);
     let schema = Schema::build(
         graphql::QueryRoot::default(),
         graphql::MutationRoot::default(),
         EmptySubscription,
     )
-    .data(Arc::new(&context))
+    .data(Arc::clone(&context))
     .finish();
 
     let app = Router::new()

@@ -1,4 +1,4 @@
-// pub mod graphql;
+pub mod graphql;
 pub mod redirect;
 
 use axum::http::StatusCode;

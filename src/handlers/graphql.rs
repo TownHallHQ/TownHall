@@ -7,7 +7,9 @@ use axum::http::HeaderMap;
 use axum::response::{Html, IntoResponse};
 use axum::Extension;
 
-use crate::graphql::GraphQLSchema;
+use crate::modules::GraphQLSchema;
+
+// use crate::graphql::GraphQLSchema;
 // use crate::services::auth::Token;
 
 pub async fn schema(

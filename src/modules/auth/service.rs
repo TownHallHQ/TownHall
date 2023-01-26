@@ -46,7 +46,7 @@ pub struct AuthService {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
     pub exp: usize,
-    pub uid: i32,
+    pub uid: String,
     pub iat: usize,
 }
 
@@ -65,7 +65,7 @@ impl AuthService {
         }
     }
 
-    pub fn sign_token(&self, uid: i32) -> Result<Token> {
+    pub fn sign_token(&self, uid: String) -> Result<Token> {
         let iat = Utc::now().timestamp() as usize;
         let exp = Utc::now()
             .checked_add_signed(Duration::days(30))

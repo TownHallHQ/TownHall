@@ -61,4 +61,11 @@ impl UserService {
         println!("User created!");
         return user.id;
     }
+
+    pub fn find_by_email(&self, email: String) -> Option<User> {
+        let users = self.get_all();
+        let all = users.into_iter().find(|item| email == item.email);
+
+        all
+    }
 }

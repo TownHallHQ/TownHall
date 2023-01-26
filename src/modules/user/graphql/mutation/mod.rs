@@ -8,7 +8,7 @@ pub struct UserMutationRoot;
 
 #[Object]
 impl UserMutationRoot {
-    async fn user_create(&self, ctx: &Context<'_>, input: UserCreateInput) -> Result<String> {
+    async fn user_create(&self, ctx: &Context<'_>, input: UserCreateInput) -> Result<UserCreate> {
         UserCreate::exec(ctx, input).await
     }
 }

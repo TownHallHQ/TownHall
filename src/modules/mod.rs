@@ -16,7 +16,7 @@ pub struct MutationRoot(
 );
 
 #[derive(MergedObject, Default)]
-// pub struct QueryRoot(pub AuthQueryRoot, pub UserQueryRoot);
 pub struct QueryRoot(pub LinkQueryRoot, pub UserQueryRoot);
+// pub struct QueryRoot(pub AuthQueryRoot, pub UserQueryRoot);
 
 pub type GraphQLSchema = Schema<QueryRoot, MutationRoot, EmptySubscription>;

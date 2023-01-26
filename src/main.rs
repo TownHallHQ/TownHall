@@ -1,5 +1,4 @@
 mod context;
-mod graphql;
 mod handlers;
 mod modules;
 
@@ -28,8 +27,8 @@ async fn main() {
         .expect("Failed to build context.");
     let context = Arc::new(context);
     let schema = Schema::build(
-        graphql::QueryRoot::default(),
-        graphql::MutationRoot::default(),
+        modules::QueryRoot::default(),
+        modules::MutationRoot::default(),
         EmptySubscription,
     )
     .data(Arc::clone(&context))

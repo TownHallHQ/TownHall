@@ -1,7 +1,10 @@
 use async_graphql::{Context, InputObject, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 
-use crate::{context::SharedContext, modules::user::service::CreateUserDto};
+use crate::{
+    context::SharedContext,
+    modules::user::{graphql::UserError, service::CreateUserDto},
+};
 
 #[derive(Debug, Default, InputObject)]
 pub struct UserCreateInput {
@@ -13,13 +16,12 @@ pub struct UserCreateInput {
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
 pub struct UserCreate {
-    user: String,
-    // user: Option<User>,
-    // error: Option<UserError>,
+    user: Option<String>,
+    error: Option<UserError>,
 }
 
 impl UserCreate {
-    pub async fn exec(ctx: &Context<'_>, input: UserCreateInput) -> Result<String> {
+    pub async fn exec(ctx: &Context<'_>, input: UserCreateInput) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
         // auth - hash_password
 
@@ -29,6 +31,9 @@ impl UserCreate {
             email: input.email,
         };
 
-        Ok(context.services.user.create(user))
+        Ok(Self {
+            user: Some(context.services.user.create(user)),
+            error: None,
+        })
     }
 }

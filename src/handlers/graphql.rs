@@ -15,7 +15,7 @@ use crate::modules::GraphQLSchema;
 pub async fn schema(
     req: GraphQLRequest,
     Extension(schema): Extension<GraphQLSchema>,
-    headers: HeaderMap,
+    // headers: HeaderMap,
 ) -> GraphQLResponse {
     let mut req = req.into_inner();
 

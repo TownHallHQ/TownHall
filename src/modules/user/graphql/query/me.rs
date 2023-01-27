@@ -1,10 +1,13 @@
 use async_graphql::{Context, Result, SimpleObject};
-use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 
-use crate::context::SharedContext;
-use crate::graphql::user::types::{User, UserError, UserErrorCode};
-use crate::services::auth::Token;
+use crate::{
+    context::SharedContext,
+    modules::{
+        auth::{graphql::User, service::Token},
+        user::graphql::{UserError, UserErrorCode},
+    },
+};
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
 pub struct Me {
@@ -18,23 +21,13 @@ impl Me {
 
         if let Some(jwt) = ctx.data_opt::<Token>() {
             let claims = context.services.auth.verify_token(jwt).unwrap();
+            let user = context.services.user.get(claims.uid);
+            let result = User::from(user);
 
-            if let Some(user) = UserEntity::find()
-                .filter(entity::user::Column::Id.eq(claims.uid))
-                .one(&context.conn())
-                .await
-                .unwrap()
-            {
-                return Ok(Me {
-                    user: Some(User {
-                        id: user.id,
-                        email: user.email,
-                        name: user.name,
-                        last_name: user.last_name,
-                    }),
-                    error: None,
-                });
-            }
+            return Ok(Me {
+                user: Some(result),
+                error: None,
+            });
         }
 
         Ok(Self {

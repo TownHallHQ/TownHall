@@ -43,12 +43,12 @@ impl UserService {
             .collect()
     }
 
-    pub fn get(&self, id: String) {
+    pub fn get(&self, id: String) -> User {
         let user_tree = self.store.db.open_tree("users").unwrap();
         let user = user_tree.get(id.as_bytes()).unwrap().unwrap();
         let decode: User = bincode::deserialize(&user).unwrap();
 
-        println!("{:?}", decode);
+        decode
     }
 
     pub fn create(&self, user_dto: CreateUserDto) -> User {

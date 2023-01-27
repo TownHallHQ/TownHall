@@ -16,8 +16,6 @@ pub struct User {
     pub name: String,
     pub surname: String,
     pub email: String,
-    // pub phone: Option<String>,
-    // pub role: Enum<Role>,
     pub created_at: DateTime<Local>,
     pub updated_at: DateTime<Local>,
 }

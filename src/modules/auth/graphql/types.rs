@@ -29,7 +29,6 @@ impl From<UserModel> for User {
             name: value.name,
             surname: value.last_name,
             email: value.email,
-            // phone: (),
             created_at: Default::default(),
             updated_at: Default::default(),
         }

@@ -10,6 +10,7 @@ pub struct CreateUserDto {
     pub name: String,
     pub last_name: String,
     pub email: String,
+    pub hash: String,
 }
 
 impl From<CreateUserDto> for User {
@@ -19,7 +20,7 @@ impl From<CreateUserDto> for User {
             name: value.name,
             last_name: value.last_name,
             email: value.email,
-            hash: String::from(""),
+            hash: value.hash,
             created_at: Default::default(),
             updated_at: Default::default(),
         }
@@ -50,7 +51,7 @@ impl UserService {
         println!("{:?}", decode);
     }
 
-    pub fn create(&self, user_dto: CreateUserDto) -> String {
+    pub fn create(&self, user_dto: CreateUserDto) -> User {
         let user_tree = self.store.db.open_tree("users").unwrap();
         let id = self.store.generate_id();
         let mut user = User::from(user_dto);
@@ -59,7 +60,7 @@ impl UserService {
         user_tree.insert(&user.id, encoded).unwrap();
 
         println!("User created!");
-        return user.id;
+        return user;
     }
 
     pub fn find_by_email(&self, email: String) -> Option<User> {

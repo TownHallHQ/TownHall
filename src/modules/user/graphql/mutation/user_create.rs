@@ -3,7 +3,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     context::SharedContext,
-    modules::user::{graphql::UserError, model::User, service::CreateUserDto},
+    modules::{
+        auth::graphql::User,
+        user::{graphql::UserError, service::CreateUserDto},
+    },
 };
 
 #[derive(Debug, Default, InputObject)]
@@ -37,9 +40,10 @@ impl UserCreate {
         };
 
         let result = context.services.user.create(user);
+        let response = User::from(result);
 
         Ok(Self {
-            user: Some(result),
+            user: Some(response),
             error: None,
         })
     }

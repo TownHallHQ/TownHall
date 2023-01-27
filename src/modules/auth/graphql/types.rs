@@ -2,6 +2,8 @@ use async_graphql::{Enum, SimpleObject, ID};
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 
+use crate::modules::user::model::User as UserModel;
+
 enum Role {
     User,
 }
@@ -14,23 +16,22 @@ pub struct User {
     pub name: String,
     pub surname: String,
     pub email: String,
-    pub phone: Option<String>,
+    // pub phone: Option<String>,
     // pub role: Enum<Role>,
     pub created_at: DateTime<Local>,
     pub updated_at: DateTime<Local>,
 }
 
-// impl From<entity::user::Model> for User {
-//     fn from(model: entity::user::Model) -> Self {
-//         User {
-//             id: ID(model.id.to_string()),
-//             email: model.email,
-//             name: model.name,
-//             surname: model.surname,
-//             phone: model.phone,
-//             role: model.role.into(),
-//             created_at: model.created_at.into(),
-//             updated_at: model.updated_at.into(),
-//         }
-//     }
-// }
+impl From<UserModel> for User {
+    fn from(value: UserModel) -> Self {
+        User {
+            id: ID(value.id),
+            name: value.name,
+            surname: value.last_name,
+            email: value.email,
+            // phone: (),
+            created_at: Default::default(),
+            updated_at: Default::default(),
+        }
+    }
+}

@@ -16,21 +16,21 @@ impl TokenCreate {
     pub async fn exec(ctx: &Context<'_>, email: String, password: String) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
 
-        if let user = context.services.user.find_by_email(email).unwrap() {
-            if context
-                .services
-                .auth
-                .validate_password(&user.hash, &password)
-            {
-                let access_token = context.services.auth.sign_token(user.id.clone()).unwrap();
+        let user = context.services.user.find_by_email(email).unwrap();
 
-                return Ok(Self {
-                    token: Some(AccessToken {
-                        access_token: access_token.0,
-                    }),
-                    error: None,
-                });
-            }
+        if context
+            .services
+            .auth
+            .validate_password(&user.hash, &password)
+        {
+            let access_token = context.services.auth.sign_token(user.id.clone()).unwrap();
+
+            return Ok(Self {
+                token: Some(AccessToken {
+                    access_token: access_token.0,
+                }),
+                error: None,
+            });
         }
 
         Ok(Self {

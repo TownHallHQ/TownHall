@@ -1,4 +1,4 @@
-mod token_create;
+pub mod token_create;
 
 use async_graphql::{Context, Object, Result};
 

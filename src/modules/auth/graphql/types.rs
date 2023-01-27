@@ -4,9 +4,9 @@ use serde::{Deserialize, Serialize};
 
 use crate::modules::user::model::User as UserModel;
 
-enum Role {
-    User,
-}
+// enum Role {
+//     User,
+// }
 
 /// Platform User. A platform user may have priviledges for different
 /// operations based on its `Role`.

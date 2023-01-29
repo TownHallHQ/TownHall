@@ -30,17 +30,13 @@ impl Config {
     }
 
     fn env_var<T: FromStr>(key: &str) -> T {
-        let value =
-            env::var(key).unwrap_or_else(|_| panic!("Missing environment variable: {}", key));
+        let value = env::var(key).unwrap_or_else(|_| panic!("Missing environment variable: {key}"));
 
         if let Ok(parsed) = str::parse::<T>(&value) {
             return parsed;
         }
 
-        panic!(
-            "Failed to parse environment variable value from key: {}",
-            key
-        );
+        panic!("Failed to parse environment variable value from key: {key}");
     }
 
     #[allow(dead_code)]

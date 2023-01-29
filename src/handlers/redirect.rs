@@ -1,15 +1,13 @@
-use axum::body::Full;
 use axum::extract::Path;
-use axum::http::StatusCode;
-use axum::response::{IntoResponse, Redirect, Response};
+
+use axum::response::IntoResponse;
 use axum::Extension;
-use tracing::info;
 
 use crate::context::SharedContext;
 
 pub async fn redirect(
-    ctx: Extension<SharedContext>,
-    Path(hash): Path<String>,
+    _ctx: Extension<SharedContext>,
+    Path(_hash): Path<String>,
 ) -> impl IntoResponse {
     todo!();
     // let Ok(maybe_link) = Link::find()

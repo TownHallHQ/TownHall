@@ -36,7 +36,7 @@ impl UserCreate {
             name: input.name,
             last_name: input.last_name,
             email: input.email,
-            hash: hash,
+            hash,
         };
 
         let result = context.services.user.create(user);

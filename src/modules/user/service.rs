@@ -60,13 +60,12 @@ impl UserService {
         user_tree.insert(&user.id, encoded).unwrap();
 
         println!("User created!");
-        return user;
+        user
     }
 
     pub fn find_by_email(&self, email: String) -> Option<User> {
         let users = self.get_all();
-        let all = users.into_iter().find(|item| email == item.email);
 
-        all
+        users.into_iter().find(|item| email == item.email)
     }
 }

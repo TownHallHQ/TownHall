@@ -44,9 +44,8 @@ impl LinkService {
     pub fn get(&self, id: String) -> Link {
         let link_tree = self.store.db.open_tree("links").unwrap();
         let link = link_tree.get(id).unwrap().unwrap();
-        let decoded = bincode::deserialize(&link).unwrap();
 
-        return decoded;
+        bincode::deserialize(&link).unwrap()
     }
 
     pub fn create(&self, link: CreateLinkDto) -> String {
@@ -58,6 +57,6 @@ impl LinkService {
 
         link_tree.insert(&link.id, encoded).unwrap();
         println!("Creating new link");
-        return link.id;
+        link.id
     }
 }

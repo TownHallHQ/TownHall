@@ -23,7 +23,7 @@ impl TokenCreate {
             .auth
             .validate_password(&user.hash, &password)
         {
-            let access_token = context.services.auth.sign_token(user.id.clone()).unwrap();
+            let access_token = context.services.auth.sign_token(user.id).unwrap();
 
             return Ok(Self {
                 token: Some(AccessToken {

@@ -1,9 +1,8 @@
-use async_graphql::{Enum, SimpleObject, ID};
+use async_graphql::{SimpleObject, ID};
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 
 use crate::modules::user::model::User as UserModel;
-
 
 /// Platform User. A platform user may have priviledges for different
 /// operations based on its `Role`.

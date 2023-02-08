@@ -12,6 +12,6 @@ pub struct LinkMutationRoot;
 #[Object]
 impl LinkMutationRoot {
     async fn link_create(&self, ctx: &Context<'_>, input: LinkCreateInput) -> Result<LinkCreate> {
-        LinkCreate::exec(ctx, input).await
+        LinkCreate::exec(ctx, input)
     }
 }

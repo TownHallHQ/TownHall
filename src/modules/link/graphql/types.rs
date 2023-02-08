@@ -1,4 +1,4 @@
-use async_graphql::{Enum, SimpleObject, ID};
+use async_graphql::{Enum, SimpleObject};
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
@@ -28,7 +28,7 @@ pub struct Link {
 impl From<LinkModel> for Link {
     fn from(value: LinkModel) -> Self {
         Link {
-            id: ID(value.id),
+            id: value.id,
             hash: value.hash,
             original_url: value.original_url,
             expires_at: Default::default(),

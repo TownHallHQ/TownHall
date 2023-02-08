@@ -69,8 +69,8 @@ impl LinkCreate {
 
         let link = CreateLinkDto {
             original_url: input.url,
-            custom_hash: input.custom_hash,
-            owner_id: Some(String::from("")),
+            custom_hash: Some(hash),
+            owner_id,
         };
 
         let result = context.services.link.create(link);

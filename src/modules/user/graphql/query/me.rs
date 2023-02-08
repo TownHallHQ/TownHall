@@ -22,7 +22,7 @@ impl Me {
         if let Some(jwt) = ctx.data_opt::<Token>() {
             let claims = context.services.auth.verify_token(jwt).unwrap();
             let user = context.services.user.get(claims.uid);
-            let result = User::from(user);
+            let result = User::from(user.unwrap());
 
             return Ok(Me {
                 user: Some(result),

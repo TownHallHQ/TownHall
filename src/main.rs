@@ -1,6 +1,7 @@
 mod context;
 mod handlers;
 mod modules;
+mod shared;
 
 use std::net::SocketAddr;
 use std::sync::Arc;

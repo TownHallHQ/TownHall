@@ -1,70 +1,36 @@
 use std::sync::Arc;
 
-use crate::{context::Store, modules::user::model::User};
+use crate::context::Store;
+use crate::modules::user::model::User;
+use crate::shared::repository::Repository;
+
+use super::repository::{CreateUserDto, UserRepository};
 
 pub struct UserService {
-    store: Arc<Store>,
-}
-
-pub struct CreateUserDto {
-    pub name: String,
-    pub last_name: String,
-    pub email: String,
-    pub hash: String,
-}
-
-impl From<CreateUserDto> for User {
-    fn from(value: CreateUserDto) -> User {
-        User {
-            id: String::from(""),
-            name: value.name,
-            last_name: value.last_name,
-            email: value.email,
-            hash: value.hash,
-            created_at: Default::default(),
-            updated_at: Default::default(),
-        }
-    }
+    repository: Arc<UserRepository>,
 }
 
 impl UserService {
     pub fn new(store: Arc<Store>) -> Self {
-        Self { store }
+        Self {
+            repository: Arc::new(UserRepository::new(store)),
+        }
     }
 
-    pub fn get_all(&self) -> Vec<User> {
-        let user_tree = self.store.db.open_tree("users").unwrap();
-        user_tree
-            .iter()
-            .map(|item| {
-                let (_, v) = item.unwrap();
-                bincode::deserialize::<User>(&v).unwrap()
-            })
-            .collect()
+    pub fn list(&self) -> Vec<User> {
+        self.repository.list().unwrap()
     }
 
-    pub fn get(&self, id: String) -> User {
-        let user_tree = self.store.db.open_tree("users").unwrap();
-        let user = user_tree.get(id.as_bytes()).unwrap().unwrap();
-        let decode: User = bincode::deserialize(&user).unwrap();
-
-        decode
+    pub fn get(&self, id: String) -> Option<User> {
+        self.repository.find_by_id(id).unwrap()
     }
 
-    pub fn create(&self, user_dto: CreateUserDto) -> User {
-        let user_tree = self.store.db.open_tree("users").unwrap();
-        let id = self.store.generate_id();
-        let mut user = User::from(user_dto);
-        user.id = id;
-        let encoded = bincode::serialize(&user).unwrap();
-        user_tree.insert(&user.id, encoded).unwrap();
-
-        println!("User created!");
-        user
+    pub fn create(&self, dto: CreateUserDto) -> User {
+        self.repository.create(dto).unwrap()
     }
 
     pub fn find_by_email(&self, email: String) -> Option<User> {
-        let users = self.get_all();
+        let users = self.list();
 
         users.into_iter().find(|item| email == item.email)
     }

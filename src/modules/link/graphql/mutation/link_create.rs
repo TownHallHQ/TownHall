@@ -10,7 +10,7 @@ use crate::{
         auth::service::Token,
         link::{
             graphql::{Link, LinkError, LinkErrorCode},
-            service::CreateLinkDto,
+            repository::CreateLinkDto,
         },
     },
 };
@@ -40,7 +40,7 @@ impl LinkCreate {
         });
 
         let owner = if let Some(claims) = user_claims {
-            Some(context.services.user.get(claims.uid))
+            Some(context.services.user.get(claims.uid).unwrap())
         } else {
             None
         };

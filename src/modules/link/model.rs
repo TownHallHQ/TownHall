@@ -1,7 +1,9 @@
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+use crate::shared::repository::Record;
+
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Link {
     pub id: String,
     pub hash: String,
@@ -10,4 +12,14 @@ pub struct Link {
     pub created_at: DateTime<Local>,
     pub updated_at: DateTime<Local>,
     pub owner_id: Option<String>,
+}
+
+impl Record for Link {
+    fn get_id(&self) -> String {
+        self.id.to_string()
+    }
+
+    fn set_id(&mut self, id: &str) {
+        self.id = id.to_string()
+    }
 }

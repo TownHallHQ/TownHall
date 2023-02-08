@@ -5,6 +5,7 @@ use axum::Extension;
 
 use crate::context::SharedContext;
 
+#[allow(dead_code)]
 pub async fn redirect(
     _ctx: Extension<SharedContext>,
     Path(_hash): Path<String>,

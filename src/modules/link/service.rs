@@ -9,6 +9,7 @@ pub struct LinkService {
 pub struct CreateLinkDto {
     pub original_url: String,
     pub owner_id: Option<String>,
+    pub custom_hash: Option<String>,
 }
 
 impl From<CreateLinkDto> for Link {
@@ -48,7 +49,7 @@ impl LinkService {
         bincode::deserialize(&link).unwrap()
     }
 
-    pub fn create(&self, link: CreateLinkDto) -> String {
+    pub fn create(&self, link: CreateLinkDto) -> Link {
         let link_tree = self.store.db.open_tree("links").unwrap();
         let id = self.store.generate_id();
         let mut link = Link::from(link);
@@ -56,7 +57,6 @@ impl LinkService {
         let encoded = bincode::serialize(&link).unwrap();
 
         link_tree.insert(&link.id, encoded).unwrap();
-        println!("Creating new link");
-        link.id
+        link
     }
 }

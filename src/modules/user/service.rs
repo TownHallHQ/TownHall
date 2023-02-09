@@ -1,5 +1,7 @@
 use std::sync::Arc;
 
+use tracing::info;
+
 use crate::context::Store;
 use crate::modules::user::model::User;
 use crate::shared::repository::Repository;
@@ -26,7 +28,10 @@ impl UserService {
     }
 
     pub fn create(&self, dto: CreateUserDto) -> User {
-        self.repository.create(dto).unwrap()
+        let user = self.repository.create(dto).unwrap();
+
+        info!(email=%user.email, "User created with success");
+        user
     }
 
     pub fn find_by_email(&self, email: String) -> Option<User> {

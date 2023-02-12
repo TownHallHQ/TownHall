@@ -60,10 +60,9 @@ pub trait Repository<const TREE: char, T: DeserializeOwned + Record + Serialize 
         U: Into<T> + Send + Serialize,
     {
         let tree = self.get_tree().unwrap();
-        let id = self.new_id();
         let mut record: T = dto.into();
 
-        record.set_id(&id);
+        record.set_id(key.as_ref());
         let encoded = serialize(&record).unwrap();
 
         tree.insert(key, encoded).unwrap();

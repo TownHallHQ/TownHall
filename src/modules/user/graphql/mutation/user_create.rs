@@ -31,7 +31,7 @@ impl UserCreate {
             .auth
             .hash_password(&input.password)
             .unwrap();
-        let email_bytes = input.email.clone().as_bytes().to_vec();
+        let email_bytes = input.email.as_bytes().to_vec();
         let create_user_dto = CreateUserDto {
             name: input.name,
             last_name: input.last_name,

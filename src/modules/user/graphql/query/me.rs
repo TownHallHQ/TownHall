@@ -7,6 +7,7 @@ use crate::{
         auth::{graphql::User, service::Token},
         user::graphql::{UserError, UserErrorCode},
     },
+    shared::repository::Repository,
 };
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
@@ -19,24 +20,27 @@ impl Me {
     pub async fn exec(ctx: &Context<'_>) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
 
-        // if let Some(jwt) = ctx.data_opt::<Token>() {
-        //     let claims = context.services.auth.verify_token(jwt).unwrap();
-        //     let user = context.services.user.get(claims.uid);
-        //     let result = User::from(user.unwrap());
+        if let Some(jwt) = ctx.data_opt::<Token>() {
+            let claims = context.services.auth.verify_token(jwt).unwrap();
+            let user = context
+                .repositories
+                .user
+                .find_by_key(claims.uid.as_bytes())
+                .unwrap();
+            let result = User::from(user.unwrap());
 
-        //     return Ok(Me {
-        //         user: Some(result),
-        //         error: None,
-        //     });
-        // }
+            return Ok(Me {
+                user: Some(result),
+                error: None,
+            });
+        }
 
-        // Ok(Self {
-        //     user: None,
-        //     error: Some(UserError {
-        //         code: UserErrorCode::Unauthorized,
-        //         message: String::from("Invalid token provided"),
-        //     }),
-        // })
-        todo!()
+        Ok(Self {
+            user: None,
+            error: Some(UserError {
+                code: UserErrorCode::Unauthorized,
+                message: String::from("Invalid token provided"),
+            }),
+        })
     }
 }

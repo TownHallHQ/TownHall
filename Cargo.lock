@@ -788,7 +788,6 @@ dependencies = [
  "rust-argon2",
  "serde",
  "sled",
- "thiserror",
  "tokio",
  "tower-http",
  "tracing",

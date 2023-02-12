@@ -64,15 +64,18 @@ impl LinkCreate {
 
         let link = CreateLinkDto {
             original_url: input.url,
-            custom_hash: Some(hash),
+            custom_hash: Some(hash.clone()),
             owner_id,
         };
 
-        let result = context.services.link.create(link);
-        let response = Link::from(result);
+        let record = context
+            .repositories
+            .link
+            .create_with_key(hash.as_bytes(), link)
+            .unwrap();
 
         Ok(Self {
-            link: Some(response),
+            link: Some(Link::from(record)),
             error: None,
         })
     }

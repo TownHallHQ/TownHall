@@ -24,14 +24,14 @@ pub trait Repository<const TREE: char, T: DeserializeOwned + Record + Serialize 
     fn get_tree(&self) -> sled::Result<sled::Tree>;
 
     /// Generates a new random ID to use for storing new records into a tree
-    fn new_id(&self) -> &[u8] {
+    fn new_id(&self) -> Vec<u8> {
         let id = rand::thread_rng()
             .sample_iter(&Alphanumeric)
             .take(ID_LEN)
             .map(char::from)
             .collect::<String>();
 
-        format!("{TREE}_{id}").as_bytes()
+        format!("{TREE}_{id}").as_bytes().to_vec()
     }
 
     /// Inserts a new Record into the tree by creating an instance of the

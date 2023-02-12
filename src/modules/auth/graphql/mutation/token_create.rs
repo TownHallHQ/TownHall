@@ -15,8 +15,7 @@ pub struct TokenCreate {
 impl TokenCreate {
     pub async fn exec(ctx: &Context<'_>, email: String, password: String) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
-
-        let user = context.services.user.find_by_email(email).unwrap();
+        let user = context.repositories.user.find_by_email(email).unwrap();
 
         if context
             .services

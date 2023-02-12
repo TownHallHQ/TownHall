@@ -1,13 +1,13 @@
+use std::str::from_utf8;
+
 use async_graphql::{Context, InputObject, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    context::SharedContext,
-    modules::{
-        auth::graphql::User,
-        user::{graphql::UserError, repositories::user::CreateUserDto},
-    },
-};
+use crate::context::SharedContext;
+use crate::modules::auth::graphql::User;
+use crate::modules::user::graphql::{UserError, UserErrorCode};
+use crate::modules::user::repository::CreateUserDto;
+use crate::shared::repository::Repository;
 
 #[derive(Debug, Default, InputObject)]
 pub struct UserCreateInput {
@@ -31,20 +31,37 @@ impl UserCreate {
             .auth
             .hash_password(&input.password)
             .unwrap();
-
-        let user = CreateUserDto {
+        let email_bytes = input.email.clone().as_bytes().to_vec();
+        let create_user_dto = CreateUserDto {
             name: input.name,
             last_name: input.last_name,
             email: input.email,
             hash,
         };
+        let maybe_user = context.repositories.user.find_by_key(&email_bytes).unwrap();
 
-        let result = context.services.user.create(user);
-        let response = User::from(result);
+        if maybe_user.is_none() {
+            let user = context
+                .repositories
+                .user
+                .create_with_key(email_bytes, create_user_dto)
+                .unwrap();
+
+            return Ok(Self {
+                user: Some(User::from(user)),
+                error: None,
+            });
+        }
 
         Ok(Self {
-            user: Some(response),
-            error: None,
+            user: None,
+            error: Some(UserError {
+                code: UserErrorCode::EmailTaken,
+                message: format!(
+                    "Email {email} is already taken",
+                    email = from_utf8(&email_bytes).unwrap()
+                ),
+            }),
         })
     }
 }

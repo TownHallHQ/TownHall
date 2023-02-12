@@ -30,14 +30,13 @@ impl Repository<LINK_REPOSITORY_TREE, Link> for LinkRepository {
 #[derive(Serialize)]
 pub struct CreateLinkDto {
     pub original_url: String,
-    pub owner_id: Option<String>,
+    pub owner_id: Option<Vec<u8>>,
     pub custom_hash: Option<String>,
 }
 
 impl From<CreateLinkDto> for Link {
     fn from(value: CreateLinkDto) -> Self {
         Self {
-            id: String::from(""),
             hash: String::from(""),
             original_url: value.original_url,
             owner_id: value.owner_id,

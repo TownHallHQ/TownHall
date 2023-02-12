@@ -27,7 +27,7 @@ impl Repository<USER_REPOSITORY_TREE, User> for UserRepository {
     }
 }
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct CreateUserDto {
     pub name: String,
     pub last_name: String,

@@ -1,4 +1,4 @@
+pub mod error;
 pub mod graphql;
 pub mod model;
-pub mod repositories;
-pub mod service;
+pub mod repository;

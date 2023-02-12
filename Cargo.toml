@@ -15,6 +15,7 @@ jsonwebtoken = "8.0"
 rand = "0.8.5"
 serde = { version = "1.0.144", features = ["derive"] }
 sled = "0.34.7"
+thiserror = "1.0.38"
 tokio = { version = "1.21.0", features = ["rt", "rt-multi-thread", "macros"] }
 tower-http = { version = "0.3.0", features = ["cors"] }
 tracing = "0.1.37"

@@ -5,21 +5,21 @@ use crate::shared::repository::Record;
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Link {
-    pub id: String,
+    pub id: Vec<u8>,
     pub hash: String,
     pub original_url: String,
     pub expires_at: DateTime<Local>,
     pub created_at: DateTime<Local>,
     pub updated_at: DateTime<Local>,
-    pub owner_id: Option<String>,
+    pub owner_id: Option<Vec<u8>>,
 }
 
 impl Record for Link {
-    fn get_id(&self) -> String {
-        self.id.to_string()
+    fn get_id(&self) -> &[u8] {
+        self.id.as_slice()
     }
 
-    fn set_id(&mut self, id: &str) {
-        self.id = id.to_string()
+    fn set_id(&mut self, id: &[u8]) {
+        self.id = id.to_owned();
     }
 }

@@ -22,7 +22,7 @@ impl LinkService {
 
     #[allow(dead_code)]
     pub fn get(&self, id: String) -> Option<Link> {
-        self.repository.find_by_id(id).unwrap()
+        self.repository.find_by_key(id.as_bytes()).unwrap()
     }
 
     pub fn create(&self, dto: CreateLinkDto) -> Link {

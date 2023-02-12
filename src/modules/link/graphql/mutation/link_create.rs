@@ -13,6 +13,7 @@ use crate::{
             repository::CreateLinkDto,
         },
     },
+    shared::repository::Repository,
 };
 
 #[derive(Debug, Default, SimpleObject)]
@@ -40,7 +41,7 @@ impl LinkCreate {
         });
 
         let owner = if let Some(claims) = user_claims {
-            Some(context.services.user.get(claims.uid).unwrap())
+            context.repositories.user.find_by_key(claims.uid).unwrap()
         } else {
             None
         };

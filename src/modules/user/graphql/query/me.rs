@@ -1,14 +1,10 @@
 use async_graphql::{Context, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    context::SharedContext,
-    modules::{
-        auth::{graphql::User, service::Token},
-        user::graphql::{UserError, UserErrorCode},
-    },
-    shared::repository::Repository,
-};
+use crate::context::SharedContext;
+use crate::modules::auth::{graphql::User, service::Token};
+use crate::modules::user::graphql::{UserError, UserErrorCode};
+use crate::shared::repository::Repository;
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
 pub struct Me {

@@ -4,16 +4,11 @@ use rand::Rng;
 use tracing::error;
 use url::Url;
 
-use crate::{
-    context::SharedContext,
-    modules::{
-        auth::service::Token,
-        link::{
-            graphql::{Link, LinkError, LinkErrorCode},
-            repository::CreateLinkDto,
-        },
-    },
-};
+use crate::context::SharedContext;
+use crate::modules::auth::service::Token;
+use crate::modules::link::graphql::{Link, LinkError, LinkErrorCode};
+use crate::modules::link::repository::CreateLinkDto;
+use crate::shared::repository::Repository;
 
 #[derive(Debug, Default, SimpleObject)]
 pub struct LinkCreate {
@@ -40,7 +35,7 @@ impl LinkCreate {
         });
 
         let owner = if let Some(claims) = user_claims {
-            Some(context.services.user.get(claims.uid).unwrap())
+            context.repositories.user.find_by_key(claims.uid).unwrap()
         } else {
             None
         };
@@ -56,6 +51,22 @@ impl LinkCreate {
         }
 
         let hash: String = if let Some(custom_hash) = input.custom_hash {
+            if context
+                .repositories
+                .link
+                .find_by_key(custom_hash.as_bytes())
+                .unwrap()
+                .is_some()
+            {
+                return Ok(Self {
+                    link: None,
+                    error: Some(LinkError {
+                        code: LinkErrorCode::CustomHashUsed,
+                        message: format!("Link with hash \"{custom_hash}\" already exists",),
+                    }),
+                });
+            }
+
             custom_hash
         } else {
             LinkCreate::create_hash()
@@ -69,15 +80,18 @@ impl LinkCreate {
 
         let link = CreateLinkDto {
             original_url: input.url,
-            custom_hash: Some(hash),
+            custom_hash: Some(hash.clone()),
             owner_id,
         };
 
-        let result = context.services.link.create(link);
-        let response = Link::from(result);
+        let record = context
+            .repositories
+            .link
+            .create_with_key(hash.as_bytes(), link)
+            .unwrap();
 
         Ok(Self {
-            link: Some(response),
+            link: Some(Link::from(record)),
             error: None,
         })
     }

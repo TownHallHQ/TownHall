@@ -2,10 +2,13 @@ use async_graphql::{Enum, SimpleObject};
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
+use std::str::from_utf8;
+
 use crate::modules::link::model::Link as LinkModel;
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]
 pub enum LinkErrorCode {
+    CustomHashUsed,
     InvalidUrl,
     Unauthorized,
     Unknown,
@@ -28,7 +31,8 @@ pub struct Link {
 impl From<LinkModel> for Link {
     fn from(value: LinkModel) -> Self {
         Link {
-            id: value.id,
+            // FIXME: this is very expensive
+            id: from_utf8(&value.id).unwrap().to_string(),
             hash: value.hash,
             original_url: value.original_url,
             expires_at: Default::default(),

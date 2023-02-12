@@ -1,13 +1,10 @@
 use async_graphql::{Context, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    context::SharedContext,
-    modules::{
-        auth::{graphql::User, service::Token},
-        user::graphql::{UserError, UserErrorCode},
-    },
-};
+use crate::context::SharedContext;
+use crate::modules::auth::{graphql::User, service::Token};
+use crate::modules::user::graphql::{UserError, UserErrorCode};
+use crate::shared::repository::Repository;
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
 pub struct Me {
@@ -21,7 +18,11 @@ impl Me {
 
         if let Some(jwt) = ctx.data_opt::<Token>() {
             let claims = context.services.auth.verify_token(jwt).unwrap();
-            let user = context.services.user.get(claims.uid);
+            let user = context
+                .repositories
+                .user
+                .find_by_key(claims.uid.as_bytes())
+                .unwrap();
             let result = User::from(user.unwrap());
 
             return Ok(Me {

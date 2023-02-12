@@ -1,3 +1,5 @@
+use std::str::from_utf8;
+
 use async_graphql::{SimpleObject, ID};
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
@@ -19,7 +21,8 @@ pub struct User {
 impl From<UserModel> for User {
     fn from(value: UserModel) -> Self {
         User {
-            id: ID(value.id),
+            // FIXME: This is very expensive
+            id: ID(from_utf8(&value.id).unwrap().to_string()),
             name: value.name,
             surname: value.last_name,
             email: value.email,

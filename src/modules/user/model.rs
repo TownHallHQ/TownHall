@@ -5,7 +5,7 @@ use crate::shared::repository::Record;
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 pub struct User {
-    pub id: String,
+    pub id: Vec<u8>,
     pub name: String,
     pub last_name: String,
     pub email: String,
@@ -15,11 +15,11 @@ pub struct User {
 }
 
 impl Record for User {
-    fn get_id(&self) -> String {
-        self.id.to_string()
+    fn get_id(&self) -> &[u8] {
+        self.id.as_slice()
     }
 
-    fn set_id(&mut self, id: &str) {
-        self.id = id.to_string()
+    fn set_id(&mut self, id: &[u8]) {
+        self.id = id.to_vec();
     }
 }

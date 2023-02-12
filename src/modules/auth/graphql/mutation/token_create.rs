@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     context::SharedContext,
     modules::user::graphql::{AccessToken, UserError, UserErrorCode},
+    shared::repository::Repository,
 };
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
@@ -15,15 +16,19 @@ pub struct TokenCreate {
 impl TokenCreate {
     pub async fn exec(ctx: &Context<'_>, email: String, password: String) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
-
-        let user = context.services.user.find_by_email(email).unwrap();
+        let user = context
+            .repositories
+            .user
+            .find_by_key(email.as_bytes())
+            .unwrap()
+            .unwrap();
 
         if context
             .services
             .auth
             .validate_password(&user.hash, &password)
         {
-            let access_token = context.services.auth.sign_token(user.id).unwrap();
+            let access_token = context.services.auth.sign_token(email).unwrap();
 
             return Ok(Self {
                 token: Some(AccessToken {

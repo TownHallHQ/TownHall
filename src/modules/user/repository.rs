@@ -5,7 +5,7 @@ use serde::Serialize;
 use crate::context::Store;
 use crate::shared::repository::Repository;
 
-use super::model::User;
+use crate::modules::user::model::User;
 
 const USER_REPOSITORY_TREE: char = 'u';
 
@@ -27,7 +27,7 @@ impl Repository<USER_REPOSITORY_TREE, User> for UserRepository {
     }
 }
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct CreateUserDto {
     pub name: String,
     pub last_name: String,

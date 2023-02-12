@@ -1,11 +1,6 @@
 use bincode::{deserialize, serialize};
-use rand::distributions::Alphanumeric;
-use rand::Rng;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
-
-/// Length of the random hash created by the `new_id` method
-const ID_LEN: usize = 16;
 
 /// A record represents an entity stored into the tree
 pub trait Record {
@@ -20,35 +15,6 @@ pub trait Repository<const TREE: char, T: DeserializeOwned + Record + Serialize 
 
     /// Retrieves a tree fromt the Sled instance
     fn get_tree(&self) -> sled::Result<sled::Tree>;
-
-    /// Generates a new random ID to use for storing new records into a tree
-    fn new_id(&self) -> Vec<u8> {
-        let id = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(ID_LEN)
-            .map(char::from)
-            .collect::<String>();
-
-        format!("{TREE}_{id}").as_bytes().to_vec()
-    }
-
-    /// Inserts a new Record into the tree by creating an instance of the
-    /// record from a DTO
-    fn create<U>(&self, dto: U) -> Result<T, Self::Error>
-    where
-        U: Into<T> + Send + Serialize,
-    {
-        let tree = self.get_tree().unwrap();
-        let id = self.new_id();
-        let mut record: T = dto.into();
-
-        record.set_id(&id);
-        let encoded = serialize(&record).unwrap();
-
-        tree.insert(id, encoded).unwrap();
-
-        Ok(record)
-    }
 
     /// Inserts a new Record into the tree by creating an instance of the
     /// record from a DTO

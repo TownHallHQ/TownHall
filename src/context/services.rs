@@ -9,7 +9,7 @@ pub struct Services {
 }
 
 impl Services {
-    pub fn new(store: Arc<Store>, config: &Config) -> Self {
+    pub fn new(_store: Arc<Store>, config: &Config) -> Self {
         let auth = AuthService::new(config.jwt_secret.clone());
 
         Self {

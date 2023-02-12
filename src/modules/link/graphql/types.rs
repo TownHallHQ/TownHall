@@ -8,6 +8,7 @@ use crate::modules::link::model::Link as LinkModel;
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]
 pub enum LinkErrorCode {
+    CustomHashUsed,
     InvalidUrl,
     Unauthorized,
     Unknown,

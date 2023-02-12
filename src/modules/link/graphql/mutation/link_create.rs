@@ -51,6 +51,22 @@ impl LinkCreate {
         }
 
         let hash: String = if let Some(custom_hash) = input.custom_hash {
+            if context
+                .repositories
+                .link
+                .find_by_key(custom_hash.as_bytes())
+                .unwrap()
+                .is_some()
+            {
+                return Ok(Self {
+                    link: None,
+                    error: Some(LinkError {
+                        code: LinkErrorCode::CustomHashUsed,
+                        message: format!("Link with hash \"{custom_hash}\" already exists",),
+                    }),
+                });
+            }
+
             custom_hash
         } else {
             LinkCreate::create_hash()

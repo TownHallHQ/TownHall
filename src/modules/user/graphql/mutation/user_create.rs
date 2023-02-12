@@ -5,7 +5,7 @@ use crate::{
     context::SharedContext,
     modules::{
         auth::graphql::User,
-        user::{graphql::UserError, repository::CreateUserDto},
+        user::{graphql::UserError, repositories::user::CreateUserDto},
     },
 };
 

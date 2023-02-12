@@ -5,7 +5,7 @@ use serde::Serialize;
 use crate::context::Store;
 use crate::shared::repository::Repository;
 
-use super::model::User;
+use crate::modules::user::model::User;
 
 const USER_REPOSITORY_TREE: char = 'u';
 

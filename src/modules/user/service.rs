@@ -6,29 +6,33 @@ use crate::context::Store;
 use crate::modules::user::model::User;
 use crate::shared::repository::Repository;
 
-use super::repository::{CreateUserDto, UserRepository};
+use super::repositories::user::CreateUserDto;
+use super::repositories::UserRepositories;
 
 pub struct UserService {
-    repository: Arc<UserRepository>,
+    repositories: Arc<UserRepositories>,
 }
 
 impl UserService {
     pub fn new(store: Arc<Store>) -> Self {
         Self {
-            repository: Arc::new(UserRepository::new(store)),
+            repositories: Arc::new(UserRepositories::new(store)),
         }
     }
 
     pub fn list(&self) -> Vec<User> {
-        self.repository.list().unwrap()
+        self.repositories.user.list().unwrap()
     }
 
     pub fn get(&self, id: String) -> Option<User> {
-        self.repository.find_by_id(id).unwrap()
+        self.repositories.user.find_by_id(id).unwrap()
     }
 
     pub fn create(&self, dto: CreateUserDto) -> User {
-        let user = self.repository.create(dto).unwrap();
+        // Verify the email in the `dto` is actually available
+        // TODO: Improve `find_by_id` to use borrowing
+        self.repositories.user_email.find_by_id(dto.email.clone());
+        let user = self.repositories.user.create(dto).unwrap();
 
         info!(email=%user.email, "User created with success");
         user

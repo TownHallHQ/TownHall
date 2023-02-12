@@ -1,3 +1,5 @@
+use std::os::unix::prelude::OsStrExt;
+
 use bincode::{deserialize, serialize};
 use rand::distributions::Alphanumeric;
 use rand::Rng;

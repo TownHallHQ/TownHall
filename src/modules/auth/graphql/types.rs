@@ -24,7 +24,7 @@ impl From<UserModel> for User {
             // FIXME: This is very expensive
             id: ID(from_utf8(&value.id).unwrap().to_string()),
             name: value.name,
-            surname: value.last_name,
+            surname: value.surname,
             email: value.email,
             created_at: Default::default(),
             updated_at: Default::default(),

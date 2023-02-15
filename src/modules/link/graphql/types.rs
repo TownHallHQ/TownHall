@@ -23,7 +23,6 @@ pub struct LinkError {
 #[derive(Debug, Deserialize, Serialize, SimpleObject)]
 pub struct Link {
     pub id: String,
-    pub hash: String,
     pub original_url: String,
     pub expires_at: NaiveDateTime,
 }
@@ -33,7 +32,6 @@ impl From<LinkModel> for Link {
         Link {
             // FIXME: this is very expensive
             id: from_utf8(&value.id).unwrap().to_string(),
-            hash: value.hash,
             original_url: value.original_url,
             expires_at: Default::default(),
         }

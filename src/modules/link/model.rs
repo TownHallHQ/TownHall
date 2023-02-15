@@ -6,7 +6,6 @@ use crate::shared::repository::Record;
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Link {
     pub id: Vec<u8>,
-    pub hash: String,
     pub original_url: String,
     pub expires_at: DateTime<Local>,
     pub created_at: DateTime<Local>,

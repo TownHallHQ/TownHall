@@ -12,7 +12,7 @@ use crate::shared::repository::Repository;
 #[derive(Debug, Default, InputObject)]
 pub struct UserCreateInput {
     pub name: String,
-    pub last_name: String,
+    pub surname: String,
     pub email: String,
     pub password: String,
 }
@@ -26,7 +26,7 @@ pub struct UserCreate {
 impl UserCreate {
     pub async fn exec(ctx: &Context<'_>, input: UserCreateInput) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
-        let hash = context
+        let password_hash = context
             .services
             .auth
             .hash_password(&input.password)
@@ -34,9 +34,9 @@ impl UserCreate {
         let email_bytes = input.email.as_bytes().to_vec();
         let create_user_dto = CreateUserDto {
             name: input.name,
-            last_name: input.last_name,
+            surname: input.surname,
             email: input.email,
-            hash,
+            password_hash,
         };
         let maybe_user = context.repositories.user.find_by_key(&email_bytes).unwrap();
 

@@ -7,9 +7,9 @@ use crate::shared::repository::Record;
 pub struct User {
     pub id: Vec<u8>,
     pub name: String,
-    pub last_name: String,
+    pub surname: String,
     pub email: String,
-    pub hash: String,
+    pub password_hash: String,
     pub created_at: DateTime<Local>,
     pub updated_at: DateTime<Local>,
 }

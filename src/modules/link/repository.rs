@@ -37,7 +37,6 @@ pub struct CreateLinkDto {
 impl From<CreateLinkDto> for Link {
     fn from(value: CreateLinkDto) -> Self {
         Self {
-            hash: String::from(""),
             original_url: value.original_url,
             owner_id: value.owner_id,
             ..Default::default()

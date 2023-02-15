@@ -30,18 +30,18 @@ impl Repository<USER_REPOSITORY_TREE, User> for UserRepository {
 #[derive(Clone, Serialize)]
 pub struct CreateUserDto {
     pub name: String,
-    pub last_name: String,
+    pub surname: String,
     pub email: String,
-    pub hash: String,
+    pub password_hash: String,
 }
 
 impl From<CreateUserDto> for User {
     fn from(value: CreateUserDto) -> Self {
         User {
             name: value.name,
-            last_name: value.last_name,
+            surname: value.surname,
             email: value.email,
-            hash: value.hash,
+            password_hash: value.password_hash,
             ..Default::default()
         }
     }

@@ -26,7 +26,7 @@ impl TokenCreate {
         if context
             .services
             .auth
-            .validate_password(&user.hash, &password)
+            .validate_password(&user.password_hash, &password)
         {
             let access_token = context.services.auth.sign_token(email).unwrap();
 

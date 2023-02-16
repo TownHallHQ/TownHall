@@ -1,12 +1,9 @@
-use async_graphql::connection::{query, Connection, Edge, EmptyFields};
 use async_graphql::{ComplexObject, Context, Enum, SimpleObject, ID};
 use serde::{Deserialize, Serialize};
 
 use crate::context::SharedContext;
 use crate::modules::link::graphql::Link;
 use crate::shared::repository::Repository;
-
-pub type LinksConnection = Connection<ID, Link, EmptyFields, EmptyFields>;
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]
 pub enum UserErrorCode {
@@ -27,6 +24,7 @@ pub struct UserError {
 }
 
 #[derive(Debug, Deserialize, Serialize, SimpleObject)]
+#[graphql(complex)]
 pub struct User {
     pub id: String,
     pub name: String,
@@ -35,11 +33,11 @@ pub struct User {
     pub links_ids: Vec<ID>,
 }
 
+#[ComplexObject]
 impl User {
-    async fn links(&self, ctx: &Context<'_>) -> Result<Vec<Link>, ()> {
+    async fn links(&self, ctx: &Context<'_>) -> Vec<Link> {
         let context = ctx.data_unchecked::<SharedContext>();
-        let links = self
-            .links_ids
+        self.links_ids
             .iter()
             .map(|link_id| {
                 let link = context
@@ -51,8 +49,6 @@ impl User {
 
                 Link::from(link)
             })
-            .collect::<Vec<Link>>();
-
-        Ok(links)
+            .collect::<Vec<Link>>()
     }
 }

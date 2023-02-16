@@ -1,5 +1,4 @@
 use async_graphql::{Enum, SimpleObject};
-use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
 use std::str::from_utf8;
@@ -24,7 +23,6 @@ pub struct LinkError {
 pub struct Link {
     pub id: String,
     pub original_url: String,
-    pub expires_at: NaiveDateTime,
 }
 
 impl From<LinkModel> for Link {
@@ -33,7 +31,6 @@ impl From<LinkModel> for Link {
             // FIXME: this is very expensive
             id: from_utf8(&value.id).unwrap().to_string(),
             original_url: value.original_url,
-            expires_at: Default::default(),
         }
     }
 }

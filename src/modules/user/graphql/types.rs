@@ -1,4 +1,7 @@
+use std::str::from_utf8;
+
 use async_graphql::{ComplexObject, Context, Enum, SimpleObject, ID};
+use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 
 use crate::context::SharedContext;
@@ -26,16 +29,18 @@ pub struct UserError {
 #[derive(Debug, Deserialize, Serialize, SimpleObject)]
 #[graphql(complex)]
 pub struct User {
-    pub id: String,
+    pub id: ID,
     pub name: String,
     pub surname: String,
     pub email: String,
     pub links_ids: Vec<ID>,
+    pub created_at: DateTime<Local>,
+    pub updated_at: DateTime<Local>,
 }
 
 #[ComplexObject]
 impl User {
-    async fn links(&self, ctx: &Context<'_>) -> Vec<Link> {
+    pub async fn links(&self, ctx: &Context<'_>) -> Vec<Link> {
         let context = ctx.data_unchecked::<SharedContext>();
         self.links_ids
             .iter()
@@ -50,5 +55,24 @@ impl User {
                 Link::from(link)
             })
             .collect::<Vec<Link>>()
+    }
+}
+
+impl From<crate::modules::user::model::User> for User {
+    fn from(value: crate::modules::user::model::User) -> Self {
+        User {
+            // FIXME: This is very expensive
+            id: ID(from_utf8(&value.id).unwrap().to_string()),
+            name: value.name,
+            surname: value.surname,
+            email: value.email,
+            links_ids: value
+                .links_ids
+                .iter()
+                .map(|link_id| ID::from(from_utf8(link_id).unwrap()))
+                .collect::<Vec<ID>>(),
+            created_at: value.created_at,
+            updated_at: value.updated_at,
+        }
     }
 }

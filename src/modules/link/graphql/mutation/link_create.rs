@@ -1,7 +1,7 @@
 use async_graphql::{Context, InputObject, Result, SimpleObject};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
-use tracing::error;
+
 use url::Url;
 
 use crate::context::SharedContext;

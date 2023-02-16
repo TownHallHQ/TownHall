@@ -78,7 +78,7 @@ pub trait Repository<const TREE: char, T: DeserializeOwned + Record + Serialize 
         let tree = self.get_tree().unwrap();
 
         if let Some(record) = self.find_by_key(&key).unwrap() {
-            let mut next_record = update_fn(record.clone()).unwrap();
+            let mut next_record = update_fn(record).unwrap();
             next_record.set_updated_at();
             let encoded = serialize(&next_record).unwrap();
 

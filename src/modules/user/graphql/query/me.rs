@@ -2,8 +2,8 @@ use async_graphql::{Context, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 
 use crate::context::SharedContext;
-use crate::modules::auth::{graphql::User, service::Token};
-use crate::modules::user::graphql::{UserError, UserErrorCode};
+use crate::modules::auth::service::Token;
+use crate::modules::user::graphql::{User, UserError, UserErrorCode};
 use crate::shared::repository::Repository;
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]

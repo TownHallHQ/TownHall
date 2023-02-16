@@ -30,7 +30,7 @@ impl Repository<LINK_REPOSITORY_TREE, Link> for LinkRepository {
 #[derive(Serialize)]
 pub struct CreateLinkDto {
     pub original_url: String,
-    pub owner_id: Option<Vec<u8>>,
+    pub owner_id: Vec<u8>,
     pub custom_hash: Option<String>,
 }
 

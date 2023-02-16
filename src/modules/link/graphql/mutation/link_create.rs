@@ -1,7 +1,7 @@
 use async_graphql::{Context, InputObject, Result, SimpleObject};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
-use tracing::error;
+
 use url::Url;
 
 use crate::context::SharedContext;
@@ -25,20 +25,9 @@ pub struct LinkCreateInput {
 impl LinkCreate {
     pub fn exec(ctx: &Context<'_>, input: LinkCreateInput) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
-        let user_claims = ctx.data_opt::<Token>().and_then(|jwt| {
-            let Ok(claims) = context.services.auth.verify_token(jwt) else {
-               error!("An error ocurred retriving claims from provided JWT");
-               return None;
-           };
-
-            Some(claims)
-        });
-
-        let owner = if let Some(claims) = user_claims {
-            context.repositories.user.find_by_key(claims.uid).unwrap()
-        } else {
-            None
-        };
+        let jwt = ctx.data_opt::<Token>().unwrap();
+        let claims = context.services.auth.verify_token(jwt).unwrap();
+        let user_id = claims.uid.as_bytes().to_vec();
 
         if let Err(parse_error) = Url::parse(&input.url) {
             return Ok(Self {
@@ -72,22 +61,29 @@ impl LinkCreate {
             LinkCreate::create_hash()
         };
 
-        let owner_id = if let Some(owner) = owner {
-            Some(owner.id)
-        } else {
-            None
-        };
-
         let link = CreateLinkDto {
             original_url: input.url,
             custom_hash: Some(hash.clone()),
-            owner_id,
+            owner_id: user_id.clone(),
         };
-
         let record = context
             .repositories
             .link
             .create_with_key(hash.as_bytes(), link)
+            .unwrap();
+        let link_id = record.id.clone();
+
+        context
+            .repositories
+            .user
+            .update(
+                user_id,
+                Box::new(|mut user| {
+                    user.links_ids.push(link_id);
+
+                    Ok(user)
+                }),
+            )
             .unwrap();
 
         Ok(Self {

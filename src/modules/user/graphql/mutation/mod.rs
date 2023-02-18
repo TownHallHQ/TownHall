@@ -1,9 +1,10 @@
+mod token_create;
 mod user_create;
 
 use async_graphql::{Context, Object, Result};
 
+use self::token_create::TokenCreate;
 use self::user_create::{UserCreate, UserCreateInput};
-use crate::modules::auth::graphql::token_create::TokenCreate;
 
 #[derive(Debug, Default)]
 pub struct UserMutationRoot;

@@ -1,11 +1,9 @@
 use async_graphql::{Context, Result, SimpleObject};
-use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 
-use entity::{self, prelude::User as UserEntity};
-
 use crate::context::SharedContext;
-use crate::graphql::user::{AccessToken, UserError, UserErrorCode};
+use crate::modules::user::graphql::{AccessToken, UserError, UserErrorCode};
+use crate::shared::repository::Repository;
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
 pub struct TokenCreate {
@@ -16,28 +14,59 @@ pub struct TokenCreate {
 impl TokenCreate {
     pub async fn exec(ctx: &Context<'_>, email: String, password: String) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
-
-        if let Some(user) = UserEntity::find()
-            .filter(entity::user::Column::Email.eq(email))
-            .one(&context.conn())
-            .await
-            .unwrap()
-        {
-            if context
-                .services
-                .auth
-                .validate_password(&user.hash, &password)
-            {
-                let access_token = context.services.auth.sign_token(user.id)?;
+        let Ok(maybe_user) = context
+            .repositories
+            .user
+            .find_by_key(email.as_bytes()) else {
+                tracing::error!(%email, "Failed to retrieve user from repository");
 
                 return Ok(Self {
-                    token: Some(AccessToken {
-                        access_token: access_token.0,
+                    token: None,
+                    error: Some(UserError {
+                        code: UserErrorCode::Unknown,
+                        message: String::from("An error ocurred")
                     }),
-                    error: None,
                 });
-            }
+            };
+
+        let Some(user) = maybe_user else {
+                tracing::error!(%email, "User with email wasn't found");
+
+                return Ok(Self {
+                    token: None,
+                    error: Some(UserError {
+                        code: UserErrorCode::Unauthorized,
+                        message: String::from("Invalid Credentials")
+                    }),
+                });
+            };
+
+        if context
+            .services
+            .auth
+            .validate_password(&user.password_hash, &password)
+        {
+            let Ok(access_token) = context.services.auth.sign_token(email) else {
+                tracing::error!("Failed to sign token");
+
+                return Ok(Self {
+                    token: None,
+                    error: Some(UserError {
+                        code: UserErrorCode::Unknown,
+                        message: String::from("An error ocurred")
+                    }),
+                });
+            };
+
+            return Ok(Self {
+                token: Some(AccessToken {
+                    access_token: access_token.0,
+                }),
+                error: None,
+            });
         }
+
+        tracing::warn!("Invalid credentials provided");
 
         Ok(Self {
             token: None,

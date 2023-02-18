@@ -1,7 +1,7 @@
 use std::str::from_utf8;
 
 use async_graphql::{Enum, SimpleObject};
-use chrono::{DateTime, Local}
+use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 
 use crate::modules::link::model::Link as LinkModel;

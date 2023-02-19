@@ -50,7 +50,7 @@ async fn main() {
                 .allow_methods([Method::GET, Method::POST]),
         );
 
-    info!("Listening on: {}", addr);
+    info!("Listening on: http://{addr}/graphql");
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())

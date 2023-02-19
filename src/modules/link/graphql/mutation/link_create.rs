@@ -19,6 +19,7 @@ pub struct LinkCreate {
 #[derive(Debug, Default, InputObject)]
 pub struct LinkCreateInput {
     pub url: String,
+    #[graphql(validator(min_length = 1))]
     pub custom_hash: Option<String>,
 }
 
@@ -40,6 +41,17 @@ impl LinkCreate {
         }
 
         let hash: String = if let Some(custom_hash) = input.custom_hash {
+            // Another way to validate
+            //    if custom_hash.is_empty() {
+            //        return Ok(Self {
+            //            link: None,
+            //            error: Some(LinkError {
+            //                code: LinkErrorCode::CustomHashUsed,
+            //                message: format!("Custom Hash is empty",),
+            //            }),
+            //        });
+            //    }
+
             if context
                 .repositories
                 .link

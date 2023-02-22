@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use chrono::Local;
 use serde::Serialize;
 
 use crate::context::Store;
@@ -42,6 +43,8 @@ impl From<CreateUserDto> for User {
             surname: value.surname,
             email: value.email,
             password_hash: value.password_hash,
+            created_at: Local::now(),
+            updated_at: Local::now(),
             ..Default::default()
         }
     }

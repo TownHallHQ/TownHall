@@ -26,6 +26,7 @@ pub struct Link {
     pub original_url: String,
     pub created_at: DateTime<Local>,
     pub updated_at: DateTime<Local>,
+    pub redirects: i32,
 }
 
 impl From<LinkModel> for Link {
@@ -36,6 +37,7 @@ impl From<LinkModel> for Link {
             original_url: value.original_url,
             created_at: value.created_at,
             updated_at: value.updated_at,
+            redirects: 0,
         }
     }
 }

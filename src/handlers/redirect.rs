@@ -12,7 +12,17 @@ pub async fn redirect(
     ctx: Extension<SharedContext>,
     Path(hash): Path<String>,
 ) -> impl IntoResponse {
-    if let Ok(Some(link)) = ctx.repositories.link.find_by_key(hash) {
+    if let Ok(Some(link)) = ctx.repositories.link.find_by_key(&hash) {
+        ctx.repositories
+            .link
+            .update(
+                hash,
+                Box::new(|mut link| {
+                    link.redirects += 1;
+                    Ok(link)
+                }),
+            )
+            .unwrap();
         return Redirect::to(&link.original_url).into_response();
     }
 

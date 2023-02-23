@@ -10,6 +10,7 @@ pub struct Link {
     pub created_at: DateTime<Local>,
     pub updated_at: DateTime<Local>,
     pub owner_id: Vec<u8>,
+    pub redirects: i32,
 }
 
 impl Record for Link {

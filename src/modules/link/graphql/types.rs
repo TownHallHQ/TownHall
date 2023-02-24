@@ -37,7 +37,7 @@ impl From<LinkModel> for Link {
             original_url: value.original_url,
             created_at: value.created_at,
             updated_at: value.updated_at,
-            redirects: 0,
+            redirects: value.redirects,
         }
     }
 }

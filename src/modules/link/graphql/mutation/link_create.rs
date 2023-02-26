@@ -4,15 +4,16 @@ use rand::Rng;
 
 use url::Url;
 
+use crate::{modules::link::model::Link, shared::gql::TypeGQL};
 use crate::context::SharedContext;
 use crate::modules::auth::service::Token;
-use crate::modules::link::graphql::{Link, LinkError, LinkErrorCode};
+use crate::modules::link::graphql::{LinkError, LinkErrorCode};
 use crate::modules::link::repository::CreateLinkDto;
 use crate::shared::repository::Repository;
 
 #[derive(Debug, Default, SimpleObject)]
 pub struct LinkCreate {
-    link: Option<Link>,
+    link: Option<TypeGQL<Link>>,
     error: Option<LinkError>,
 }
 
@@ -107,7 +108,7 @@ impl LinkCreate {
             .unwrap();
 
         Ok(Self {
-            link: Some(Link::from(record)),
+            link: Some(TypeGQL(record)),
             error: None,
         })
     }

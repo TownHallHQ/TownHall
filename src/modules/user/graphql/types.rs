@@ -5,7 +5,8 @@ use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 
 use crate::context::SharedContext;
-use crate::modules::link::graphql::Link;
+use crate::modules::link::model::Link;
+use crate::shared::gql::TypeGQL;
 use crate::shared::repository::Repository;
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]
@@ -40,7 +41,7 @@ pub struct User {
 
 #[ComplexObject]
 impl User {
-    pub async fn links(&self, ctx: &Context<'_>) -> Vec<Link> {
+    pub async fn links(&self, ctx: &Context<'_>) -> Vec<TypeGQL<Link>> {
         let context = ctx.data_unchecked::<SharedContext>();
         self.links_ids
             .iter()
@@ -52,9 +53,9 @@ impl User {
                     .unwrap()
                     .unwrap();
 
-                Link::from(link)
+                TypeGQL(link)
             })
-            .collect::<Vec<Link>>()
+            .collect::<Vec<TypeGQL<Link>>>()
     }
 }
 

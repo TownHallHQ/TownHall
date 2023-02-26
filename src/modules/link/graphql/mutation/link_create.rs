@@ -26,7 +26,15 @@ pub struct LinkCreateInput {
 impl LinkCreate {
     pub fn exec(ctx: &Context<'_>, input: LinkCreateInput) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
-        let jwt = ctx.data_opt::<Token>().unwrap();
+        let Some(jwt) = ctx.data_opt::<Token>() else {
+            return Ok(Self {
+                link: None,
+                error: Some(LinkError {
+                    code: LinkErrorCode::Unauthorized,
+                    message: format!("You must create a token using token create",),
+                }),
+            });
+        };
         let claims = context.services.auth.verify_token(jwt).unwrap();
         let user_id = claims.uid.as_bytes().to_vec();
 

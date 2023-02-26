@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use chrono::Local;
 use serde::Serialize;
 
 use crate::context::Store;
@@ -39,6 +40,8 @@ impl From<CreateLinkDto> for Link {
         Self {
             original_url: value.original_url,
             owner_id: value.owner_id,
+            created_at: Local::now(),
+            updated_at: Local::now(),
             ..Default::default()
         }
     }

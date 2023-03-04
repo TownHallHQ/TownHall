@@ -1,0 +1,84 @@
+use std::str::FromStr;
+
+use chrono::{DateTime, Utc};
+use pxid::Pxid;
+use serde::{Deserialize, Serialize};
+
+use crate::user::error::{Result, UserError};
+use crate::user::repository::UserRecord;
+
+use super::email::Email;
+use super::password::Password;
+
+pub const USER_PXID_PREFIX: &str = "user";
+
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+pub struct User {
+    pub id: Pxid,
+    pub name: String,
+    pub surname: String,
+    pub email: Email,
+    pub password: Password,
+    pub avatar_id: Option<Pxid>,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub deleted_at: Option<DateTime<Utc>>,
+}
+
+pub struct NewPhoneDto {
+    pub country_code: String,
+    pub phone_number: String,
+}
+
+pub struct NewUserDto {
+    pub name: String,
+    pub surname: String,
+    pub email: String,
+    pub phone: Option<NewPhoneDto>,
+    pub password: String,
+}
+
+impl User {
+    pub fn new(dto: NewUserDto) -> Result<Self> {
+        let email = Email::from_str(&dto.email)?;
+        let password = Password::from_str(&dto.password)?;
+
+        Ok(Self {
+            id: Self::new_id()?,
+            name: dto.name,
+            surname: dto.surname,
+            email,
+            password,
+            avatar_id: None,
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
+            deleted_at: None,
+        })
+    }
+
+    pub fn new_id() -> Result<Pxid> {
+        Pxid::new(USER_PXID_PREFIX).map_err(UserError::PxidError)
+    }
+}
+
+impl TryFrom<UserRecord> for User {
+    type Error = UserError;
+
+    fn try_from(value: UserRecord) -> Result<Self> {
+        let avatar_id = value
+            .avatar_id
+            .and_then(|value| Some(Pxid::from_str(&value).unwrap()));
+
+        Ok(User {
+            id: Pxid::from_str(&value.id)?,
+            name: value.name,
+            surname: value.surname,
+            email: Email(value.email.into()),
+            password: Password(value.password_hash.into()),
+            created_at: value.created_at,
+            updated_at: value.updated_at,
+            deleted_at: value.deleted_at,
+            avatar_id,
+        })
+    }
+}

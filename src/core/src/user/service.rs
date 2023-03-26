@@ -1,26 +1,14 @@
 use pxid::Pxid;
 
 use super::error::Result;
-use super::model::{Email, NewPhoneDto, User};
+use super::model::{Email, User};
 use super::repository::UserRepository;
 
-pub struct CreateAdminDto {
+pub struct CreateUserDto {
     pub name: String,
     pub surname: String,
     pub email: String,
     pub password: String,
-}
-
-pub struct CreateCustomerDto {
-    pub name: String,
-    pub surname: String,
-    pub email: String,
-    pub phone: Option<NewPhoneDto>,
-    pub password: Option<String>,
-}
-
-pub struct UploadAvatarDto {
-    pub bytes: Vec<u8>,
 }
 
 #[derive(Clone)]

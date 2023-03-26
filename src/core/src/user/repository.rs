@@ -25,7 +25,6 @@ pub struct UserRecord {
     /// https://github.com/rin-nas/postgresql-patterns-library/blob/master/functions/phone_parse.sql
     pub phone: Option<String>,
     pub password_hash: String,
-    pub avatar_id: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub deleted_at: Option<DateTime<Utc>>,
@@ -85,7 +84,6 @@ pub mod tests {
                     email: dto.email.clone(),
                     phone: dto.phone.clone(),
                     password_hash: dto.password_hash,
-                    avatar_id: None,
                     created_at: Utc::now(),
                     updated_at: Utc::now(),
                     deleted_at: None,

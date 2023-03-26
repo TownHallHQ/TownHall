@@ -19,7 +19,6 @@ pub struct User {
     pub surname: String,
     pub email: Email,
     pub password: Password,
-    pub avatar_id: Option<Pxid>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub deleted_at: Option<DateTime<Utc>>,
@@ -49,7 +48,6 @@ impl User {
             surname: dto.surname,
             email,
             password,
-            avatar_id: None,
             created_at: Utc::now(),
             updated_at: Utc::now(),
             deleted_at: None,
@@ -65,10 +63,6 @@ impl TryFrom<UserRecord> for User {
     type Error = UserError;
 
     fn try_from(value: UserRecord) -> Result<Self> {
-        let avatar_id = value
-            .avatar_id
-            .and_then(|value| Some(Pxid::from_str(&value).unwrap()));
-
         Ok(User {
             id: Pxid::from_str(&value.id)?,
             name: value.name,
@@ -78,7 +72,6 @@ impl TryFrom<UserRecord> for User {
             created_at: value.created_at,
             updated_at: value.updated_at,
             deleted_at: value.deleted_at,
-            avatar_id,
         })
     }
 }

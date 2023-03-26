@@ -1,5 +1,5 @@
 <div>
-  <h1 align="center">linx</h1>
+  <h1 align="center">quicklink</h1>
   <p align="center">Headless URL Shortener</p>
 </div>
 
@@ -13,10 +13,10 @@
 
 ```bash
 # clone this repository
-git clone https://github.com/whizzes/linx.git
+git clone https://github.com/whizzes/quicklink.git
 
 # step into repository directory
-cd ./linx
+cd ./quicklink
 
 # copy the `.env.example` file into a `.env` file
 cp .env.example .env

@@ -1,3 +1,9 @@
+## Install `Just` Command Runner
+
+```bash
+cargo install just
+```
+
 ## Database Management
 
 This application uses seaql/sea-orm for Database connections and conpsumption.

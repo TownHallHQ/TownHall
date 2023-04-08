@@ -41,7 +41,7 @@ impl MigrationTrait for Migration {
                     )
                     .foreign_key(
                         ForeignKey::create()
-                            .name("FK_user_links_user_id")
+                            .name("FK_user_links_link_id")
                             .from(UserLinks::Table, UserLinks::LinkId)
                             .to(Link::Table, Link::Id)
                             .on_delete(ForeignKeyAction::Cascade)

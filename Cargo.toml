@@ -2,6 +2,7 @@
 members = [
     "src/cli",
     "src/core",
+    "src/entity",
     "src/migration",
     "src/server",
 ]

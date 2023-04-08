@@ -26,7 +26,6 @@ impl DatabseSub {
         match self {
             Self::Migrate(opt) => {
                 tracing::info!("Creating new Database Manager");
-                tracing::info!("{}", opt.database_url);
                 let manager = Database::new(&opt.database_url).await.unwrap();
 
                 tracing::info!("Running database migrations");

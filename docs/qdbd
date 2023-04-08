@@ -1,0 +1,27 @@
+# https://app.quickdatabasediagrams.com/#/
+
+User
+-
+id PK Pxid
+name String
+surname String
+email String
+password String
+created_at DateTime
+updated_at DateTime
+deleted_at NULL DateTime
+
+Link
+-
+id PK Pxid
+slug String
+original_url String
+created_at DateTime
+updated_at DateTime
+deleted_at NULL DateTime
+
+UserLinks
+-
+id PK
+UserID FK - User.id
+LinkID FK - Link.id

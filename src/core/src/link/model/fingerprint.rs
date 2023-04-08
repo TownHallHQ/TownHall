@@ -1,9 +1,12 @@
 use std::borrow::Cow;
 use std::str::FromStr;
 
+use serde::{Deserialize, Serialize};
+
 use crate::link::error::LinkError;
 
 /// A Fingerprint is a unique identifier for a link. It must be URL safe.
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub struct Fingerprint(Cow<'static, str>);
 
 impl FromStr for Fingerprint {

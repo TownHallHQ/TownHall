@@ -1,0 +1,30 @@
+[package]
+name = "cli"
+version = "0.1.0"
+edition = "2021"
+authors = ["Esteban Borai <estebanborai@gmail.com>"]
+
+[lib]
+name = "libcli"
+path = "src/lib.rs"
+
+[[bin]]
+name = "cli"
+path = "src/bin/main.rs"
+
+[dependencies]
+clap = { version = "4.1.4", features = ["std", "derive", "env"] }
+
+# Workspace Dependencies
+dotenv = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# Local Dependencies
+core = { path = "../core" }
+database = { path = "../database" }
+server = { path = "../server" }
+
+[dev-dependencies]
+serde_json = { workspace = true }

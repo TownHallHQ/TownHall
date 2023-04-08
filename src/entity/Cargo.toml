@@ -1,0 +1,15 @@
+[package]
+name = "entity"
+version = "0.1.0"
+edition = "2021"
+authors = ["Esteban Borai <estebanborai@gmail.com>"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "entity"
+path = "src/lib.rs"
+
+[dependencies]
+sea-orm = { version = "0.11.2", features = [ "sqlx-postgres", "runtime-tokio-rustls", "macros", "with-chrono", ] }
+serde = { workspace = true, features = ["derive"] }

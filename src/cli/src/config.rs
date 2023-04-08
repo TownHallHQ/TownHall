@@ -1,0 +1,1 @@
+pub const DATABASE_URL_ENV_VAR: &str = "DATABASE_URL";

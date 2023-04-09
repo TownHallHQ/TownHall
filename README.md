@@ -5,7 +5,7 @@
 
 <div align="center">
 
-  [![Discord](https://img.shields.io/discord/1015625333887733882?color=blue&label=discord&logo=discord)](https://discord.gg/yde6mcgs2C)
+  [![Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/yde6mcgs2C)
   ![Build](https://github.com/whizzes/quicklink/workflows/build/badge.svg)
   ![Clippy](https://github.com/whizzes/quicklink/workflows/clippy/badge.svg)
   ![Formatter](https://github.com/whizzes/quicklink/workflows/fmt/badge.svg)

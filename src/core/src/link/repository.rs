@@ -24,8 +24,8 @@ pub struct InsertLinkDto {
 }
 
 pub struct LinkFilter {
-    id: Option<Pxid>,
-    fingerprint: Option<Fingerprint>,
+    pub id: Option<Pxid>,
+    pub fingerprint: Option<Fingerprint>,
 }
 
 #[async_trait]

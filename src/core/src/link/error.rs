@@ -8,6 +8,8 @@ pub enum LinkError {
     FingerprintParseError(String),
     #[error("An error ocurred processing Pxid value")]
     PxidError(pxid::Error),
+    #[error("Database Error")]
+    DatabaseError,
 }
 
 impl From<pxid::Error> for LinkError {

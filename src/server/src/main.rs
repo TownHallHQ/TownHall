@@ -1,5 +1,6 @@
 mod config;
 mod context;
+mod graphql;
 mod handlers;
 
 use axum::routing::get;

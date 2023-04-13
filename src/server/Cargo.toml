@@ -17,6 +17,7 @@ jsonwebtoken = "8.3"
 tower-http = { version = "0.3.5", features = ["cors"] }
 
 # Workspace Dependencies
+async-graphql = { workspace = true }
 dotenv = { workspace = true }
 tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
 tracing = { workspace = true }
@@ -25,3 +26,4 @@ url = { workspace = true }
 
 # Local Dependencies
 core = { path = "../core" }
+database = { path = "../database" }

@@ -19,6 +19,7 @@ tracing = { workspace = true }
 
 # Local Dependencies
 core = { path = "../core" }
+entity = { path = "../entity" }
 migration = { path = "../migration" }
 
 [dev-dependencies]

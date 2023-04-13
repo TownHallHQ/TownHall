@@ -15,3 +15,9 @@ pub struct Link {
     pub updated_at: DateTime<Utc>,
     pub deleted_at: Option<DateTime<Utc>>,
 }
+
+impl Link {
+    pub fn generate_id() -> Pxid {
+        Pxid::new_unchecked("link")
+    }
+}

@@ -6,7 +6,7 @@ members = [
     "src/migration",
     "src/server",
 ]
-default-members = ["src/cli"]
+default-members = ["src/cli", "src/server"]
 
 [workspace.dependencies]
 async-graphql = { version = "5.0.6", features = ["chrono", "decimal", "tracing"] }

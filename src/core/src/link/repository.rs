@@ -4,12 +4,12 @@ use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
 use crate::link::error::Result;
-use crate::link::model::fingerprint::Fingerprint;
+use crate::link::model::ulid::Ulid;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct LinkRecord {
     pub id: String,
-    pub fingerprint: String,
+    pub ulid: String,
     pub original_url: String,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
@@ -20,12 +20,13 @@ pub struct LinkRecord {
 pub struct InsertLinkDto {
     pub user_id: String,
     pub original_url: String,
-    pub fingerprint: Option<String>,
+    pub ulid: String,
 }
 
+#[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
 pub struct LinkFilter {
     pub id: Option<Pxid>,
-    pub fingerprint: Option<Fingerprint>,
+    pub ulid: Option<Ulid>,
 }
 
 #[async_trait]

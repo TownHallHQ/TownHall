@@ -1,9 +1,11 @@
-use async_graphql::{EmptySubscription, MergedObject, Schema, SimpleObject, ID};
+mod link;
+
+use async_graphql::MergedObject;
+
+use self::link::mutation::LinkMutationRoot;
 
 #[derive(MergedObject, Default)]
-pub struct MutationRoot;
+pub struct MutationRoot(LinkMutationRoot);
 
 #[derive(MergedObject, Default)]
 pub struct QueryRoot;
-
-pub type GraphQLSchema = Schema<QueryRoot, MutationRoot, EmptySubscription>;

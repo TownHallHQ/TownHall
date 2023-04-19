@@ -37,7 +37,7 @@ pub struct Email(pub(crate) Cow<'static, str>);
 
 impl Display for Email {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.0.to_string())
+        write!(f, "{}", self.0)
     }
 }
 

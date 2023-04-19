@@ -21,8 +21,8 @@ impl LinkRepository {
     pub fn into_record(model: entity::link::Model) -> LinkRecord {
         LinkRecord {
             id: model.id,
+            ulid: model.ulid,
             original_url: model.original_url,
-            fingerprint: model.fingerprint,
             created_at: DateTime::from_utc(model.created_at, Utc),
             updated_at: DateTime::from_utc(model.updated_at, Utc),
             deleted_at: model.deleted_at.map(|naive| DateTime::from_utc(naive, Utc)),
@@ -35,13 +35,13 @@ impl quicklink::link::repository::LinkRepository for LinkRepository {
     async fn insert(&self, dto: InsertLinkDto) -> Result<LinkRecord> {
         let active_model = entity::link::ActiveModel {
             id: Set(Link::generate_id().to_string()),
+            ulid: Set(dto.ulid),
             original_url: Set(dto.original_url),
-            fingerprint: Set(dto.fingerprint.unwrap_or_default()),
             ..Default::default()
         };
 
         let model = active_model.insert(&*self.db.0).await.map_err(|err| {
-            // TODO: Handle duplicated Fingerprint error
+            // TODO: Handle duplicated ULID error
             tracing::error!(%err, "Failed to insert into database");
             LinkError::DatabaseError
         })?;
@@ -57,8 +57,8 @@ impl quicklink::link::repository::LinkRepository for LinkRepository {
                 query = query.filter(entity::link::Column::Id.eq(id.to_string()));
             }
 
-            if let Some(fingerprint) = filter.fingerprint {
-                query = query.filter(entity::link::Column::Fingerprint.eq(fingerprint.to_string()));
+            if let Some(ulid) = filter.ulid {
+                query = query.filter(entity::link::Column::Ulid.eq(ulid.to_string()));
             }
         }
 
@@ -71,9 +71,6 @@ impl quicklink::link::repository::LinkRepository for LinkRepository {
             return Ok(Vec::default());
         }
 
-        Ok(rows
-            .into_iter()
-            .map(|model| LinkRepository::into_record(model))
-            .collect())
+        Ok(rows.into_iter().map(LinkRepository::into_record).collect())
     }
 }

@@ -19,7 +19,7 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(Link::Fingerprint).string_len(256).not_null())
+                    .col(ColumnDef::new(Link::Ulid).string_len(256).not_null())
                     .col(ColumnDef::new(Link::OriginalUrl).string_len(512).not_null())
                     .col(
                         ColumnDef::new(Link::CreatedAt)
@@ -51,7 +51,7 @@ impl MigrationTrait for Migration {
 pub enum Link {
     Table,
     Id,
-    Fingerprint,
+    Ulid,
     OriginalUrl,
     CreatedAt,
     UpdatedAt,

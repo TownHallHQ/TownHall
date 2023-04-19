@@ -1,13 +1,16 @@
-docker-setup:
+setup-db:
   docker compose up database
 
-docker-cleanup:
+shutdown-db:
   docker compose down
 
 migrate:
-  cargo run database migrate
+  cargo run --bin cli database migrate
 
-entities:
+generate:
   sea-orm-cli generate entity \
     --with-serde both \
     --output-dir ./src/entity/src --lib
+
+serve:
+  cargo run --bin server

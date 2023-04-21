@@ -14,3 +14,6 @@ generate:
 
 serve:
   cargo run --bin server
+
+clippy:
+  cargo clippy --fix --workspace

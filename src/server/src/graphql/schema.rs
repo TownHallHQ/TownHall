@@ -1,9 +1,4 @@
-
-
-
 use async_graphql::{EmptySubscription, Schema};
-
-
 
 use super::modules::{MutationRoot, QueryRoot};
 

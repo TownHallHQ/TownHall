@@ -2396,6 +2396,7 @@ dependencies = [
  "database",
  "dotenv",
  "jsonwebtoken",
+ "pxid",
  "rand",
  "rust-argon2",
  "serde",

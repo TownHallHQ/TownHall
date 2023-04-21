@@ -21,7 +21,12 @@ impl MigrationTrait for Migration {
                     )
                     .col(ColumnDef::new(User::Name).string_len(256).not_null())
                     .col(ColumnDef::new(User::Surname).string_len(256).not_null())
-                    .col(ColumnDef::new(User::Email).string_len(256).unique_key())
+                    .col(
+                        ColumnDef::new(User::Email)
+                            .string_len(256)
+                            .unique_key()
+                            .not_null(),
+                    )
                     .col(
                         ColumnDef::new(User::PasswordHash)
                             .string_len(512)

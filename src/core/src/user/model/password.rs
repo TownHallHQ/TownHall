@@ -32,7 +32,14 @@ pub enum PasswordError {
     HashVerifyError,
 }
 
-/// Password [Value Object][1]
+/// Password [Value Object][1] used to hash and store the hashed version of the
+/// password. Passwords are not accesible on raw state.
+///
+/// Calling `to_string` on this struct will return the hashed version of the
+/// password.
+///
+/// To create an instance of `Password` you must call `from_str` function
+/// which is introduced by the `FromStr` trait.
 ///
 /// # Validation
 ///

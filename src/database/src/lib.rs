@@ -1,4 +1,5 @@
 pub mod link;
+pub mod user;
 
 use std::ops::Deref;
 use std::sync::Arc;

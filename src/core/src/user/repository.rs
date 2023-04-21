@@ -6,11 +6,16 @@ use serde::{Deserialize, Serialize};
 use crate::user::error::Result;
 use crate::user::model::Email;
 
+#[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
+pub struct UserFilter {
+    pub id: Option<Pxid>,
+    pub email: Option<Email>,
+}
+
 #[async_trait]
 pub trait UserRepository: Clone {
     async fn insert(&self, dto: InsertUserDto) -> Result<UserRecord>;
-    async fn find_by_email(&self, email: Email) -> Result<Option<UserRecord>>;
-    async fn find_by_id(&self, id: Pxid) -> Result<Option<UserRecord>>;
+    async fn find(&self, filter: Option<UserFilter>) -> Result<Vec<UserRecord>>;
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -19,11 +24,6 @@ pub struct UserRecord {
     pub name: String,
     pub surname: String,
     pub email: String,
-    /// User's Phone Number, probably can use:
-    ///
-    /// https://github.com/rin-nas/postgresql-patterns-library/blob/master/domains/phone.sql
-    /// https://github.com/rin-nas/postgresql-patterns-library/blob/master/functions/phone_parse.sql
-    pub phone: Option<String>,
     pub password_hash: String,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
@@ -36,6 +36,5 @@ pub struct InsertUserDto {
     pub name: String,
     pub surname: String,
     pub email: String,
-    pub phone: Option<String>,
     pub password_hash: String,
 }

@@ -24,16 +24,10 @@ pub struct User {
     pub deleted_at: Option<DateTime<Utc>>,
 }
 
-pub struct NewPhoneDto {
-    pub country_code: String,
-    pub phone_number: String,
-}
-
 pub struct NewUserDto {
     pub name: String,
     pub surname: String,
     pub email: String,
-    pub phone: Option<NewPhoneDto>,
     pub password: String,
 }
 
@@ -43,7 +37,7 @@ impl User {
         let password = Password::from_str(&dto.password)?;
 
         Ok(Self {
-            id: Self::new_id()?,
+            id: Self::generate_id()?,
             name: dto.name,
             surname: dto.surname,
             email,
@@ -54,7 +48,7 @@ impl User {
         })
     }
 
-    pub fn new_id() -> Result<Pxid> {
+    pub fn generate_id() -> Result<Pxid> {
         Pxid::new(USER_PXID_PREFIX).map_err(UserError::PxidError)
     }
 }

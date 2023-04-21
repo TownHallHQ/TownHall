@@ -1,14 +1,12 @@
-use pxid::Pxid;
-
 use super::error::Result;
-use super::model::{Email, User};
-use super::repository::UserRepository;
+use super::model::{Email, Password, User};
+use super::repository::{InsertUserDto, UserFilter, UserRepository};
 
 pub struct CreateUserDto {
     pub name: String,
     pub surname: String,
-    pub email: String,
-    pub password: String,
+    pub email: Email,
+    pub password: Password,
 }
 
 #[derive(Clone)]
@@ -26,23 +24,29 @@ where
         }
     }
 
-    pub async fn find_by_email(&self, email: Email) -> Result<Option<User>> {
-        if let Some(user_record) = self.repository.find_by_email(email).await? {
-            let user = User::try_from(user_record)?;
+    pub async fn create(&self, dto: CreateUserDto) -> Result<User> {
+        let record = self
+            .repository
+            .insert(InsertUserDto {
+                id: User::generate_id()?.to_string(),
+                name: dto.name,
+                surname: dto.surname,
+                email: dto.email.to_string(),
+                password_hash: dto.password.to_string(),
+            })
+            .await?;
+        let user = User::try_from(record)?;
 
-            return Ok(Some(user));
-        }
-
-        Ok(None)
+        Ok(user)
     }
 
-    pub async fn find_by_id(&self, id: Pxid) -> Result<Option<User>> {
-        if let Some(user_record) = self.repository.find_by_id(id).await? {
-            let user = User::try_from(user_record)?;
+    pub async fn find(&self, filter: Option<UserFilter>) -> Result<Vec<User>> {
+        let records = self.repository.find(filter).await?;
+        let users = records
+            .into_iter()
+            .map_while(|record| User::try_from(record).ok())
+            .collect();
 
-            return Ok(Some(user));
-        }
-
-        Ok(None)
+        Ok(users)
     }
 }

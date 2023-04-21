@@ -1,11 +1,10 @@
 use std::str::FromStr;
 
 use anyhow::{Error, Result};
-use argon2::{hash_encoded, verify_encoded, Config};
+use argon2::verify_encoded;
 use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
-use rand::distributions::Alphanumeric;
-use rand::{thread_rng, Rng};
+use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
 const JWT_AUDIENCE: &str = "linx";
@@ -46,7 +45,7 @@ pub struct AuthService {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
     pub exp: usize,
-    pub uid: String,
+    pub uid: Pxid,
     pub iat: usize,
 }
 
@@ -65,7 +64,7 @@ impl AuthService {
         }
     }
 
-    pub fn sign_token(&self, uid: String) -> Result<Token> {
+    pub fn sign_token(&self, uid: Pxid) -> Result<Token> {
         let iat = Utc::now().timestamp() as usize;
         let exp = Utc::now()
             .checked_add_signed(Duration::days(30))
@@ -89,17 +88,6 @@ impl AuthService {
         let raw = raw.as_bytes();
 
         verify_encoded(encoded, raw).unwrap()
-    }
-
-    pub fn hash_password(&self, raw: &str) -> Result<String> {
-        let salt: String = thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(30)
-            .map(char::from)
-            .collect();
-        let hash = hash_encoded(raw.as_bytes(), salt.as_bytes(), &Config::default()).unwrap();
-
-        Ok(hash)
     }
 }
 

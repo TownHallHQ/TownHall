@@ -22,6 +22,7 @@ tower-http = { version = "0.3.5", features = ["cors"] }
 async-graphql = { workspace = true }
 chrono = { workspace = true }
 dotenv = { workspace = true }
+pxid = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
 tracing = { workspace = true }

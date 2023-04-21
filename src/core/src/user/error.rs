@@ -15,8 +15,8 @@ pub enum UserError {
     PasswordError(PasswordError),
     #[error("The provided PXID string instance is not valid")]
     PxidError(pxid::Error),
-    #[error("Repository layer error")]
-    RepositoryError,
+    #[error("Database layer error")]
+    DatabaseError,
     #[error("User not found")]
     UserNotFound,
 }

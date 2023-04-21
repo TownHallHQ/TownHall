@@ -7,6 +7,9 @@ shutdown-db:
 migrate:
   cargo run --bin cli database migrate
 
+refresh_db:
+  cargo run --bin cli database refresh
+
 generate:
   sea-orm-cli generate entity \
     --with-serde both \

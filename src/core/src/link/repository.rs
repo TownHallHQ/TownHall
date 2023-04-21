@@ -18,7 +18,7 @@ pub struct LinkRecord {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct InsertLinkDto {
-    pub user_id: String,
+    pub owner_id: String,
     pub original_url: String,
     pub ulid: String,
 }

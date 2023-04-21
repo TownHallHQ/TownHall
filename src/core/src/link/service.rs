@@ -1,5 +1,7 @@
 use std::str::FromStr;
 
+use pxid::Pxid;
+
 use super::error::{LinkError, Result};
 use super::model::link::Link;
 use super::model::ulid::Ulid;
@@ -25,14 +27,14 @@ where
         }
     }
 
-    pub async fn create(&self, dto: CreateLinkDto) -> Result<Link> {
+    pub async fn create(&self, owner_id: Pxid, dto: CreateLinkDto) -> Result<Link> {
         use super::repository::InsertLinkDto;
 
         let ulid = Self::handle_ulid_input(dto.ulid)?;
         let record = self
             .repository
             .insert(InsertLinkDto {
-                user_id: String::default(),
+                owner_id: owner_id.to_string(),
                 original_url: dto.original_url,
                 ulid: ulid.to_string(),
             })

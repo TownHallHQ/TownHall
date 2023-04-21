@@ -6,6 +6,7 @@ use tracing::instrument;
 use quicklink::link::service::CreateLinkDto;
 
 use crate::context::SharedContext;
+use crate::services::auth::Token;
 
 #[derive(Debug, Default, InputObject)]
 pub struct LinkCreateInput {
@@ -34,10 +35,12 @@ impl LinkCreate {
         use crate::graphql::modules::link::types::Link;
         use crate::graphql::modules::link::types::LinkError;
 
+        let token = ctx.data_unchecked::<Token>();
         let context = ctx.data_unchecked::<SharedContext>();
+        let claims = context.services.auth.verify_token(token)?;
         let dto = CreateLinkDto::from(input);
 
-        match context.services.link.create(dto).await {
+        match context.services.link.create(claims.uid, dto).await {
             Ok(link) => Ok(Self {
                 link: Some(Link::from(link)),
                 error: None,

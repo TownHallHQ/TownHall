@@ -1,6 +1,9 @@
 use async_trait::async_trait;
 use chrono::{DateTime, Utc};
-use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, QueryFilter, Set};
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, EntityTrait, QueryFilter, Set, TransactionError,
+    TransactionTrait,
+};
 
 use quicklink::link::error::{LinkError, Result};
 use quicklink::link::model::link::Link;
@@ -33,20 +36,43 @@ impl LinkRepository {
 #[async_trait]
 impl quicklink::link::repository::LinkRepository for LinkRepository {
     async fn insert(&self, dto: InsertLinkDto) -> Result<LinkRecord> {
-        let active_model = entity::link::ActiveModel {
-            id: Set(Link::generate_id().to_string()),
-            ulid: Set(dto.ulid),
-            original_url: Set(dto.original_url),
-            ..Default::default()
-        };
+        self.db
+            .transaction::<_, LinkRecord, LinkError>(|txn| {
+                Box::pin(async move {
+                    let active_model = entity::link::ActiveModel {
+                        id: Set(Link::generate_id().to_string()),
+                        ulid: Set(dto.ulid),
+                        original_url: Set(dto.original_url),
+                        ..Default::default()
+                    };
 
-        let model = active_model.insert(&*self.db.0).await.map_err(|err| {
-            // TODO: Handle duplicated ULID error
-            tracing::error!(%err, "Failed to insert into database");
-            LinkError::DatabaseError
-        })?;
+                    let model = active_model.insert(txn).await.map_err(|err| {
+                        // TODO: Handle duplicated ULID error
+                        tracing::error!(%err, "Failed to insert into database");
+                        LinkError::DatabaseError
+                    })?;
 
-        Ok(LinkRepository::into_record(model))
+                    let user_link_active_model = entity::user_links::ActiveModel {
+                        link_id: Set(model.id.clone()),
+                        user_id: Set(dto.owner_id),
+                    };
+
+                    user_link_active_model.insert(txn).await.map_err(|err| {
+                        tracing::error!(%err, "Failed to insert into database");
+                        LinkError::DatabaseError
+                    })?;
+
+                    Ok(LinkRepository::into_record(model))
+                })
+            })
+            .await
+            .map_err(|err| {
+                tracing::error!(%err, "Insert Product Transaction Failed");
+                match err {
+                    TransactionError::Connection(_) => LinkError::DatabaseError,
+                    TransactionError::Transaction(err) => err,
+                }
+            })
     }
 
     async fn find(&self, filter: Option<LinkFilter>) -> Result<Vec<LinkRecord>> {

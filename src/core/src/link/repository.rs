@@ -33,4 +33,5 @@ pub struct LinkFilter {
 pub trait LinkRepository: Clone {
     async fn insert(&self, dto: InsertLinkDto) -> Result<LinkRecord>;
     async fn find(&self, filter: Option<LinkFilter>) -> Result<Vec<LinkRecord>>;
+    async fn find_by_owner_id(&self, owner_id: Pxid) -> Result<Vec<LinkRecord>>;
 }

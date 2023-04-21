@@ -1,5 +1,6 @@
 use async_trait::async_trait;
 use chrono::{DateTime, Utc};
+use pxid::Pxid;
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, EntityTrait, QueryFilter, Set, TransactionError,
     TransactionTrait,
@@ -98,5 +99,29 @@ impl quicklink::link::repository::LinkRepository for LinkRepository {
         }
 
         Ok(rows.into_iter().map(LinkRepository::into_record).collect())
+    }
+
+    async fn find_by_owner_id(&self, owner_id: Pxid) -> Result<Vec<LinkRecord>> {
+        let rows = entity::user::Entity::find()
+            .find_with_related(entity::link::Entity)
+            .filter(entity::user_links::Column::UserId.eq(owner_id.to_string()))
+            .all(&*self.db.0)
+            .await
+            .map_err(|err| {
+                tracing::error!(%err, "Failed to fetch from database");
+                LinkError::DatabaseError
+            })?;
+
+        if rows.len() != 1 {
+            return Ok(Vec::default());
+        }
+
+        let models = rows.first().unwrap().to_owned().1;
+        let records = models
+            .into_iter()
+            .map(|link| LinkRepository::into_record(link))
+            .collect();
+
+        Ok(records)
     }
 }

@@ -47,8 +47,36 @@ where
         Link::try_from(record)
     }
 
-    pub async fn find(&self, _filter: Option<LinkFilter>) -> Result<Vec<Link>> {
-        todo!()
+    pub async fn find(&self, filter: Option<LinkFilter>) -> Result<Vec<Link>> {
+        let records = self.repository.find(filter).await?;
+        let links = records
+            .into_iter()
+            .filter_map(|record| match Link::try_from(record) {
+                Ok(link) => Some(link),
+                Err(err) => {
+                    tracing::error!(%err, "Failed to construct a Link instance");
+                    None
+                }
+            })
+            .collect::<Vec<Link>>();
+
+        Ok(links)
+    }
+
+    pub async fn find_by_owner_id(&self, owner_id: Pxid) -> Result<Vec<Link>> {
+        let records = self.repository.find_by_owner_id(owner_id).await?;
+        let links = records
+            .into_iter()
+            .filter_map(|record| match Link::try_from(record) {
+                Ok(link) => Some(link),
+                Err(err) => {
+                    tracing::error!(%err, "Failed to construct a Link instance");
+                    None
+                }
+            })
+            .collect::<Vec<Link>>();
+
+        Ok(links)
     }
 
     fn handle_ulid_input(s: Option<String>) -> Result<Ulid> {

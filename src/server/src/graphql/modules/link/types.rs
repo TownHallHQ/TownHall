@@ -1,4 +1,5 @@
 use async_graphql::{Enum, SimpleObject, ID};
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize, SimpleObject)]
@@ -44,6 +45,9 @@ pub struct Link {
     pub id: ID,
     pub ulid: String,
     pub original_url: String,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 
 impl From<quicklink::link::model::link::Link> for Link {
@@ -52,6 +56,9 @@ impl From<quicklink::link::model::link::Link> for Link {
             id: ID(value.id.to_string()),
             ulid: value.ulid.to_string(),
             original_url: value.original_url.to_string(),
+            created_at: value.created_at,
+            updated_at: value.updated_at,
+            deleted_at: value.deleted_at,
         }
     }
 }

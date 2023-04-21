@@ -20,3 +20,7 @@ serve:
 
 clippy:
   cargo clippy --fix --workspace
+
+prepare:
+  cp .env.example .env
+  cargo install sea-orm-cli

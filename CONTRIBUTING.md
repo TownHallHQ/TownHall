@@ -19,7 +19,7 @@ To run any migration or database related command, make sure `DATABASE_URL`
 environment variable is present, either inline via Terminal or via `.env` file.
 
 ```bash
-cargo run --manifest-path ./migration/Cargo.toml -- up
+cargo run --bin cli database migrate
 ```
 
 To learn more about SeaORM you can read on their tests and examples, a

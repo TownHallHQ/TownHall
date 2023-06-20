@@ -3,8 +3,8 @@ use std::str::FromStr;
 use async_graphql::{Context, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 
-use quicklink::user::model::Email;
-use quicklink::user::repository::UserFilter;
+use gabble::user::model::Email;
+use gabble::user::repository::UserFilter;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{AccessToken, UserError, UserErrorCode};

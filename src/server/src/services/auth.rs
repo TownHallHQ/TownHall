@@ -7,7 +7,7 @@ use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, 
 use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
-const JWT_AUDIENCE: &str = "quicklink";
+const JWT_AUDIENCE: &str = "gabble";
 
 /// JWT Token Abstaction
 #[derive(Debug)]

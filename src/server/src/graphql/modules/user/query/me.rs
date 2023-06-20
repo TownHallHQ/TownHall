@@ -1,5 +1,5 @@
 use async_graphql::{Context, Result, SimpleObject};
-use quicklink::user::repository::UserFilter;
+use gabble::user::repository::UserFilter;
 use serde::{Deserialize, Serialize};
 
 use crate::context::SharedContext;

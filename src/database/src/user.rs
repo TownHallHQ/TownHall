@@ -2,9 +2,9 @@ use async_trait::async_trait;
 use chrono::{DateTime, Utc};
 use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, QueryFilter, Set};
 
-use quicklink::user::error::{Result, UserError};
-use quicklink::user::model::User;
-use quicklink::user::repository::{InsertUserDto, UserFilter, UserRecord};
+use gabble::user::error::{Result, UserError};
+use gabble::user::model::User;
+use gabble::user::repository::{InsertUserDto, UserFilter, UserRecord};
 
 use crate::Database;
 
@@ -33,7 +33,7 @@ impl UserRepository {
 }
 
 #[async_trait]
-impl quicklink::user::repository::UserRepository for UserRepository {
+impl gabble::user::repository::UserRepository for UserRepository {
     async fn insert(&self, dto: InsertUserDto) -> Result<UserRecord> {
         let active_model = entity::user::ActiveModel {
             id: Set(User::generate_id()?.to_string()),

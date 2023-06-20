@@ -4,11 +4,11 @@ use tracing::info;
 
 use libcli::database::DatabseSub;
 
-const ABOUT: &str = "Quicklink Application Command Line Interface";
+const ABOUT: &str = "gabble Application Command Line Interface";
 
 #[derive(Debug, Parser)]
 #[command(next_line_help = true)]
-#[command(name = "quicklink", author, version, about, long_about = Some(ABOUT))]
+#[command(name = "gabble", author, version, about, long_about = Some(ABOUT))]
 pub enum Cli {
     /// Manage Database
     #[clap(subcommand)]

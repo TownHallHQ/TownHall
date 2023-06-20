@@ -36,7 +36,6 @@ async fn main() {
             "/graphql",
             get(handlers::graphql::playground).post(handlers::graphql::schema),
         )
-        .route("/:hash", get(handlers::redirect::redirect))
         .layer(Extension(context))
         .layer(Extension(schema))
         .layer(

@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["Esteban Borai <estebanborai@gmail.com>"]
 
 [lib]
-name = "quicklink"
+name = "gabble"
 path = "src/lib.rs"
 
 [dependencies]

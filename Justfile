@@ -1,7 +1,7 @@
-setup-db:
+dev:
   docker compose up database
 
-shutdown-db:
+undev:
   docker compose down
 
 migrate:

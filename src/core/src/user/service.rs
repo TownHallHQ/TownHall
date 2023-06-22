@@ -5,6 +5,7 @@ use super::repository::{InsertUserDto, UserFilter, UserRepository};
 pub struct CreateUserDto {
     pub name: String,
     pub surname: String,
+    pub username: String,
     pub email: Email,
     pub password: Password,
 }
@@ -31,6 +32,7 @@ where
                 id: User::generate_id()?.to_string(),
                 name: dto.name,
                 surname: dto.surname,
+                username: dto.username,
                 email: dto.email.to_string(),
                 password_hash: dto.password.to_string(),
             })

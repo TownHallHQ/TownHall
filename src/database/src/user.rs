@@ -23,6 +23,7 @@ impl UserRepository {
             id: model.id,
             name: model.name,
             surname: model.surname,
+            username: model.username,
             email: model.email,
             password_hash: model.password_hash,
             created_at: DateTime::from_utc(model.created_at, Utc),

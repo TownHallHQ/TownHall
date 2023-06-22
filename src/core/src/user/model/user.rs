@@ -17,6 +17,7 @@ pub struct User {
     pub id: Pxid,
     pub name: String,
     pub surname: String,
+    pub username: String,
     pub email: Email,
     pub password: Password,
     pub created_at: DateTime<Utc>,
@@ -27,6 +28,7 @@ pub struct User {
 pub struct NewUserDto {
     pub name: String,
     pub surname: String,
+    pub username: String,
     pub email: String,
     pub password: String,
 }
@@ -40,6 +42,7 @@ impl User {
             id: Self::generate_id()?,
             name: dto.name,
             surname: dto.surname,
+            username: dto.username,
             email,
             password,
             created_at: Utc::now(),
@@ -61,6 +64,7 @@ impl TryFrom<UserRecord> for User {
             id: Pxid::from_str(&value.id)?,
             name: value.name,
             surname: value.surname,
+            username: value.username,
             email: Email(value.email.into()),
             password: Password(value.password_hash.into()),
             created_at: value.created_at,

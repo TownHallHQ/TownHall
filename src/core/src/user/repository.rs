@@ -23,6 +23,7 @@ pub struct UserRecord {
     pub id: String,
     pub name: String,
     pub surname: String,
+    pub username: String,
     pub email: String,
     pub password_hash: String,
     pub created_at: DateTime<Utc>,
@@ -35,6 +36,7 @@ pub struct InsertUserDto {
     pub id: String,
     pub name: String,
     pub surname: String,
+    pub username: String,
     pub email: String,
     pub password_hash: String,
 }

@@ -13,6 +13,7 @@ use crate::graphql::modules::user::types::{User, UserError, UserErrorCode};
 pub struct UserRegisterInput {
     pub name: String,
     pub surname: String,
+    pub username: String,
     pub email: String,
     pub password: String,
 }
@@ -31,6 +32,7 @@ impl UserRegister {
         let dto = CreateUserDto {
             name: input.name,
             surname: input.surname,
+            username: input.username,
             email,
             password,
         };

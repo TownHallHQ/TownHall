@@ -3,7 +3,7 @@ use std::str::FromStr;
 use async_graphql::{Context, InputObject, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 
-use gabble::user::model::{Email, Password};
+use gabble::user::model::{Email, Password, Username};
 use gabble::user::service::CreateUserDto;
 
 use crate::context::SharedContext;
@@ -28,11 +28,12 @@ impl UserRegister {
     pub async fn exec(ctx: &Context<'_>, input: UserRegisterInput) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
         let email = Email::from_str(&input.email)?;
+        let username = Username::from_str(&input.username)?;
         let password = Password::from_str(&input.password)?;
         let dto = CreateUserDto {
             name: input.name,
             surname: input.surname,
-            username: input.username,
+            username,
             email,
             password,
         };

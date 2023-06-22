@@ -40,7 +40,7 @@ impl gabble::user::repository::UserRepository for UserRepository {
             id: Set(User::generate_id()?.to_string()),
             name: Set(dto.name),
             surname: Set(dto.surname),
-            username: Set(dto.username),
+            username: Set(dto.username.to_string()),
             email: Set(dto.email.to_string()),
             password_hash: Set(dto.password_hash),
             ..Default::default()

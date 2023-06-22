@@ -39,7 +39,7 @@ impl From<gabble::user::model::User> for User {
             id: ID(value.id.to_string()),
             name: value.name,
             surname: value.surname,
-            username: value.username,
+            username: value.username.to_string(),
             email: value.email.to_string(),
             created_at: value.created_at,
             updated_at: value.updated_at,

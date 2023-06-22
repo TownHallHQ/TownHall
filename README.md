@@ -19,6 +19,7 @@
 ### Requirements
 
 - [Rust](https://rustup.rs)
+- [Docker](https://www.docker.com)
 - [Justfile](https://github.com/casey/just) (**Recommended**)
 
 ### Getting Started

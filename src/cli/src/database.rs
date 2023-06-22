@@ -1,4 +1,6 @@
 use clap::{Parser, Subcommand};
+use sea_orm_cli::commands::generate::run_generate_command;
+use sea_orm_cli::{DateTimeCrate, GenerateSubcommands};
 
 use database::Database;
 
@@ -19,6 +21,8 @@ pub enum DatabseSub {
     Refresh(DatabaseArgs),
     /// Drops migrations using drop
     Drop(DatabaseArgs),
+    /// Generates Database Entities
+    Entities(DatabaseArgs),
 }
 
 impl DatabseSub {
@@ -44,6 +48,30 @@ impl DatabseSub {
 
                 tracing::info!("Dropping Database Tables");
                 manager.drop().await.unwrap();
+            }
+            Self::Entities(opt) => {
+                let opts = GenerateSubcommands::Entity {
+                    compact_format: false,
+                    expanded_format: false,
+                    include_hidden_tables: false,
+                    tables: Vec::default(),
+                    ignore_tables: Vec::default(),
+                    max_connections: 1,
+                    output_dir: String::from("./src/entity/src"),
+                    database_schema: String::from("public"),
+                    database_url: opt.database_url.clone(),
+                    with_serde: String::from("both"),
+                    serde_skip_deserializing_primary_key: false,
+                    serde_skip_hidden_column: false,
+                    with_copy_enums: false,
+                    date_time_crate: DateTimeCrate::Chrono,
+                    lib: true,
+                    model_extra_derives: Vec::default(),
+                    model_extra_attributes: Vec::default(),
+                };
+
+                tracing::info!("Generating Database Entities");
+                run_generate_command(opts, true).await.unwrap();
             }
         }
     }

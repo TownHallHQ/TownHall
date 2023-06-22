@@ -6,7 +6,11 @@ authors = ["Esteban Borai <estebanborai@gmail.com>"]
 
 [[bin]]
 name = "server"
-path = "src/main.rs"
+path = "src/bin/main.rs"
+
+[lib]
+name = "libserver"
+path = "src/lib.rs"
 
 [dependencies]
 anyhow = "1.0.69"

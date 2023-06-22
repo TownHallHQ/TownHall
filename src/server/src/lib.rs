@@ -14,13 +14,9 @@ use axum::{Extension, Router};
 use tower_http::cors::CorsLayer;
 
 use crate::context::Context;
-use crate::graphql::modules::{MutationRoot, QueryRoot};
+use crate::graphql::schema::{MutationRoot, QueryRoot};
 
-#[tokio::main]
-async fn main() {
-    dotenv::dotenv().ok();
-    tracing_subscriber::fmt::init();
-
+pub async fn start() {
     let config = config::Config::new();
     let addr = SocketAddr::from(([127, 0, 0, 1], config.server_port));
     let context = Context::shared(config).await;

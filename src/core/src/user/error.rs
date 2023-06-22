@@ -2,11 +2,14 @@ use thiserror::Error;
 
 use super::model::EmailError;
 use super::model::PasswordError;
+use super::model::UsernameError;
 
 pub type Result<T> = std::result::Result<T, UserError>;
 
 #[derive(Clone, Debug, Error, PartialEq, Eq)]
 pub enum UserError {
+    #[error("The username is invalid")]
+    UsernameError(UsernameError),
     #[error("An error ocurred processing email value")]
     EmailError(EmailError),
     #[error("The email {0} is already taken")]
@@ -24,6 +27,12 @@ pub enum UserError {
 impl From<EmailError> for UserError {
     fn from(value: EmailError) -> Self {
         UserError::EmailError(value)
+    }
+}
+
+impl From<UsernameError> for UserError {
+    fn from(value: UsernameError) -> Self {
+        UserError::UsernameError(value)
     }
 }
 

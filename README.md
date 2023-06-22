@@ -42,6 +42,12 @@ just serve
 
 > Note: As of today migrations runs when bootstrapping the server automatically
 
+## Architecture
+
+<div align="center">
+  <img src="./docs/diagram.png">
+</div>
+
 ## Contributions
 
 All contributions to this project are welcome. Feel free to open a PR or issue

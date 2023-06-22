@@ -6,7 +6,7 @@ use regex::Regex;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-pub const USERNAME_REGEXP: &str = r#"^[a-zA-Z0-9_]+$"#;
+pub const USERNAME_REGEXP: &str = r#"^[a-zA-Z0-9][a-zA-Z0-9_]*[a-zA-Z0-9]$"#;
 
 #[derive(Clone, Debug, Error, PartialEq, Eq)]
 pub enum UsernameError {
@@ -46,7 +46,6 @@ impl FromStr for Username {
     }
 }
 
-#[cfg(test)]
 mod tests {
     use std::borrow::Cow;
     use std::str::FromStr;
@@ -64,7 +63,7 @@ mod tests {
 
     #[test]
     fn checks_for_valid_username() {
-        let usernames = vec!["john", "john_doe", "123john", "123john_"];
+        let usernames = vec!["john", "john_doe", "1john2", "john_doe_appleseed", "45"];
 
         for username in usernames {
             assert!(Username::from_str(username).is_ok(), "username: {username}");
@@ -73,7 +72,15 @@ mod tests {
 
     #[test]
     fn checks_for_invalid_usernames() {
-        let usernames = vec!["", " ", "john doe", "#@%^%#$@#$@#", "あいうえお"];
+        let usernames = vec![
+            "",
+            " ",
+            "john doe",
+            "#@%^%#$@#$@#",
+            "あいうえお",
+            "_",
+            "_john_",
+        ];
 
         for username in usernames {
             let result = Username::from_str(username);

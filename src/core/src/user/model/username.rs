@@ -6,7 +6,7 @@ use regex::Regex;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-pub const USERNAME_REGEXP: &str = r#"^[a-zA-Z0-9][a-zA-Z0-9_]*[a-zA-Z0-9]$"#;
+pub const USERNAME_REGEXP: &str = r#"^[a-zA-Z][a-zA-Z0-9_]*[a-zA-Z0-9]$"#;
 
 #[derive(Clone, Debug, Error, PartialEq, Eq)]
 pub enum UsernameError {
@@ -63,7 +63,7 @@ mod tests {
 
     #[test]
     fn checks_for_valid_username() {
-        let usernames = vec!["john", "john_doe", "1john2", "john_doe_appleseed", "45"];
+        let usernames = vec!["john", "john_doe", "john_doe_appleseed", "john12", "j0hn"];
 
         for username in usernames {
             assert!(Username::from_str(username).is_ok(), "username: {username}");
@@ -80,6 +80,8 @@ mod tests {
             "あいうえお",
             "_",
             "_john_",
+            "45algo",
+            "123",
         ];
 
         for username in usernames {

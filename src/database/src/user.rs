@@ -47,33 +47,23 @@ impl gabble::user::repository::UserRepository for UserRepository {
         };
 
         let model = active_model.insert(&*self.db.0).await.map_err(|err| {
-            // TODO: Handle duplicated ULID error
+            tracing::error!(%err, "Failed to insert into database");
             match err {
-                sea_orm::DbErr::Query(sea_orm::RuntimeErr::SqlxError(err)) => {
+                migration::DbErr::Query(sea_orm::RuntimeErr::SqlxError(err)) => {
                     if let Some(db_err) = err.into_database_error() {
-                        match db_err.constraint() {
-                            Some("user_email_key") => {
-                                tracing::error!(%db_err);
-                                return UserError::EmailTakenError(dto.email);
-                            }
-                            Some("user_username_key") => {
-                                tracing::error!(%db_err);
+                        if let Some(constraint) = db_err.constraint() {
+                            if constraint == "user_username_key" {
                                 return UserError::UsernameTakenError(dto.username);
                             }
-                            _ => {
-                                tracing::error!(%db_err, "Failed to insert into database");
-                                return UserError::DatabaseError;
+
+                            if constraint == "user_email_key" {
+                                return UserError::EmailTakenError(dto.email);
                             }
                         }
-                    } else {
-                        tracing::error!("Failed to insert into database");
-                        return UserError::DatabaseError;
                     }
+                    UserError::DatabaseError
                 }
-                _ => {
-                    tracing::error!(%err, "Failed to insert into database");
-                    return UserError::DatabaseError;
-                }
+                _ => UserError::DatabaseError,
             }
         })?;
 

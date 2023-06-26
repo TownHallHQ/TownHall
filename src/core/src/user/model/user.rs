@@ -9,6 +9,7 @@ use crate::user::repository::UserRecord;
 
 use super::email::Email;
 use super::password::Password;
+use super::username::Username;
 
 pub const USER_PXID_PREFIX: &str = "user";
 
@@ -17,6 +18,7 @@ pub struct User {
     pub id: Pxid,
     pub name: String,
     pub surname: String,
+    pub username: Username,
     pub email: Email,
     pub password: Password,
     pub created_at: DateTime<Utc>,
@@ -27,6 +29,7 @@ pub struct User {
 pub struct NewUserDto {
     pub name: String,
     pub surname: String,
+    pub username: String,
     pub email: String,
     pub password: String,
 }
@@ -34,12 +37,14 @@ pub struct NewUserDto {
 impl User {
     pub fn new(dto: NewUserDto) -> Result<Self> {
         let email = Email::from_str(&dto.email)?;
+        let username = Username::from_str(&dto.username)?;
         let password = Password::from_str(&dto.password)?;
 
         Ok(Self {
             id: Self::generate_id()?,
             name: dto.name,
             surname: dto.surname,
+            username,
             email,
             password,
             created_at: Utc::now(),
@@ -61,6 +66,7 @@ impl TryFrom<UserRecord> for User {
             id: Pxid::from_str(&value.id)?,
             name: value.name,
             surname: value.surname,
+            username: Username(value.username.into()),
             email: Email(value.email.into()),
             password: Password(value.password_hash.into()),
             created_at: value.created_at,

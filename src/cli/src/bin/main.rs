@@ -3,6 +3,7 @@ use dotenv::dotenv;
 use tracing::info;
 
 use libcli::database::DatabseSub;
+use libserver::start;
 
 const ABOUT: &str = "gabble Application Command Line Interface";
 
@@ -13,12 +14,15 @@ pub enum Cli {
     /// Manage Database
     #[clap(subcommand)]
     Database(DatabseSub),
+    /// Initializes and starts Gabble Server
+    Serve,
 }
 
 impl Cli {
     pub async fn exec(self) {
         match self {
             Self::Database(cmd) => cmd.exec().await,
+            Self::Serve => start().await,
         }
     }
 }

@@ -1,8 +1,8 @@
-mod config;
-mod context;
-mod graphql;
-mod handlers;
-mod services;
+pub mod config;
+pub mod context;
+pub mod graphql;
+pub mod handlers;
+pub mod services;
 
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -14,16 +14,12 @@ use axum::{Extension, Router};
 use tower_http::cors::CorsLayer;
 
 use crate::context::Context;
-use crate::graphql::modules::{MutationRoot, QueryRoot};
+use crate::graphql::schema::{MutationRoot, QueryRoot};
 
-#[tokio::main]
-async fn main() {
-    dotenv::dotenv().ok();
-    tracing_subscriber::fmt::init();
-
+pub async fn start() {
     let config = config::Config::new();
     let addr = SocketAddr::from(([127, 0, 0, 1], config.server_port));
-    let context = Context::shared(config).await;
+    let context = Context::shared(&config).await;
     let schema = Schema::build(
         QueryRoot::default(),
         MutationRoot::default(),

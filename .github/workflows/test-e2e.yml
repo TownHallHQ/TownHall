@@ -1,0 +1,53 @@
+name: E2E Tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "**"
+      - "!/*.md"
+      - "!/**.md"
+
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  e2e_tests:
+    name: Run E2E Tests
+    runs-on: ubuntu-latest
+    env:
+      RUST_LOG: "info"
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Setup Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+
+      - name: Setup Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Just
+        uses: extractions/setup-just@v1
+        with:
+          just-version: '1.13.0'
+
+      - name: Creates a Dotenv file
+        run: just dotenv
+
+      - name: Start Containers
+        run: docker compose up -d --build
+
+      - name: Run Migrations
+        run: cargo run database migrate
+
+      - name: Runs E2E tests
+        run: just e2e_test
+        
+      - name: Stop containers
+        if: always()
+        run: docker compose down

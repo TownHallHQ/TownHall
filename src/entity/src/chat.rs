@@ -4,31 +4,23 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
-#[sea_orm(table_name = "user")]
+#[sea_orm(table_name = "chat")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: String,
-    pub name: String,
-    pub surname: String,
-    #[sea_orm(unique)]
-    pub email: String,
-    #[sea_orm(unique)]
-    pub username: String,
-    pub password_hash: String,
     pub created_at: DateTime,
     pub updated_at: DateTime,
-    pub deleted_at: Option<DateTime>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {}
 
-impl Related<super::chat::Entity> for Entity {
+impl Related<super::user::Entity> for Entity {
     fn to() -> RelationDef {
-        super::user_chats::Relation::Chat.def()
+        super::user_chats::Relation::User.def()
     }
     fn via() -> Option<RelationDef> {
-        Some(super::user_chats::Relation::User.def().rev())
+        Some(super::user_chats::Relation::Chat.def().rev())
     }
 }
 

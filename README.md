@@ -19,6 +19,7 @@
 ### Requirements
 
 - [Rust](https://rustup.rs)
+- [Docker](https://www.docker.com)
 - [Justfile](https://github.com/casey/just) (**Recommended**)
 
 ### Getting Started
@@ -41,6 +42,12 @@ just serve
 ```
 
 > Note: As of today migrations runs when bootstrapping the server automatically
+
+## Architecture
+
+<div align="center">
+  <img src="./docs/diagram.png">
+</div>
 
 ## Contributions
 

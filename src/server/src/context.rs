@@ -11,13 +11,13 @@ pub struct Context {
 pub type SharedContext = Arc<Context>;
 
 impl Context {
-    pub async fn new(config: Config) -> Self {
-        let services = Services::shared(&config).await;
+    pub async fn new(config: &Config) -> Self {
+        let services = Services::shared(config).await;
 
         Self { services }
     }
 
-    pub async fn shared(config: Config) -> SharedContext {
+    pub async fn shared(config: &Config) -> SharedContext {
         let context = Self::new(config).await;
 
         Arc::new(context)

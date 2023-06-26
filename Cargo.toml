@@ -5,6 +5,7 @@ members = [
     "src/entity",
     "src/migration",
     "src/server",
+    "src/test"
 ]
 default-members = ["src/cli"]
 

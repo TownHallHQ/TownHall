@@ -42,10 +42,11 @@ impl FromStr for Username {
         }
 
         let cow = Cow::from(s.to_string());
-        return Ok(Self(cow));
+        Ok(Self(cow))
     }
 }
 
+#[cfg(test)]
 mod tests {
     use std::borrow::Cow;
     use std::str::FromStr;

@@ -6,6 +6,12 @@ pub struct Config {
     pub server_port: u16,
 }
 
+impl Default for Config {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Config {
     pub fn new() -> Self {
         let database_url = env::var("DATABASE_URL").unwrap();

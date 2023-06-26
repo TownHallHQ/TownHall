@@ -47,9 +47,24 @@ impl gabble::user::repository::UserRepository for UserRepository {
         };
 
         let model = active_model.insert(&*self.db.0).await.map_err(|err| {
-            // TODO: Handle duplicated ULID error
             tracing::error!(%err, "Failed to insert into database");
-            UserError::DatabaseError
+            match err {
+                migration::DbErr::Query(sea_orm::RuntimeErr::SqlxError(err)) => {
+                    if let Some(db_err) = err.into_database_error() {
+                        if let Some(constraint) = db_err.constraint() {
+                            if constraint == "user_username_key" {
+                                return UserError::UsernameTakenError(dto.username);
+                            }
+
+                            if constraint == "user_email_key" {
+                                return UserError::EmailTakenError(dto.email);
+                            }
+                        }
+                    }
+                    UserError::DatabaseError
+                }
+                _ => UserError::DatabaseError,
+            }
         })?;
 
         Ok(UserRepository::into_record(model))

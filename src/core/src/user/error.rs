@@ -10,6 +10,8 @@ pub type Result<T> = std::result::Result<T, UserError>;
 pub enum UserError {
     #[error("The username is invalid")]
     UsernameError(UsernameError),
+    #[error("The username {0} is already taken")]
+    UsernameTakenError(String),
     #[error("An error ocurred processing email value")]
     EmailError(EmailError),
     #[error("The email {0} is already taken")]

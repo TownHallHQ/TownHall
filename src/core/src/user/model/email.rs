@@ -53,7 +53,8 @@ impl FromStr for Email {
             return Err(EmailError::ParseError(s.to_string()));
         }
 
-        let parts = s.split('@').collect::<Vec<&str>>();
+        let lowercase_email = s.to_lowercase();
+        let parts = lowercase_email.split('@').collect::<Vec<&str>>();
 
         if parts.len() > 2 {
             return Err(EmailError::ParseError(s.to_string()));
@@ -74,7 +75,7 @@ impl FromStr for Email {
                 return Err(EmailError::InvalidDomain(domain.to_string(), s.to_string()));
             }
 
-            let cow = Cow::from(s.to_string());
+            let cow = Cow::from(lowercase_email);
 
             return Ok(Self(cow));
         }
@@ -95,6 +96,15 @@ mod tests {
         let email = "john.appleseed@example.com";
         let have = Email::from_str(email).unwrap();
         let want = Email(Cow::from(email));
+
+        assert_eq!(have, want);
+    }
+
+    #[test]
+    fn checks_for_lowercase_emails() {
+        let email = "JOHN.APPLESEED@EXAMPLE.COM";
+        let have = Email::from_str(email).unwrap();
+        let want = Email(Cow::from("john.appleseed@example.com"));
 
         assert_eq!(have, want);
     }

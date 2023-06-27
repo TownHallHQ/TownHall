@@ -41,7 +41,7 @@ impl FromStr for Username {
             return Err(UsernameError::ParseError(s.to_string()));
         }
 
-        let cow = Cow::from(s.to_string());
+        let cow = Cow::from(s.to_string().to_lowercase());
         Ok(Self(cow))
     }
 }
@@ -58,6 +58,15 @@ mod tests {
         let username = "johndoe";
         let have = Username::from_str(username).unwrap();
         let want = Username(Cow::from(username));
+
+        assert_eq!(have, want);
+    }
+
+    #[test]
+    fn checks_for_lowercase_usernames() {
+        let username = "JOHNDOE";
+        let have = Username::from_str(username).unwrap();
+        let want = Username(Cow::from("johndoe"));
 
         assert_eq!(have, want);
     }

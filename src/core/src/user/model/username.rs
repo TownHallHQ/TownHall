@@ -41,7 +41,7 @@ impl FromStr for Username {
             return Err(UsernameError::ParseError(s.to_string()));
         }
 
-        let cow = Cow::from(s.to_string());
+        let cow = Cow::from(s.to_string().to_lowercase());
         Ok(Self(cow))
     }
 }

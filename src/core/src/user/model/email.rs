@@ -74,7 +74,7 @@ impl FromStr for Email {
                 return Err(EmailError::InvalidDomain(domain.to_string(), s.to_string()));
             }
 
-            let cow = Cow::from(s.to_string());
+            let cow = Cow::from(s.to_string().to_lowercase());
 
             return Ok(Self(cow));
         }

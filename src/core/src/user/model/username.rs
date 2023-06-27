@@ -63,6 +63,15 @@ mod tests {
     }
 
     #[test]
+    fn checks_for_lowercase_usernames() {
+        let username = "JOHNDOE";
+        let have = Username::from_str(username).unwrap();
+        let want = Username(Cow::from("johndoe"));
+
+        assert_eq!(have, want);
+    }
+
+    #[test]
     fn checks_for_valid_username() {
         let usernames = vec!["john", "john_doe", "john_doe_appleseed", "john12", "j0hn"];
 

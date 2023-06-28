@@ -1,10 +1,10 @@
 use sea_orm_migration::prelude::*;
 
 use crate::m20230408_000001_create_table_user::User;
-use crate::m20230627_000001_create_feed_table::Feed;
 use crate::PXID_LENGTH;
 
-const MAX_COMMENT_CONTENT_LENGTH: u32 = 50;
+const MAX_CONTENT_LENGTH: u32 = 2048;
+const MAX_TITLE_CONTENT_LENGTH: u32 = 150;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -15,54 +15,59 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(Comment::Table)
+                    .table(Post::Table)
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(Comment::Id)
+                        ColumnDef::new(Post::Id)
                             .string_len(PXID_LENGTH)
                             .not_null()
                             .primary_key(),
                     )
                     .col(
-                        ColumnDef::new(Comment::UserId)
+                        ColumnDef::new(Post::Title)
+                            .string_len(MAX_TITLE_CONTENT_LENGTH)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Post::Content)
+                            .string_len(MAX_CONTENT_LENGTH)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Post::ParentId)
+                            .string_len(PXID_LENGTH)
+                            .null(),
+                    )
+                    .col(
+                        ColumnDef::new(Post::OwnerId)
                             .string_len(PXID_LENGTH)
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(Comment::FeedId)
-                            .string_len(PXID_LENGTH)
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new(Comment::Content)
-                            .string_len(MAX_COMMENT_CONTENT_LENGTH)
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new(Comment::CreatedAt)
+                        ColumnDef::new(Post::CreatedAt)
                             .timestamp()
                             .not_null()
                             .extra(String::from("DEFAULT NOW()::timestamp")),
                     )
                     .col(
-                        ColumnDef::new(Comment::UpdatedAt)
+                        ColumnDef::new(Post::UpdatedAt)
                             .timestamp()
                             .not_null()
                             .extra(String::from("DEFAULT NOW()::timestamp")),
                     )
                     .foreign_key(
                         ForeignKey::create()
-                            .name("FK_comment_user_id")
-                            .from(Comment::Table, Comment::UserId)
+                            .name("FK_post_user_id")
+                            .from(Post::Table, Post::OwnerId)
                             .to(User::Table, User::Id)
                             .on_delete(ForeignKeyAction::Cascade)
                             .on_update(ForeignKeyAction::Cascade),
                     )
                     .foreign_key(
                         ForeignKey::create()
-                            .name("FK_comment_feed_id")
-                            .from(Comment::Table, Comment::FeedId)
-                            .to(Feed::Table, Feed::Id)
+                            .name("FK_post_parent_id")
+                            .from(Post::Table, Post::ParentId)
+                            .to(Post::Table, Post::Id)
                             .on_delete(ForeignKeyAction::Cascade)
                             .on_update(ForeignKeyAction::Cascade),
                     )
@@ -73,19 +78,20 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(Comment::Table).to_owned())
+            .drop_table(Table::drop().table(Post::Table).to_owned())
             .await
     }
 }
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-pub enum Comment {
+pub enum Post {
     Table,
     Id,
-    UserId,
-    FeedId,
+    Title,
     Content,
+    ParentId,
+    OwnerId,
     CreatedAt,
     UpdatedAt,
 }

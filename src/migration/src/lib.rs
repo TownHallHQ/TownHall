@@ -5,7 +5,7 @@ mod m20230621_000001_create_table_chat;
 mod m20230621_000002_create_table_message;
 mod m20230621_000003_create_table_user_chats;
 mod m20230627_000001_create_feed_table;
-mod m20230627_000002_create_table_comment;
+mod m20230627_000002_create_table_post;
 
 pub const PXID_LENGTH: u32 = 30;
 
@@ -20,7 +20,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20230621_000002_create_table_message::Migration),
             Box::new(m20230621_000003_create_table_user_chats::Migration),
             Box::new(m20230627_000001_create_feed_table::Migration),
-            Box::new(m20230627_000002_create_table_comment::Migration),
+            Box::new(m20230627_000002_create_table_post::Migration),
         ]
     }
 }

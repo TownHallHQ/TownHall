@@ -1,10 +1,8 @@
 use sea_orm_migration::prelude::*;
 
 use crate::m20230408_000001_create_table_user::User;
+use crate::m20230627_000002_create_table_post::Post;
 use crate::PXID_LENGTH;
-
-const MAX_BODY_CONTENT_LENGTH: u32 = 2048;
-const MAX_TITLE_CONTENT_LENGTH: u32 = 150;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -24,17 +22,12 @@ impl MigrationTrait for Migration {
                             .primary_key(),
                     )
                     .col(
-                        ColumnDef::new(Feed::Title)
-                            .string_len(MAX_TITLE_CONTENT_LENGTH)
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new(Feed::Body)
-                            .string_len(MAX_BODY_CONTENT_LENGTH)
-                            .not_null(),
-                    )
-                    .col(
                         ColumnDef::new(Feed::UserId)
+                            .string_len(PXID_LENGTH)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Feed::PostId)
                             .string_len(PXID_LENGTH)
                             .not_null(),
                     )
@@ -58,6 +51,14 @@ impl MigrationTrait for Migration {
                             .on_delete(ForeignKeyAction::Cascade)
                             .on_update(ForeignKeyAction::Cascade),
                     )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("FK_feed_post_id")
+                            .from(Feed::Table, Feed::PostId)
+                            .to(Post::Table, Post::Id)
+                            .on_delete(ForeignKeyAction::Cascade)
+                            .on_update(ForeignKeyAction::Cascade),
+                    )
                     .to_owned(),
             )
             .await
@@ -75,9 +76,8 @@ impl MigrationTrait for Migration {
 pub enum Feed {
     Table,
     Id,
-    Title,
-    Body,
     UserId,
+    PostId,
     CreatedAt,
     UpdatedAt,
 }

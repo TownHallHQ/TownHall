@@ -1,6 +1,7 @@
 use sea_orm_migration::prelude::*;
 
 use crate::m20230408_000001_create_table_user::User;
+use crate::m20230627_000001_create_table_threads::Thread;
 use crate::PXID_LENGTH;
 
 const MAX_CONTENT_LENGTH: u32 = 2048;
@@ -18,10 +19,15 @@ impl MigrationTrait for Migration {
                     .table(Post::Table)
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(Post::Id)
+                        ColumnDef::new(Post::PostId)
                             .string_len(PXID_LENGTH)
                             .not_null()
                             .primary_key(),
+                    )
+                    .col(
+                        ColumnDef::new(Post::ThreadId)
+                            .string_len(PXID_LENGTH)
+                            .not_null(),
                     )
                     .col(
                         ColumnDef::new(Post::Title)
@@ -32,11 +38,6 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Post::Content)
                             .string_len(MAX_CONTENT_LENGTH)
                             .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new(Post::ParentId)
-                            .string_len(PXID_LENGTH)
-                            .null(),
                     )
                     .col(
                         ColumnDef::new(Post::OwnerId)
@@ -57,17 +58,17 @@ impl MigrationTrait for Migration {
                     )
                     .foreign_key(
                         ForeignKey::create()
-                            .name("FK_post_user_id")
-                            .from(Post::Table, Post::OwnerId)
-                            .to(User::Table, User::Id)
+                            .name("FK_post_thread_id")
+                            .from(Post::Table, Post::ThreadId)
+                            .to(Thread::Table, Thread::ThreadId)
                             .on_delete(ForeignKeyAction::Cascade)
                             .on_update(ForeignKeyAction::Cascade),
                     )
                     .foreign_key(
                         ForeignKey::create()
-                            .name("FK_post_parent_id")
-                            .from(Post::Table, Post::ParentId)
-                            .to(Post::Table, Post::Id)
+                            .name("FK_post_user_id")
+                            .from(Post::Table, Post::OwnerId)
+                            .to(User::Table, User::Id)
                             .on_delete(ForeignKeyAction::Cascade)
                             .on_update(ForeignKeyAction::Cascade),
                     )
@@ -87,10 +88,10 @@ impl MigrationTrait for Migration {
 #[derive(Iden)]
 pub enum Post {
     Table,
-    Id,
+    PostId,
+    ThreadId,
     Title,
     Content,
-    ParentId,
     OwnerId,
     CreatedAt,
     UpdatedAt,

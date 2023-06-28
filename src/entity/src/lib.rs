@@ -3,7 +3,9 @@
 pub mod prelude;
 
 pub mod chat;
+pub mod feed;
 pub mod message;
+pub mod post;
 pub mod sea_orm_active_enums;
 pub mod seaql_migrations;
 pub mod user;

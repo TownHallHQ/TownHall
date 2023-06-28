@@ -1,7 +1,7 @@
 use sea_orm_migration::prelude::*;
 
 use crate::m20230408_000001_create_table_user::User;
-use crate::m20230627_000002_create_table_post::Post;
+use crate::m20230627_000001_create_table_post::Post;
 use crate::PXID_LENGTH;
 
 #[derive(DeriveMigrationName)]

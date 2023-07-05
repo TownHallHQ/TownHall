@@ -22,30 +22,13 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::feed::Entity")]
-    Feed,
     #[sea_orm(has_many = "super::post::Entity")]
     Post,
-}
-
-impl Related<super::feed::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::Feed.def()
-    }
 }
 
 impl Related<super::post::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Post.def()
-    }
-}
-
-impl Related<super::chat::Entity> for Entity {
-    fn to() -> RelationDef {
-        super::user_chats::Relation::Chat.def()
-    }
-    fn via() -> Option<RelationDef> {
-        Some(super::user_chats::Relation::User.def().rev())
     }
 }
 

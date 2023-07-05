@@ -2,19 +2,18 @@
   import { cacheExchange, fetchExchange } from '@urql/core';
   import { authExchange } from '@urql/exchange-auth';
   import { createClient, setContextClient } from '@urql/svelte';
-  import {NotificationList, Position} from '@whizzes/svelte-notifications'
-  
+  import { NotificationList, Position } from '@whizzes/svelte-notifications';
+
   import { page } from '$app/stores';
   import Notification from '$lib/components/Notification/Notification.svelte';
 
-  import '@whizzes/exo/dist/styles.css';
   import '../app.css';
 
   const initializeAuthState = () => {
     const token = $page.data?.accessToken;
 
     return {
-      token
+      token,
     };
   };
 
@@ -33,7 +32,7 @@
             }
 
             return utils.appendHeaders(operation, {
-              Authorization: `JWT ${token}`
+              Authorization: `JWT ${token}`,
             });
           },
           async refreshAuth() {
@@ -44,11 +43,11 @@
           },
           didAuthError() {
             return false;
-          }
+          },
         };
       }),
-      fetchExchange
-    ]
+      fetchExchange,
+    ],
   });
 
   setContextClient(client);
@@ -58,5 +57,5 @@
   <slot />
 </div>
 <NotificationList position={Position.TopRight} let:notification>
-  <Notification  notification={notification} />
+  <Notification {notification} />
 </NotificationList>

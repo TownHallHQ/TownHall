@@ -31,7 +31,6 @@
     "@urql/svelte": "^4.0.1",
     "@whizzes/svelte-forms": "^0.2.0",
     "@whizzes/svelte-notifications": "^0.1.4",
-    "@whizzes/exo": "file:../exo",
     "autoprefixer": "^10.4.14",
     "classnames": "^2.3.2",
     "graphql": "^16.6.0",

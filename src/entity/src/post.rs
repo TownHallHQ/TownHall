@@ -8,40 +8,25 @@ use serde::{Deserialize, Serialize};
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: String,
+    pub author_id: String,
+    pub parent_id: Option<String>,
+    pub head: bool,
     pub title: String,
     pub content: String,
-    pub parent_id: Option<String>,
-    pub owner_id: String,
     pub created_at: DateTime,
     pub updated_at: DateTime,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::feed::Entity")]
-    Feed,
-    #[sea_orm(
-        belongs_to = "Entity",
-        from = "Column::ParentId",
-        to = "Column::Id",
-        on_update = "Cascade",
-        on_delete = "Cascade"
-    )]
-    SelfRef,
     #[sea_orm(
         belongs_to = "super::user::Entity",
-        from = "Column::OwnerId",
+        from = "Column::AuthorId",
         to = "super::user::Column::Id",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
     User,
-}
-
-impl Related<super::feed::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::Feed.def()
-    }
 }
 
 impl Related<super::user::Entity> for Entity {

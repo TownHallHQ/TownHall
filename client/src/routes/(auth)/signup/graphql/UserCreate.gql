@@ -1,0 +1,11 @@
+mutation UserCreate($input: UserRegisterInput!) {
+  userRegister(input: $input) {
+    user {
+      id
+    }
+    error {
+      code
+      message
+    }
+  }
+}

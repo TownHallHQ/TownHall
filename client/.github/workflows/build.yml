@@ -1,0 +1,27 @@
+name: build
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Setup Bun.sh
+        uses: antongolub/action-setup-bun@v1
+        with:
+          bun-version: 0.5.9
+
+      - name: Install Dependencies
+        run: bun i
+
+      - name: Run Build Script
+        env:
+          BUN_ENV: production
+        run: bun run build

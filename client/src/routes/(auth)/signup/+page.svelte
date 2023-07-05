@@ -50,7 +50,7 @@
       href="https://whizzes.io"
       class="flex items-center justify-center mb-8 text-2xl text-white font-semibold lg:mb-10 dark:text-white"
     >
-      Whizzes.io + Quicklink
+      Whizzes.io + Gabble
     </a>
     <Card class="w-full max-w-xl p-6 space-y-8 sm:p-8 dark:bg-gray-800">
       <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Register</h2>

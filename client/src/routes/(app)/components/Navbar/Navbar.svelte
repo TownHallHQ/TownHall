@@ -29,7 +29,7 @@
           <img src="/favicon.png" class="h-8 mr-3" alt="SvelteKit Logo" />
           <span
             class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
-            >Quicklink</span
+            >Gabble</span
           >
         </a>
       </div>

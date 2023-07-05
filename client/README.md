@@ -1,16 +1,17 @@
+
 <div>
-  <h1 align="center">Quicklink Dashboard</h1>
+  <h1 align="center">Gabble Frontend</h1>
   <h4 align="center">
-    Dashboard for Quicklink a Headless URL Shortener written in Rust
+    A "Host Yourself" Chat powered by Rust and Whizzes Contributors
   </h4>
 </div>
 
 <div align="center">
 
 [![Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/yde6mcgs2C)
-![Build](https://github.com/whizzes/quicklink-dashboard/workflows/build/badge.svg)
-![Tests](https://github.com/whizzes/quicklink-dashboard/workflows/test/badge.svg)
-![Lint](https://github.com/whizzes/quicklink-dashboard/workflows/lint/badge.svg)
+![Build](https://github.com/whizzes/gabble/workflows/build/badge.svg)
+![Tests](https://github.com/whizzes/gabble/workflows/test/badge.svg)
+![Lint](https://github.com/whizzes/gabble/workflows/lint/badge.svg)
 
 </div>
 
@@ -21,10 +22,10 @@
 
 ```bash
 # clone repository
-git clone git@github.com:whizzes/quicklink-dashboard.git
+git clone git@github.com:whizzes/gabble.git
 
 # cd into the new directory
-cd ./quicklink-dashboard
+cd ./gabble/client
 
 # create a `.env` file by copying contents from `.env.example`
 cp .env.example .env
@@ -32,7 +33,7 @@ cp .env.example .env
 # install dependencies
 bun i
 
-# optional: make sure quicklink server is running
+# optional: make sure gabble server is running
 lsof -i -P -n | grep LISTEN
 
 # run on development mode

@@ -1,0 +1,18 @@
+# Write your query or mutation here
+query GetCurrentUser {
+  me {
+    user {
+      ...CurrentUser
+    }
+  }
+}
+
+fragment CurrentUser on User {
+  id
+  name
+  surname
+  email
+  username
+  createdAt
+  updatedAt
+}

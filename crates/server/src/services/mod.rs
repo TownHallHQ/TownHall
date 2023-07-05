@@ -2,7 +2,8 @@ pub mod auth;
 
 use std::sync::Arc;
 
-use database::Database;
+use gabble::common::Database;
+use gabble::user::repository::UserRepository;
 use gabble::user::service::UserService;
 
 use crate::config::Config;
@@ -14,7 +15,7 @@ pub type SharedServices = Arc<Services>;
 #[derive(Clone)]
 pub struct Services {
     pub auth: Arc<AuthService>,
-    pub user: Arc<UserService<database::user::UserRepository>>,
+    pub user: Arc<UserService>,
 }
 
 impl Services {
@@ -23,7 +24,7 @@ impl Services {
             .await
             .expect("Failed to create a new database pool");
         let auth_service = AuthService::new(&config.jwt_secret);
-        let user_repository = database::user::UserRepository::new(&db_pool);
+        let user_repository = UserRepository::new(&db_pool);
         let user_service = UserService::new(user_repository);
 
         Self {

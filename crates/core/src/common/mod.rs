@@ -1,12 +1,8 @@
-pub mod user;
-
 use std::ops::Deref;
 use std::sync::Arc;
 use std::time::Duration;
 
-use migration::sea_orm::{ConnectOptions, Database as SeaORMDatabase, DatabaseConnection, DbErr};
-use migration::{Migrator, MigratorTrait};
-
+use sea_orm::{ConnectOptions, Database as SeaORMDatabase, DatabaseConnection, DbErr};
 use tracing::log;
 
 #[derive(Clone)]
@@ -45,17 +41,5 @@ impl Database {
         let db_conn = Arc::new(db_conn);
 
         Ok(Self(db_conn))
-    }
-
-    pub async fn migrate(&self) -> Result<(), migration::DbErr> {
-        Migrator::up(&*self.0, None).await
-    }
-
-    pub async fn refresh(&self) -> Result<(), migration::DbErr> {
-        Migrator::fresh(&*self.0).await
-    }
-
-    pub async fn drop(&self) -> Result<(), migration::DbErr> {
-        Migrator::down(&*self.0, None).await
     }
 }

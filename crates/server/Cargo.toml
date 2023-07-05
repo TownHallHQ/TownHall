@@ -35,4 +35,3 @@ url = { workspace = true }
 
 # Local Dependencies
 core = { path = "../core" }
-database = { path = "../database" }

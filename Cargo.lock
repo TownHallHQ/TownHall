@@ -720,8 +720,8 @@ version = "0.1.0"
 dependencies = [
  "clap 4.2.1",
  "core",
- "database",
  "dotenv",
+ "migration",
  "sea-orm-cli",
  "serde_json",
  "server",
@@ -772,11 +772,14 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "chrono",
+ "entity",
  "lazy_static",
+ "migration",
  "pxid",
  "rand",
  "regex",
  "rust-argon2",
+ "sea-orm",
  "serde",
  "serde_json",
  "thiserror",
@@ -891,21 +894,6 @@ dependencies = [
  "darling_core",
  "quote",
  "syn 1.0.109",
-]
-
-[[package]]
-name = "database"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "chrono",
- "core",
- "entity",
- "migration",
- "pxid",
- "sea-orm",
- "tokio",
- "tracing",
 ]
 
 [[package]]
@@ -2585,7 +2573,6 @@ dependencies = [
  "base64 0.21.2",
  "chrono",
  "core",
- "database",
  "dotenv",
  "jsonwebtoken",
  "pxid",
@@ -2904,9 +2891,9 @@ dependencies = [
  "async-graphql",
  "chrono",
  "core",
- "database",
  "dotenv",
  "fake",
+ "migration",
  "pxid",
  "rand",
  "serde_json",

@@ -11,15 +11,12 @@ pub struct CreateUserDto {
 }
 
 #[derive(Clone)]
-pub struct UserService<R: UserRepository> {
-    repository: Box<R>,
+pub struct UserService {
+    repository: Box<UserRepository>,
 }
 
-impl<R> UserService<R>
-where
-    R: UserRepository,
-{
-    pub fn new(repository: R) -> Self {
+impl UserService {
+    pub fn new(repository: UserRepository) -> Self {
         Self {
             repository: Box::new(repository),
         }

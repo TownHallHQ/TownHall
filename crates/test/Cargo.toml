@@ -23,5 +23,5 @@ tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
 
 # Local Dependencies
 core = { path = "../core" }
-database = { path = "../database" }
+migration = { path = "../migration" }
 server = { path = "../server" }

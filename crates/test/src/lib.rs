@@ -3,11 +3,12 @@ use std::sync::Arc;
 use anyhow::Result;
 use pxid::Pxid;
 
-use database::Database;
+use gabble::common::Database;
 use libserver::config::Config;
 use libserver::context::Context;
 use libserver::graphql::schema::{build_schema_with_context, GraphQLSchema};
 use libserver::services::auth::Token;
+use migration::{Migrator, MigratorTrait};
 
 pub const TEST_ADMIN_EMAIL: &str = "admin@whizzes.io";
 pub const TEST_ADMIN_PASSWORD: &str = "R00tP@ssw0rd";
@@ -61,7 +62,7 @@ impl TestUtil {
     }
 
     pub async fn clear_db(&self) {
-        self.db.refresh().await.expect("Failed to refresh database");
+        Migrator::fresh(&*self.db).await.unwrap();
     }
 
     pub fn parts(&self) -> (Arc<Context>, GraphQLSchema) {

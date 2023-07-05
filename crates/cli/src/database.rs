@@ -2,7 +2,8 @@ use clap::{Parser, Subcommand};
 use sea_orm_cli::commands::generate::run_generate_command;
 use sea_orm_cli::{DateTimeCrate, GenerateSubcommands};
 
-use database::Database;
+use gabble::common::Database;
+use migration::{Migrator, MigratorTrait};
 
 use crate::config::DATABASE_URL_ENV_VAR;
 
@@ -33,21 +34,21 @@ impl DatabseSub {
                 let manager = Database::new(&opt.database_url).await.unwrap();
 
                 tracing::info!("Running database migrations");
-                manager.migrate().await.unwrap();
+                Migrator::up(&*manager, None).await.unwrap();
             }
             Self::Refresh(opt) => {
                 tracing::info!("Creating new Database Manager");
                 let manager = Database::new(&opt.database_url).await.unwrap();
 
                 tracing::warn!("Refreshing database instance");
-                manager.refresh().await.unwrap();
+                Migrator::fresh(&*manager).await.unwrap();
             }
             Self::Drop(opt) => {
                 tracing::info!("Creating new Database Manager");
                 let manager = Database::new(&opt.database_url).await.unwrap();
 
                 tracing::info!("Dropping Database Tables");
-                manager.drop().await.unwrap();
+                Migrator::down(&*manager, None).await.unwrap();
             }
             Self::Entities(opt) => {
                 let opts = GenerateSubcommands::Entity {

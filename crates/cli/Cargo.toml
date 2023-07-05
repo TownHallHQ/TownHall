@@ -24,7 +24,7 @@ tracing-subscriber = { workspace = true }
 
 # Local Dependencies
 core = { path = "../core" }
-database = { path = "../database" }
+migration = { path = "../migration" }
 server = { path = "../server" }
 
 [dev-dependencies]

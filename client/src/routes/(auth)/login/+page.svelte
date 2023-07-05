@@ -1,22 +1,24 @@
 <script lang="ts">
-  import { newForm } from "@whizzes/svelte-forms";
-  import * as Yup from "yup";
-  import { Button, Card, TextField } from "@whizzes/exo";
-  import { notifications } from "@whizzes/svelte-notifications";
+  import { newForm } from '@whizzes/svelte-forms';
+  import * as Yup from 'yup';
+  import { notifications } from '@whizzes/svelte-notifications';
 
-  import { createHeader } from "$lib/utils/basic-auth";
-  import { LoginError, type ErrorMessages } from "./shared";
-  import { UserErrorCode } from "$lib/graphql/schema";
+  import { createHeader } from '$lib/utils/basic-auth';
+  import { LoginError, type ErrorMessages } from './shared';
+  import { UserErrorCode } from '$lib/graphql/schema';
+  import Card from '$lib/components/Card.svelte';
+  import TextField from '$lib/components/TextField.svelte';
+  import Button from '$lib/components/Button.svelte';
 
   const errorMessages: ErrorMessages = {
-    [LoginError.MissingCredentials]: "Please enter your email and password",
-    [UserErrorCode.Unauthorized]: "Invalid email or password",
+    [LoginError.MissingCredentials]: 'Please enter your email and password',
+    [UserErrorCode.Unauthorized]: 'Invalid email or password',
   };
 
   const { handleSubmit, values, errors, isSubmitting } = newForm({
     initialValues: {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
     },
     validationSchema: Yup.object({
       username: Yup.string().email().required(),
@@ -24,22 +26,22 @@
     }),
     onSubmit: async ({ username, password }) => {
       const basicAuth = createHeader(username, password);
-      const response = await fetch("/login", {
-        method: "POST",
+      const response = await fetch('/login', {
+        method: 'POST',
         headers: {
           Authorization: basicAuth,
         },
       });
 
       if (response.ok) {
-        notifications.notifySuccess("Logged in successfully");
-        window.location.pathname = "/";
+        notifications.notifySuccess('Logged in successfully');
+        window.location.pathname = '/';
       } else {
         const data = await response.json();
 
         const errorMessage =
           errorMessages[data.error as keyof typeof errorMessages] ||
-          "An error occurred. Please try again later.";
+          'An error occurred. Please try again later.';
 
         notifications.notifyFailure(errorMessage);
       }
@@ -62,7 +64,7 @@
         label="Password"
         bind:value={$values.password}
       />
-      <Button type="submit" label="Create Account" />
+      <Button type="submit">Login</Button>
     </form>
   </Card>
 </section>

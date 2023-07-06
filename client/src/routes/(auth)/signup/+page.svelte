@@ -4,11 +4,7 @@
   import { notifications } from '@whizzes/svelte-notifications';
 
   import TextField from '$lib/components/TextField.svelte';
-  import Card from '$lib/components/Card.svelte';
   import Button from '$lib/components/Button.svelte';
-
-  let userCreatedOk = false;
-  let error: string | null = null;
 
   const { handleSubmit, values, errors, isSubmitting } = newForm({
     initialValues: {

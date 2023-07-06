@@ -6,7 +6,6 @@
   import { createHeader } from '$lib/utils/basic-auth';
   import { LoginError, type ErrorMessages } from './shared';
   import { UserErrorCode } from '$lib/graphql/schema';
-  import Card from '$lib/components/Card.svelte';
   import TextField from '$lib/components/TextField.svelte';
   import Button from '$lib/components/Button.svelte';
 

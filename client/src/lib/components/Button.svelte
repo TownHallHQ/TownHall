@@ -12,7 +12,7 @@
 
   let className = classNames(
     customClassNames,
-    'border py-2 px-6 rounded-full text-sm flex items-center font-semibold',
+    'border py-2 px-6 rounded-full text-sm  items-center font-semibold',
     {
       'w-full': fullWidth,
       '!opacity-50 !text-gray-400': isLoading || disabled,

@@ -1,6 +1,8 @@
 import { createApi } from 'unsplash-js';
-import type { RequestEvent } from './$types';
+
 import { UNSPLASH_ACCESS_KEY } from '$env/static/private';
+
+import type { RequestEvent } from './$types';
 
 export type Unsplash = {
   url: string;

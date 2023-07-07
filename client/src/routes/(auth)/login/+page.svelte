@@ -6,7 +6,6 @@
   import { createHeader } from '$lib/utils/basic-auth';
   import { LoginError, type ErrorMessages } from './shared';
   import { UserErrorCode } from '$lib/graphql/schema';
-  import Card from '$lib/components/Card.svelte';
   import TextField from '$lib/components/TextField.svelte';
   import Button from '$lib/components/Button.svelte';
 
@@ -49,22 +48,35 @@
   });
 </script>
 
-<section class="grid grid-cols-12">
-  <Card class="self-center space-y-4 col-start-10 col-end-13 h-max w-full">
-    <h3 class="text-lg">Create an Account</h3>
-    <form on:submit|preventDefault={handleSubmit} class="space-y-4">
-      <TextField
-        name="username"
-        label="Username"
-        bind:value={$values.username}
-      />
-      <TextField
-        type="password"
-        name="password"
-        label="Password"
-        bind:value={$values.password}
-      />
-      <Button type="submit">Login</Button>
-    </form>
-  </Card>
-</section>
+<h3 class="text-2xl">Login into your account</h3>
+<form
+  on:submit|preventDefault={handleSubmit}
+  class="flex flex-col w-full mt-8 space-y-1"
+>
+  <TextField
+    name="username"
+    label="Username"
+    placeholder="johndoe"
+    bind:value={$values.username}
+  />
+  <TextField
+    type="password"
+    name="password"
+    label="Password"
+    placeholder="• • • • • • • •"
+    bind:value={$values.password}
+    error={$errors.password}
+  />
+
+  <div class="flex justify-between">
+    <Button type="submit" disabled={$isSubmitting} variant="primary"
+      >Login</Button
+    >
+    <Button
+      disabled={$isSubmitting}
+      on:click={() => {
+        window.location.href = '/signup';
+      }}>Create an account</Button
+    >
+  </div>
+</form>

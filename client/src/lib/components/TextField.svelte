@@ -14,7 +14,7 @@
   export { customClassNames as class };
   let className = classNames(
     customClassNames,
-    'bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+    'text-md  font-semibold bg-gray-50 px-3 py-3 placeholder-slate-300 text-slate-600 rounded-lg text-sm outline-none focus:outline-none focus:ring w-full'
   );
   const handleInput = (event: Event): void => {
     const target = event.target as HTMLInputElement;
@@ -25,8 +25,8 @@
 {#if label}
   <label
     for={name}
-    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-    >{label}</label
+    class:text-red-600={!!error}
+    class="block text-sm font-medium text-gray-700 pb-2">{label}</label
   >
 {/if}
 
@@ -44,4 +44,4 @@
   on:blur
   on:input={handleInput}
 />
-<p class:opacity-0={!error} class="text-sm pb-1 text-red-600">{error}</p>
+<p class:opacity-0={!error} class="text-sm pt-1 text-red-600">{error}</p>

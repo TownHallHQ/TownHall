@@ -1,15 +1,12 @@
 <script lang="ts">
   import classNames from 'classnames';
 
-  let className = '';
-  export { className as class };
+  let customClassName: string | null = null;
+  export { customClassName as class };
+
+  let className = classNames(customClassName, 'bg-white rounded-lg p-4 w-full');
 </script>
 
-<div
-  class={classNames(
-    'p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800',
-    className
-  )}
->
+<div class={className}>
   <slot />
 </div>

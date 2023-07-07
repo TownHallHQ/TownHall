@@ -2,18 +2,25 @@
   import classNames from 'classnames';
 
   export let type: 'button' | 'submit' = 'button';
+  export let variant: 'primary' | null = null;
   export let fullWidth = false;
   export let disabled = false;
+  export let isLoading = false;
 
   let customClassNames = '';
   export { customClassNames as class };
 
   let className = classNames(
     customClassNames,
-    'bg-black px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800',
+    'border py-2 px-6 rounded-full text-sm  items-center font-semibold',
     {
       'w-full': fullWidth,
-      '!cursor-not-allowed !opacity-50 !bg-gray-700 !text-white': disabled
+      '!opacity-50 !text-gray-400': isLoading || disabled,
+      '!cursor-not-allowed': disabled,
+      '!cursor-progress': isLoading,
+      'border-gray-200 text-gray-600 hover:bg-gray-100': !variant,
+      '!text-white border-blue-600 bg-blue-600 hover:bg-blue-800 hover:!border-blue-800':
+        variant === 'primary',
     }
   );
 </script>

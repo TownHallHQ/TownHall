@@ -30,4 +30,4 @@ entity = { path = "../entity" }
 migration = { path = "../migration" }
 
 [dev-dependencies]
-tokio = { version = "1.25.0", features = ["rt", "macros"] }
+tokio = { version = "1.29.1", features = ["rt", "macros"] }

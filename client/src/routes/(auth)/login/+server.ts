@@ -8,7 +8,7 @@ import type { Client } from '@urql/core';
 import type { AccessToken, UserError } from '$lib/graphql/schema';
 import { LoginError } from './shared';
 
-export async function _createToken(
+export async function createToken(
   urqlClient: Client,
   email: string,
   password: string
@@ -65,7 +65,7 @@ export const POST = async ({
       url: import.meta.env.VITE_GRAPHQL_URL,
       exchanges: [cacheExchange, fetchExchange],
     });
-    const tokens = await _createToken(urqlClient, username, password);
+    const tokens = await createToken(urqlClient, username, password);
 
     if (tokens.accessToken) {
       cookies.set('accessToken', tokens.accessToken, {

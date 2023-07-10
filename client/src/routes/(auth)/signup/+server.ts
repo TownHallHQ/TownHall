@@ -3,7 +3,7 @@ import { cacheExchange, createClient, fetchExchange } from '@urql/core';
 
 import type { Cookies } from '@sveltejs/kit';
 import type { Client } from '@urql/core';
-import { _createToken } from '$auth/login/+server';
+import { createToken } from '$auth/login/+server';
 
 export type CreateUserPayload = {
   name: string;
@@ -55,7 +55,7 @@ export const POST = async ({
     });
     await createUser(urqlClient, requestBody);
 
-    const tokens = await _createToken(
+    const tokens = await createToken(
       urqlClient,
       requestBody.email,
       requestBody.password

@@ -50,7 +50,7 @@ export const POST = async ({
   try {
     const requestBody: CreateUserPayload = await request.json();
     const urqlClient = createClient({
-      url: import.meta.env.VITE_LINX_GRAPHQL_URL,
+      url: import.meta.env.VITE_GRAPHQL_URL,
       exchanges: [cacheExchange, fetchExchange],
     });
     await createUser(urqlClient, requestBody);

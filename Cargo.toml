@@ -10,7 +10,7 @@ members = [
 default-members = ["crates/cli"]
 
 [workspace.dependencies]
-async-graphql = { version = "5.0.6", features = ["chrono", "decimal", "tracing"] }
+async-graphql = { version = "5.0.10", features = ["chrono", "decimal", "tracing"] }
 async-trait = "0.1.68"
 chrono = { version = "0.4.26" }
 dotenv = "0.15.0"

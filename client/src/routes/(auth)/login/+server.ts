@@ -8,10 +8,10 @@ import type { Client } from '@urql/core';
 import type { AccessToken, UserError } from '$lib/graphql/schema';
 import { LoginError } from './shared';
 
-export async function createToken(
+export async function _createToken(
   urqlClient: Client,
   email: string,
-  password: string,
+  password: string
 ): Promise<AccessToken> {
   const response = await urqlClient
     .mutation(
@@ -22,7 +22,7 @@ export async function createToken(
       },
       {
         requestPolicy: 'network-only',
-      },
+      }
     )
     .toPromise();
 
@@ -57,7 +57,7 @@ export const POST = async ({
         }),
         {
           status: 422,
-        },
+        }
       );
     }
 
@@ -65,7 +65,7 @@ export const POST = async ({
       url: import.meta.env.VITE_GRAPHQL_URL,
       exchanges: [cacheExchange, fetchExchange],
     });
-    const tokens = await createToken(urqlClient, username, password);
+    const tokens = await _createToken(urqlClient, username, password);
 
     if (tokens.accessToken) {
       cookies.set('accessToken', tokens.accessToken, {
@@ -91,7 +91,7 @@ export const POST = async ({
       }),
       {
         status: 500,
-      },
+      }
     );
   }
 };

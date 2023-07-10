@@ -16,15 +16,15 @@
 
   const { handleSubmit, values, errors, isSubmitting } = newForm({
     initialValues: {
-      username: '',
+      email: '',
       password: '',
     },
     validationSchema: Yup.object({
-      username: Yup.string().email().required(),
-      password: Yup.string().required(),
+      email: Yup.string().email().required('Email is required'),
+      password: Yup.string().required('Password is required'),
     }),
-    onSubmit: async ({ username, password }) => {
-      const basicAuth = createHeader(username, password);
+    onSubmit: async ({ email, password }) => {
+      const basicAuth = createHeader(email, password);
       const response = await fetch('/login', {
         method: 'POST',
         headers: {
@@ -54,10 +54,12 @@
   class="flex flex-col w-full mt-8 space-y-1"
 >
   <TextField
-    name="username"
-    label="Username"
-    placeholder="johndoe"
-    bind:value={$values.username}
+    name="email"
+    type="email"
+    label="Email"
+    placeholder="john@example.com"
+    bind:value={$values.email}
+    error={$errors.email}
   />
   <TextField
     type="password"

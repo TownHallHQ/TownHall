@@ -1,54 +1,94 @@
+<script lang="ts" context="module">
+  export type AvatarSize = 'sm' | 'md';
+</script>
+
 <script lang="ts">
-  import { page } from '$app/stores';
+  import classNames from 'classnames';
+
+  import type { CurrentUserFragment } from '$lib/graphql/schema';
   import { clickOutside } from '$lib/actions/click-outside';
 
+  export let user: CurrentUserFragment;
+  export let size: AvatarSize = 'md';
+
+  let customClassName: string | null = null;
+  export { customClassName as class };
+
   let isDropdownOpen = false;
+
+  const userNameCharAtZero = user.name.charAt(0).toUpperCase();
+  const sizeClassNames = classNames({
+    'text-md h-[44px] w-[44px]': size === 'sm',
+    'text-lg h-[50px] w-[50px]': size === 'md',
+  });
+
+  const initialsClassNames = classNames(
+    'text-white flex items-center justify-center',
+    sizeClassNames,
+    {
+      'bg-slate-400': userNameCharAtZero === 'A' || userNameCharAtZero === 'W',
+      'bg-gray-400': userNameCharAtZero === 'B' || userNameCharAtZero === 'X',
+      'bg-zinc-400': userNameCharAtZero === 'C' || userNameCharAtZero === 'Y',
+      'bg-neutral-400':
+        userNameCharAtZero === 'D' || userNameCharAtZero === 'Z',
+      'bg-stone-400': userNameCharAtZero === 'E',
+      'bg-red-400': userNameCharAtZero === 'F',
+      'bg-orange-400': userNameCharAtZero === 'G',
+      'bg-amber-400': userNameCharAtZero === 'H',
+      'bg-yellow-400': userNameCharAtZero === 'I',
+      'bg-lime-400': userNameCharAtZero === 'J',
+      'bg-green-400': userNameCharAtZero === 'K',
+      'bg-emerald-400': userNameCharAtZero === 'L',
+      'bg-teal-400': userNameCharAtZero === 'M',
+      'bg-cyan-400': userNameCharAtZero === 'N',
+      'bg-sky-400': userNameCharAtZero === 'O',
+      'bg-blue-400': userNameCharAtZero === 'P',
+      'bg-indigo-400': userNameCharAtZero === 'Q',
+      'bg-violet-400': userNameCharAtZero === 'R',
+      'bg-purple-400': userNameCharAtZero === 'S',
+      'bg-fuchsia-400': userNameCharAtZero === 'T',
+      'bg-pink-400': userNameCharAtZero === 'U',
+      'bg-rose-400': userNameCharAtZero === 'V',
+    }
+  );
+
+  const containerClassNames = classNames(
+    'rounded-lg overflow-hidden',
+    sizeClassNames,
+    customClassName
+  );
 
   const handleDropdownClick = () => {
     isDropdownOpen = !isDropdownOpen;
   };
 </script>
 
-<div class="flex items-center ml-3">
-  <div>
-    <button
-      on:click={handleDropdownClick}
-      type="button"
-      class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-      id="user-menu-button"
-      aria-expanded="false"
-      data-dropdown-toggle="dropdown-2"
+<button on:click={handleDropdownClick}>
+  <figure class={containerClassNames}>
+    <span class={initialsClassNames}
+      >{user.name.charAt(0)}{user.surname.charAt(0)}</span
     >
-      <span class="sr-only">Open user menu</span>
-      <figure
-        class="flex justify-center items-center bg-gray-200 w-8 h-8 rounded-full"
-      >
-        {$page.data.user?.name
-          ?.charAt(0)
-          ?.toUpperCase()}{$page.data.user?.surname?.charAt(0)?.toUpperCase()}
-      </figure>
-    </button>
-    {#if isDropdownOpen}
-      <div
-        use:clickOutside
-        on:clickOutside={handleDropdownClick}
-        id="dropdown"
-        class="z-10 fixed right-5 top-14 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
-      >
-        <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-          <div class="truncate">
-            {$page.data.user.name + ' ' + $page.data.user.surname}
-          </div>
-          <div class="font-medium truncate">{$page.data.user.email}</div>
-        </div>
-        <div class="py-2">
-          <a
-            href="/logout"
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            >Sign out</a
-          >
-        </div>
+  </figure>
+</button>
+{#if isDropdownOpen}
+  <div
+    use:clickOutside
+    on:clickOutside={handleDropdownClick}
+    id="dropdown"
+    class="z-[100] fixed right-5 top-14 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+  >
+    <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+      <div class="truncate">
+        {user.name + ' ' + user.surname}
       </div>
-    {/if}
+      <div class="font-medium truncate">{user.username}</div>
+    </div>
+    <div class="py-2">
+      <a
+        href="/logout"
+        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+        >Sign out</a
+      >
+    </div>
   </div>
-</div>
+{/if}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import Navbar from './components/Navbar/Navbar.svelte';
-  import Sidebar from './components/Sidebar/Sidebar.svelte';
+  import Sidebar from './components/Sidebar.svelte';
 </script>
 
 <div>
@@ -9,11 +9,9 @@
     <Sidebar />
     <div
       id="main-content"
-      class="relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900"
+      class="w-full min-h-[calc(100vh-64px)] overflow-y-auto bg-gray-50"
     >
-      <main class="dark:text-white min-h-[calc(100vh-64px)]">
-        <slot />
-      </main>
+      <slot />
     </div>
   </div>
 </div>

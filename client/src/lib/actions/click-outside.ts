@@ -1,5 +1,6 @@
 /** Dispatch event on click outside of node */
-export function clickOutside(node: HTMLElement) {
+// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+export function clickOutside(node: HTMLElement): any {
   const handleClick = (event: MouseEvent) => {
     if (
       node &&
@@ -15,6 +16,9 @@ export function clickOutside(node: HTMLElement) {
   return {
     destroy() {
       document.removeEventListener('click', handleClick, true);
+    },
+    on: {
+      clickOutside: handleClick,
     },
   };
 }

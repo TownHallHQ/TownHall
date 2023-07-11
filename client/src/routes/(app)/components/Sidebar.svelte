@@ -7,7 +7,7 @@
 </script>
 
 <aside
-  class="bg-slate-50 border-r border-slate-200 w-96 flex flex-col p-2 text-black"
+  class="bg-slate-50 border-r border-slate-200 w-96 sm:flex flex-col hidden p-2 text-black"
 >
   <div class="flex items-center">
     <Profile user={$page.data.user} />

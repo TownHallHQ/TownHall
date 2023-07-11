@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import Button from '$lib/components/Button.svelte';
-  import Profile from './Profile.svelte';
+  import Profile from './Avatar.svelte';
 </script>
 
 <header
@@ -18,7 +18,7 @@
   <div class="flex gap-4">
     {#if $page.data.user}
       <article class="flex items-center">
-        <Profile size="sm" user={$page.data.user} />
+        <Profile dropdown size="sm" user={$page.data.user} />
         <span class="pl-2">
           Hi, {$page.data.user.username}!
         </span>

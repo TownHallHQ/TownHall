@@ -10,6 +10,7 @@
 
   export let user: CurrentUserFragment;
   export let size: AvatarSize = 'md';
+  export let dropdown: true | false = false;
 
   let customClassName: string | null = null;
   export { customClassName as class };
@@ -70,25 +71,27 @@
     >
   </figure>
 </button>
-{#if isDropdownOpen}
-  <div
-    use:clickOutside
-    on:clickOutside={handleDropdownClick}
-    id="dropdown"
-    class="z-[100] fixed right-5 top-14 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
-  >
-    <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-      <div class="truncate">
-        {user.name + ' ' + user.surname}
+{#if isDropdownOpen && dropdown}
+  <div class="fixed top-12">
+    <div
+      use:clickOutside
+      on:clickOutside={handleDropdownClick}
+      id="dropdown"
+      class="z-[100] relative bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+    >
+      <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+        <div class="truncate">
+          {user.name + ' ' + user.surname}
+        </div>
+        <div class="font-medium truncate">{user.username}</div>
       </div>
-      <div class="font-medium truncate">{user.username}</div>
-    </div>
-    <div class="py-2">
-      <a
-        href="/logout"
-        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-        >Sign out</a
-      >
+      <div class="py-2">
+        <a
+          href="/logout"
+          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+          >Sign out</a
+        >
+      </div>
     </div>
   </div>
 {/if}

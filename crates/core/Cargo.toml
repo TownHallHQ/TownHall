@@ -9,7 +9,7 @@ name = "gabble"
 path = "src/lib.rs"
 
 [dependencies]
-async-trait = "0.1.64"
+async-trait = "0.1.71"
 chrono = { version = "0.4.26", features = ["serde"] }
 lazy_static = "1.4.0"
 pxid = { version = "0.1.3", features = ["serde"] }

@@ -1,10 +1,17 @@
+use std::str::FromStr;
+
 use chrono::{DateTime, Utc};
 use pxid::Pxid;
+use serde::{Deserialize, Serialize};
 
-use crate::post::error::{PostError, Result};
+use crate::post::{
+    error::{PostError, Result},
+    repository::PostRecord,
+};
 
 pub const POST_PXID_PREFIX: &str = "post";
 
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub struct Post {
     pub id: Pxid,
     pub author_id: Pxid,
@@ -40,5 +47,24 @@ impl Post {
 
     pub fn generate_id() -> Result<Pxid> {
         Pxid::new(POST_PXID_PREFIX).map_err(PostError::PxidError)
+    }
+}
+
+impl TryFrom<PostRecord> for Post {
+    type Error = PostError;
+
+    fn try_from(value: PostRecord) -> Result<Self> {
+        Ok(Post {
+            id: Pxid::from_str(&value.id)?,
+            author_id: Pxid::from_str(&value.author_id)?,
+            parent_id: value
+                .parent_id
+                .and_then(|pid| Some(Pxid::from_str(&pid).unwrap())),
+            head: value.head,
+            title: value.title,
+            content: value.content,
+            created_at: value.created_at,
+            updated_at: value.updated_at,
+        })
     }
 }

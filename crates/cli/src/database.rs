@@ -58,7 +58,7 @@ impl DatabseSub {
                     tables: Vec::default(),
                     ignore_tables: Vec::default(),
                     max_connections: 1,
-                    output_dir: String::from("./src/entity/src"),
+                    output_dir: String::from("./crates/entity/src"),
                     database_schema: String::from("public"),
                     database_url: opt.database_url.clone(),
                     with_serde: String::from("both"),

@@ -1,12 +1,11 @@
 use async_graphql::{Enum, SimpleObject, ID};
 use chrono::{DateTime, Utc};
-use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]
 pub enum PostErrorCode {
     Unauthorized,
-    Internal,
+    Unknown,
 }
 
 #[derive(Debug, Deserialize, Serialize, SimpleObject)]
@@ -19,7 +18,7 @@ pub struct PostError {
 pub struct Post {
     pub id: ID,
     pub author_id: ID,
-    pub parent_id: Option<Pxid>,
+    pub parent_id: Option<ID>,
     pub head: bool,
     pub title: String,
     pub content: String,
@@ -32,7 +31,12 @@ impl From<gabble::post::model::Post> for Post {
         Post {
             id: ID(value.id.to_string()),
             author_id: ID(value.author_id.to_string()),
-            parent_id: value.parent_id,
+            parent_id: Some(
+                value
+                    .parent_id
+                    .map(|pxid| ID(pxid.to_string()))
+                    .unwrap_or(ID(String::new())),
+            ),
             head: value.head,
             title: value.title,
             content: value.content,

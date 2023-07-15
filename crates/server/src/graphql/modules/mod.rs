@@ -1,3 +1,4 @@
+mod post;
 mod user;
 
 use async_graphql::MergedObject;

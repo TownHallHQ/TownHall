@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
+use async_graphql::http::GraphiQLSource;
 use async_graphql::ServerError;
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::http::HeaderMap;
@@ -35,5 +35,5 @@ pub async fn schema(
 }
 
 pub async fn playground() -> impl IntoResponse {
-    Html(playground_source(GraphQLPlaygroundConfig::new("/graphql")))
+    Html(GraphiQLSource::build().endpoint("/graphql").finish())
 }

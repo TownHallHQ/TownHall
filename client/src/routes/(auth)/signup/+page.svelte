@@ -36,27 +36,31 @@
   });
 </script>
 
-<h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-  Create an account
-</h2>
-<form class="flex flex-col w-full mt-8 space-y-1" on:submit={handleSubmit}>
-  <TextField
+<div class="flex flex-col justify-center h-full">
+  <div class="py-4">
+    <h1 class="font-semibold">Welcome to Gabble!</h1>
+    <span>
+     Create an account to continue
+    </span>
+  </div>
+  <form class="flex flex-col py-4 space-y-4" on:submit={handleSubmit}>
+    <TextField
     id="name"
     name="name"
     type="text"
     placeholder="E.g. John"
     label="Name"
-    bind:value={$values.name}
     error={$errors.name}
+    bind:value={$values.name}
   />
   <TextField
     id="surname"
     name="surname"
     type="text"
     placeholder="E.g. Appleseed"
-    label="Last name"
-    bind:value={$values.surname}
+    label="Surname"
     error={$errors.surname}
+    bind:value={$values.surname}
   />
   <TextField
     id="username"
@@ -64,8 +68,8 @@
     type="text"
     placeholder="E.g. johndoe"
     label="Username"
-    bind:value={$values.username}
     error={$errors.username}
+    bind:value={$values.username}
   />
   <TextField
     id="email"
@@ -73,25 +77,23 @@
     type="email"
     placeholder="E.g. user@email.com"
     label="Email"
-    bind:value={$values.email}
     error={$errors.email}
+    bind:value={$values.email}
   />
   <TextField
     type="password"
     id="password"
     name="password"
     label="Password"
-    placeholder="• • • • • • • •"
-    bind:value={$values.password}
+    placeholder="•••••••"
     error={$errors.password}
+    bind:value={$values.password}
   />
-  <div class="flex justify-between">
-    <Button variant="primary" type="submit" disabled={$isSubmitting}
-      >Create account</Button
-    >
-    <Button
-      on:click={() => (window.location.href = '/login')}
-      disabled={$isSubmitting}>Login into your account</Button
-    >
-  </div>
-</form>
+    <Button type="submit" variant="primary">
+      Sign up
+    </Button>
+  </form>
+  <small class="text-gray-600">
+    Already have an account? <a class="text-blue-600 underline" href="/login">Log in</a>
+  </small>
+</div>

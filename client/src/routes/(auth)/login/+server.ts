@@ -11,7 +11,7 @@ import { LoginError } from './shared';
 export async function createToken(
   urqlClient: Client,
   email: string,
-  password: string
+  password: string,
 ): Promise<AccessToken> {
   const response = await urqlClient
     .mutation(
@@ -22,7 +22,7 @@ export async function createToken(
       },
       {
         requestPolicy: 'network-only',
-      }
+      },
     )
     .toPromise();
 
@@ -57,7 +57,7 @@ export const POST = async ({
         }),
         {
           status: 422,
-        }
+        },
       );
     }
 
@@ -91,7 +91,7 @@ export const POST = async ({
       }),
       {
         status: 500,
-      }
+      },
     );
   }
 };

@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import Card from '$lib/components/Card.svelte';
   import type { Unsplash } from '../api/unsplash/+server';
 
   let cover: Unsplash;
@@ -17,17 +16,24 @@
   });
 </script>
 
-<div
-  class="flex bg-gray-900 min-h-screen justify-center items-center bg-cover bg-no-repeat"
-  style="background-image: var(--cover-image);"
->
-  <Card class="h-max w-full mx-2 md:w-1/2 xl:w-1/4">
-    <slot />
-  </Card>
-  <small class="text-sm text-white fixed bottom-4 right-4"
-    >Photo by <a
+<main class="auth_view" style="background-image: url({cover?.url});">
+  <article class="sidebar">
+    <div class="container">
+      <slot />
+    </div>
+    <footer class="footer">
+      <small>
+        Gabble is an MIT Licensed solution
+        <br />
+        Contribute to the project on{" "}
+        <a href="https://github.com/whizzes/gabble" class="text-blue-600 underline" target="_blank"> GitHub </a>
+      </small>
+    </footer>
+  </article>
+  <small class="text-sm text-white fixed bottom-4 right-4">
+    Photo by <a
       class="underline font-semibold"
-      href={`https://unsplash.com/@${cover?.author?.username}?utm_source=gabble&utm_medium=referral`}
+      href="https://unsplash.com/@{cover?.author?.username}"
       >{cover?.author?.name || ''}</a
     >
     on
@@ -38,4 +44,29 @@
       Unsplash</a
     ></small
   >
-</div>
+</main>
+
+
+<style lang="postcss">
+  .auth_view {
+    @apply bg-cover bg-center bg-no-repeat flex h-screen overflow-hidden;
+  }
+
+  .sidebar {
+    @apply bg-white flex flex-col justify-between items-center w-full shadow-md;
+  }
+
+  @media screen(md) {
+    .sidebar {
+      @apply w-[390px];
+    }
+  }
+
+  .container {
+    @apply h-full w-11/12;
+  }
+
+  .footer {
+    @apply flex flex-col text-gray-600 p-4 text-center;
+  }
+</style>

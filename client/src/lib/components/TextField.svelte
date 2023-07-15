@@ -1,21 +1,18 @@
 <script lang="ts">
-  import classNames from 'classnames';
+  import Warning from "~icons/custom/warning";
 
-  export let type: 'text' | 'number' | 'email' | 'password' | 'date' = 'text';
+  export let type: "text" | "number" | "email" | "password" | "date" = "text";
   export let name: string;
-  export let id = '';
+  export let id = "";
   export let error: string | null = null;
   export let value: string | number | Date | null = null;
   export let label: string | null = null;
   export let placeholder: string | undefined = undefined;
   export let required = false;
-  export let autocomplete: 'true' | 'false' | undefined = undefined;
-  let customClassNames = '';
-  export { customClassNames as class };
-  let className = classNames(
-    customClassNames,
-    'text-md  font-semibold bg-gray-50 px-3 py-3 placeholder-slate-300 text-slate-600 rounded-lg text-sm outline-none focus:outline-none focus:ring w-full'
-  );
+  export let autocomplete: "true" | "false" | undefined = undefined;
+  let className = "";
+  export { className as class };
+
   const handleInput = (event: Event): void => {
     const target = event.target as HTMLInputElement;
     value = type.match(/^(number|range)$/) ? +target.value : target.value;
@@ -25,23 +22,72 @@
 {#if label}
   <label
     for={name}
-    class:text-red-600={!!error}
-    class="block text-sm font-medium text-gray-700 pb-2">{label}</label
+    class:underline={!!error}
+    class:text-rose-600={!!error}
+    class="block text-sm font-medium text-gray-700">{label}</label
   >
 {/if}
 
-<input
-  {name}
-  {id}
-  {placeholder}
-  {required}
-  {autocomplete}
-  {type}
-  {value}
-  class:border-red-600={!!error}
-  class={className}
-  on:change
-  on:blur
-  on:input={handleInput}
-/>
-<p class:opacity-0={!error} class="text-sm pt-1 text-red-600">{error}</p>
+<div class="input_wrapper">
+  <div class="input_container">
+    <input
+      {required}
+      {autocomplete}
+      id={id || name}
+      {type}
+      {name}
+      {value}
+      {placeholder}
+      class="input{className ? ' ' + className : ''}"
+      class:input_error={!!error}
+      on:input={handleInput}
+    />
+    {#if error}
+    <figure class="icon_error_icon_container">
+      <Warning class="input_error_icon" />
+    </figure>
+    {/if}
+  </div>
+  {#if error}
+    <p class="input_error_message">{error}</p>
+  {/if}
+</div>
+
+<style lang="postcss">
+  .input_wrapper {
+    @apply flex flex-col;
+  }
+
+  .input_container {
+    @apply flex relative;
+  }
+
+  .input_error_icon {
+    @apply text-rose-600 h-4 w-4;
+  }
+
+  .icon_error_icon_container {
+    @apply flex items-center justify-center p-4 pointer-events-none;
+    @apply absolute right-0 top-0;
+  }
+
+  .input_error_message {
+    @apply text-rose-600 text-sm;
+  }
+
+  .input {
+    @apply bg-gray-200 border border-transparent rounded text-gray-800;
+    @apply w-full p-3 text-[.9rem];
+  }
+
+  .input:active,
+  .input:focus {
+    @apply outline-none border-gray-400;
+  }
+
+  .input_error,
+  .input_error:active,
+  .input_error:focus {
+    @apply border-rose-600 text-rose-600;
+  }
+</style>

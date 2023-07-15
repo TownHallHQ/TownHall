@@ -15,7 +15,7 @@ export type CreateUserPayload = {
 
 async function createUser(
   urqlClient: Client,
-  payload: CreateUserPayload
+  payload: CreateUserPayload,
 ): Promise<{ id: string }> {
   const response = await urqlClient
     .mutation(
@@ -23,7 +23,7 @@ async function createUser(
       { input: payload },
       {
         requestPolicy: 'network-only',
-      }
+      },
     )
     .toPromise();
 
@@ -58,7 +58,7 @@ export const POST = async ({
     const tokens = await createToken(
       urqlClient,
       requestBody.email,
-      requestBody.password
+      requestBody.password,
     );
 
     if (tokens.accessToken) {
@@ -82,7 +82,7 @@ export const POST = async ({
       }),
       {
         status: 403,
-      }
+      },
     );
   } catch (err) {
     console.error(err);
@@ -94,7 +94,7 @@ export const POST = async ({
       }),
       {
         status: 500,
-      }
+      },
     );
   }
 };

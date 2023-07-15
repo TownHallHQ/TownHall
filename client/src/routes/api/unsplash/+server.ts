@@ -17,7 +17,7 @@ export type Unsplash = {
 
 export async function GET(event: RequestEvent) {
   const UNSPLASH_DAILY_BACKGROUND = event.cookies.get(
-    'UNSPLASH_DAILY_BACKGROUND'
+    'UNSPLASH_DAILY_BACKGROUND',
   );
 
   if (UNSPLASH_DAILY_BACKGROUND) {
@@ -27,7 +27,7 @@ export async function GET(event: RequestEvent) {
         data: JSON.parse(UNSPLASH_DAILY_BACKGROUND),
         error: null,
         success: true,
-      })
+      }),
     );
   }
 
@@ -73,7 +73,7 @@ export async function GET(event: RequestEvent) {
           data: response,
           success: true,
           error: null,
-        })
+        }),
       );
     }
   }
@@ -86,6 +86,6 @@ export async function GET(event: RequestEvent) {
       },
       data: null,
       success: false,
-    })
+    }),
   );
 }

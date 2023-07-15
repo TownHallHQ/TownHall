@@ -31,12 +31,7 @@ impl From<gabble::post::model::Post> for Post {
         Post {
             id: ID(value.id.to_string()),
             author_id: ID(value.author_id.to_string()),
-            parent_id: Some(
-                value
-                    .parent_id
-                    .map(|pxid| ID(pxid.to_string()))
-                    .unwrap_or(ID(String::new())),
-            ),
+            parent_id: Some(value.parent_id.map(|pxid| ID(pxid.to_string())).unwrap()),
             head: value.head,
             title: value.title,
             content: value.content,

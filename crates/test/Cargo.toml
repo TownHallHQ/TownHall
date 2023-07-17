@@ -9,7 +9,7 @@ name = "test"
 path = "src/lib.rs"
 
 [dependencies]
-anyhow = "1.0.71"
+anyhow = "1.0.72"
 fake = "2.6.1"
 rand = "0.8.5"
 

@@ -1,2 +1,2 @@
-mod mutation;
-mod types;
+pub mod mutation;
+pub mod types;

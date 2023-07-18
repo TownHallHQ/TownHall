@@ -4,19 +4,18 @@ use crate::{
     services::auth::Token,
 };
 
-use async_graphql::{Context, Result, ID};
+use async_graphql::{Context, InputObject, Result, SimpleObject, ID};
 use gabble::post::service::CreatePostDto;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, InputObject)]
 pub struct PostCreateInput {
-    pub author_id: ID,
     pub parent_id: Option<ID>,
     pub title: String,
     pub content: String,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
 pub struct PostCreate {
     post: Option<Post>,
     error: Option<PostError>,

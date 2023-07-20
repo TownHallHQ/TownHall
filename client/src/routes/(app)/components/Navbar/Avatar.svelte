@@ -64,7 +64,7 @@
   };
 </script>
 
-<button on:click={handleDropdownClick}>
+<button type="button" on:click={handleDropdownClick}>
   <figure class={containerClassNames}>
     <span class={initialsClassNames}
       >{user.name.charAt(0)}{user.surname.charAt(0)}</span

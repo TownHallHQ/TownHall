@@ -1,1 +1,2 @@
+mod post;
 mod user;

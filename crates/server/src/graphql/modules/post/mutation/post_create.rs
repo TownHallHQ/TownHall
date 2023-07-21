@@ -6,6 +6,7 @@ use crate::{
 
 use async_graphql::{Context, InputObject, Result, SimpleObject, ID};
 use gabble::post::service::CreatePostDto;
+use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Default, InputObject)]
@@ -28,9 +29,13 @@ impl PostCreate {
         if let Some(jwt) = ctx.data_opt::<Token>() {
             let claims = context.services.auth.verify_token(jwt).unwrap();
             let is_head = input.parent_id.is_some();
+            let parent_id = input.parent_id.map(|pxid| Pxid::from_str(&pxid.to_string()))? else {
+                
+            };
+
             let dto = CreatePostDto {
-                author_id: claims.uid.to_string(),
-                parent_id: input.parent_id.map(|id| id.to_string()),
+                author_id: claims.uid,
+                parent_id: parent_id,
                 head: is_head,
                 title: input.title,
                 content: input.content,

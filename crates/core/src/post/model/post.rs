@@ -54,15 +54,10 @@ impl TryFrom<PostRecord> for Post {
     type Error = PostError;
 
     fn try_from(value: PostRecord) -> Result<Self> {
-        let parent_id = match value.parent_id {
-            Some(pid) => Some(Pxid::from_str(&pid).map_err(PostError::PxidError)?),
-            None => None,
-        };
-
         Ok(Post {
             id: Pxid::from_str(&value.id)?,
             author_id: Pxid::from_str(&value.author_id)?,
-            parent_id,
+            parent_id: value.parent_id.map(|pxid| Pxid::from_str(&pxid).unwrap()),
             head: value.head,
             title: value.title,
             content: value.content,

@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use crate::{
     context::SharedContext,
     graphql::modules::post::types::{Post, PostError, PostErrorCode},
@@ -29,8 +31,20 @@ impl PostCreate {
         if let Some(jwt) = ctx.data_opt::<Token>() {
             let claims = context.services.auth.verify_token(jwt).unwrap();
             let is_head = input.parent_id.is_some();
-            let parent_id = input.parent_id.map(|pxid| Pxid::from_str(&pxid.to_string()))? else {
-                
+            let parent_id = match input.parent_id {
+                Some(parent_id_str) => match Pxid::from_str(&parent_id_str) {
+                    Ok(pxid) => Some(pxid),
+                    Err(_) => {
+                        return Ok(Self {
+                            post: None,
+                            error: Some(PostError {
+                                code: PostErrorCode::InvalidParentId,
+                                message: "Invalid parent id provided".to_string(),
+                            }),
+                        });
+                    }
+                },
+                None => None,
             };
 
             let dto = CreatePostDto {

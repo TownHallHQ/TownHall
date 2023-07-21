@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]
 pub enum PostErrorCode {
+    InvalidParentId,
     Unauthorized,
     Unknown,
 }

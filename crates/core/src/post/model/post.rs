@@ -57,9 +57,7 @@ impl TryFrom<PostRecord> for Post {
         Ok(Post {
             id: Pxid::from_str(&value.id)?,
             author_id: Pxid::from_str(&value.author_id)?,
-            parent_id: value
-                .parent_id
-                .and_then(|pid| Some(Pxid::from_str(&pid).unwrap())),
+            parent_id: value.parent_id.map(|pxid| Pxid::from_str(&pxid).unwrap()),
             head: value.head,
             title: value.title,
             content: value.content,

@@ -46,12 +46,12 @@ async fn creates_a_post() {
         .await;
 
     let user_data = result_user.data.into_json().unwrap();
-    let user_uid = user_data["userRegister"]["user"]["id"].to_string();
+    let user_uid = user_data["userRegister"]["user"]["id"].as_str().unwrap();
 
     let token = TestUtil::token_create(&test_util, Pxid::from_str(&user_uid).unwrap()).await;
 
     let mutation = "
-      mutation ($input: PostCreateInput!) {
+      mutation ($payload: PostCreateInput!) {
         createPost(input: $payload) {
           post {
             id
@@ -89,8 +89,52 @@ async fn creates_a_post() {
 
     assert_eq!(post_data["title"], "Hello World!");
     assert_eq!(post_data["content"], "Hello, new post!");
-    assert_eq!(post_data["authorId"], 1);
+    assert_eq!(post_data["authorId"], user_uid);
     assert_eq!(post_data["head"], false);
     assert!(post_data["createdAt"].is_string());
     assert!(post_data["updatedAt"].is_string())
+}
+
+#[tokio::test]
+async fn create_post_without_a_token() {
+    let test_util = TestUtil::new_cleared().await;
+    let (_, schema) = test_util.parts();
+
+    let mutation = "
+      mutation ($payload: PostCreateInput!) {
+        createPost(input: $payload) {
+          post {
+            id
+            authorId
+            parentId
+            head
+            title
+            content
+            createdAt
+            updatedAt      
+          }
+          error {
+            code
+            message
+          }
+        }
+      }
+    ";
+
+    let result = schema
+        .execute(
+            Request::new(mutation).variables(Variables::from_json(json!({
+              "payload":{
+                "title":"Hello World!",
+                "content":"Hello, new post!"
+              }
+            }))),
+        )
+        .await;
+
+    let data = result.data.into_json().unwrap();
+    let post_error = &data["createPost"]["error"];
+
+    assert_eq!(post_error["code"], "UNAUTHORIZED");
+    assert_eq!(post_error["message"], "Invalid token provided");
 }

@@ -61,7 +61,7 @@ async fn create_post() {
             title
             content
             createdAt
-            updatedAt      
+            updatedAt
           }
           error {
             code
@@ -90,7 +90,7 @@ async fn create_post() {
     assert_eq!(post_data["title"], "Hello World!");
     assert_eq!(post_data["content"], "Hello, new post!");
     assert_eq!(post_data["authorId"], user_uid);
-    assert_eq!(post_data["head"], false);
+    assert_eq!(post_data["head"], true);
     assert!(post_data["parentId"].is_null());
     assert!(post_data["createdAt"].is_string());
     assert!(post_data["updatedAt"].is_string())

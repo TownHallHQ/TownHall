@@ -146,6 +146,13 @@ export type GetCurrentUserQuery = { __typename?: 'QueryRoot', me: { __typename?:
 
 export type CurrentUserFragment = { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any };
 
+export type PostCreateMutationVariables = Exact<{
+  input: PostCreateInput;
+}>;
+
+
+export type PostCreateMutation = { __typename?: 'MutationRoot', postCreate: { __typename?: 'PostCreate', post?: { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content: string, createdAt: any, updatedAt: any } | null, error?: { __typename?: 'PostError', code: PostErrorCode, message: string } | null } };
+
 export type TokenCreateMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -181,6 +188,26 @@ export const GetCurrentUserDocument = gql`
   }
 }
     ${CurrentUserFragmentDoc}`;
+export const PostCreateDocument = gql`
+    mutation PostCreate($input: PostCreateInput!) {
+  postCreate(input: $input) {
+    post {
+      id
+      authorId
+      parentId
+      head
+      title
+      content
+      createdAt
+      updatedAt
+    }
+    error {
+      code
+      message
+    }
+  }
+}
+    `;
 export const TokenCreateDocument = gql`
     mutation TokenCreate($email: String!, $password: String!) {
   tokenCreate(email: $email, password: $password) {

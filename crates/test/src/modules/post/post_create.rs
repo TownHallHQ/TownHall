@@ -10,7 +10,6 @@ use crate::TestUtil;
 async fn create_post() {
     let test_util = TestUtil::new_cleared().await;
     let (_, schema) = test_util.parts();
-
     let user_create_mutation: &str = "
       mutation RegisterUser($payload: UserRegisterInput!) {
           userRegister(input: $payload) {
@@ -47,12 +46,10 @@ async fn create_post() {
 
     let user_data = result_user.data.into_json().unwrap();
     let user_uid = user_data["userRegister"]["user"]["id"].as_str().unwrap();
-
-    let token = TestUtil::token_create(&test_util, Pxid::from_str(&user_uid).unwrap()).await;
-
+    let token = TestUtil::token_create(&test_util, Pxid::from_str(user_uid).unwrap()).await;
     let mutation = "
       mutation ($payload: PostCreateInput!) {
-        createPost(input: $payload) {
+        postCreate(input: $payload) {
           post {
             id
             authorId
@@ -85,7 +82,7 @@ async fn create_post() {
         .await;
 
     let data = result.data.into_json().unwrap();
-    let post_data = &data["createPost"]["post"];
+    let post_data = &data["postCreate"]["post"];
 
     assert_eq!(post_data["title"], "Hello World!");
     assert_eq!(post_data["content"], "Hello, new post!");
@@ -138,11 +135,11 @@ async fn creates_post_with_parent() {
     let user_data = result_user.data.into_json().unwrap();
     let user_uid = user_data["userRegister"]["user"]["id"].as_str().unwrap();
 
-    let token = TestUtil::token_create(&test_util, Pxid::from_str(&user_uid).unwrap()).await;
+    let token = TestUtil::token_create(&test_util, Pxid::from_str(user_uid).unwrap()).await;
 
     let mutation = "
       mutation ($payload: PostCreateInput!) {
-        createPost(input: $payload) {
+        postCreate(input: $payload) {
           post {
             id
             authorId
@@ -151,7 +148,7 @@ async fn creates_post_with_parent() {
             title
             content
             createdAt
-            updatedAt      
+            updatedAt
           }
           error {
             code
@@ -175,10 +172,8 @@ async fn creates_post_with_parent() {
         .await;
 
     let post_parent_data = result_parent.data.into_json().unwrap();
-    let post_parent_id = &post_parent_data["createPost"]["post"]["id"];
-
-    let token = TestUtil::token_create(&test_util, Pxid::from_str(&user_uid).unwrap()).await;
-
+    let post_parent_id = &post_parent_data["postCreate"]["post"]["id"];
+    let token = TestUtil::token_create(&test_util, Pxid::from_str(user_uid).unwrap()).await;
     let result = schema
         .execute(
             Request::new(mutation)
@@ -194,7 +189,7 @@ async fn creates_post_with_parent() {
         .await;
 
     let data = result.data.into_json().unwrap();
-    let post_data = &data["createPost"]["post"];
+    let post_data = &data["postCreate"]["post"];
 
     assert_eq!(post_data["title"].as_str().unwrap(), "Hello again!");
     assert_eq!(
@@ -202,7 +197,10 @@ async fn creates_post_with_parent() {
         "Hello, new post again!"
     );
     assert_eq!(post_data["authorId"], user_uid);
-    assert_eq!(post_data["head"], true);
+    assert_eq!(
+        post_data["head"], false,
+        "should not be head given that is a comment"
+    );
     assert_eq!(&post_data["parentId"], post_parent_id);
     assert!(post_data["createdAt"].is_string());
     assert!(post_data["updatedAt"].is_string())
@@ -215,7 +213,7 @@ async fn create_post_without_a_token() {
 
     let mutation = "
       mutation ($payload: PostCreateInput!) {
-        createPost(input: $payload) {
+        postCreate(input: $payload) {
           post {
             id
             authorId
@@ -224,7 +222,7 @@ async fn create_post_without_a_token() {
             title
             content
             createdAt
-            updatedAt      
+            updatedAt
           }
           error {
             code
@@ -244,9 +242,8 @@ async fn create_post_without_a_token() {
             }))),
         )
         .await;
-
     let data = result.data.into_json().unwrap();
-    let post_error = &data["createPost"]["error"];
+    let post_error = &data["postCreate"]["error"];
 
     assert_eq!(post_error["code"], "UNAUTHORIZED");
     assert_eq!(post_error["message"], "Invalid token provided");

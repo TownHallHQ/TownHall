@@ -29,7 +29,7 @@ impl PostCreate {
             let parent_id = input.parent_id.map(|id| id.into_inner());
             let dto = CreatePostDto {
                 author_id: claims.uid,
-                parent_id: parent_id,
+                parent_id,
                 title: input.title,
                 content: input.content,
             };

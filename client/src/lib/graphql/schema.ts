@@ -15,6 +15,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  Pxid: { input: any; output: any; }
 };
 
 export type AccessToken = {
@@ -30,8 +31,15 @@ export type Me = {
 
 export type MutationRoot = {
   __typename?: 'MutationRoot';
+  /** Creates a post authored by the user identified by the provided token */
+  postCreate: PostCreate;
   tokenCreate: TokenCreate;
   userRegister: UserRegister;
+};
+
+
+export type MutationRootPostCreateArgs = {
+  input: PostCreateInput;
 };
 
 
@@ -44,6 +52,42 @@ export type MutationRootTokenCreateArgs = {
 export type MutationRootUserRegisterArgs = {
   input: UserRegisterInput;
 };
+
+export type Post = {
+  __typename?: 'Post';
+  authorId: Scalars['Pxid']['output'];
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  head: Scalars['Boolean']['output'];
+  id: Scalars['Pxid']['output'];
+  parentId?: Maybe<Scalars['Pxid']['output']>;
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type PostCreate = {
+  __typename?: 'PostCreate';
+  error?: Maybe<PostError>;
+  post?: Maybe<Post>;
+};
+
+export type PostCreateInput = {
+  content: Scalars['String']['input'];
+  parentId?: InputMaybe<Scalars['Pxid']['input']>;
+  title: Scalars['String']['input'];
+};
+
+export type PostError = {
+  __typename?: 'PostError';
+  code: PostErrorCode;
+  message: Scalars['String']['output'];
+};
+
+export enum PostErrorCode {
+  InvalidParentId = 'INVALID_PARENT_ID',
+  Unauthorized = 'UNAUTHORIZED',
+  Unknown = 'UNKNOWN'
+}
 
 export type QueryRoot = {
   __typename?: 'QueryRoot';
@@ -61,7 +105,7 @@ export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
+  id: Scalars['Pxid']['output'];
   name: Scalars['String']['output'];
   surname: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -98,9 +142,9 @@ export type UserRegisterInput = {
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'QueryRoot', me: { __typename?: 'Me', user?: { __typename?: 'User', id: string, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any } | null } };
+export type GetCurrentUserQuery = { __typename?: 'QueryRoot', me: { __typename?: 'Me', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any } | null } };
 
-export type CurrentUserFragment = { __typename?: 'User', id: string, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any };
+export type CurrentUserFragment = { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any };
 
 export type TokenCreateMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -115,7 +159,7 @@ export type UserCreateMutationVariables = Exact<{
 }>;
 
 
-export type UserCreateMutation = { __typename?: 'MutationRoot', userRegister: { __typename?: 'UserRegister', user?: { __typename?: 'User', id: string } | null, error?: { __typename?: 'UserError', code: UserErrorCode, message: string } | null } };
+export type UserCreateMutation = { __typename?: 'MutationRoot', userRegister: { __typename?: 'UserRegister', user?: { __typename?: 'User', id: any } | null, error?: { __typename?: 'UserError', code: UserErrorCode, message: string } | null } };
 
 export const CurrentUserFragmentDoc = gql`
     fragment CurrentUser on User {

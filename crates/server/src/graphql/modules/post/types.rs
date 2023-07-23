@@ -1,5 +1,6 @@
-use async_graphql::{Enum, SimpleObject, ID};
+use async_graphql::{Enum, SimpleObject};
 use chrono::{DateTime, Utc};
+use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]
@@ -17,9 +18,9 @@ pub struct PostError {
 
 #[derive(Debug, Deserialize, Serialize, SimpleObject)]
 pub struct Post {
-    pub id: ID,
-    pub author_id: ID,
-    pub parent_id: Option<ID>,
+    pub id: Pxid,
+    pub author_id: Pxid,
+    pub parent_id: Option<Pxid>,
     pub head: bool,
     pub title: String,
     pub content: String,
@@ -30,9 +31,9 @@ pub struct Post {
 impl From<gabble::post::model::Post> for Post {
     fn from(value: gabble::post::model::Post) -> Self {
         Post {
-            id: ID(value.id.to_string()),
-            author_id: ID(value.author_id.to_string()),
-            parent_id: value.parent_id.map(|pxid| ID(pxid.to_string())),
+            id: value.id.into(),
+            author_id: value.author_id.into(),
+            parent_id: value.parent_id.map(|id| id.into()),
             head: value.head,
             title: value.title,
             content: value.content,

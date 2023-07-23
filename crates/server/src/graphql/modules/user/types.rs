@@ -1,5 +1,6 @@
-use async_graphql::{Enum, SimpleObject, ID};
+use async_graphql::{Enum, SimpleObject};
 use chrono::{DateTime, Utc};
+use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]
@@ -24,7 +25,7 @@ pub struct UserError {
 /// A Platform's User
 #[derive(Debug, Deserialize, Serialize, SimpleObject)]
 pub struct User {
-    pub id: ID,
+    pub id: Pxid,
     pub name: String,
     pub surname: String,
     pub username: String,
@@ -36,7 +37,7 @@ pub struct User {
 impl From<gabble::user::model::User> for User {
     fn from(value: gabble::user::model::User) -> Self {
         User {
-            id: ID(value.id.to_string()),
+            id: value.id.into(),
             name: value.name,
             surname: value.surname,
             username: value.username.to_string(),

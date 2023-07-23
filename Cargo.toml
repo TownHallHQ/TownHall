@@ -14,7 +14,7 @@ async-graphql = { version = "5.0.10", features = ["chrono", "decimal", "tracing"
 async-trait = "0.1.71"
 chrono = { version = "0.4.26" }
 dotenv = "0.15.0"
-pxid = { version = "0.1.3" }
+pxid = { version = "0.2.1", features = ["async-graphql", "serde"] }
 serde = { version = "1.0.171" }
 serde_json = { version = "1.0.100" }
 tokio = { version = "1.29.1", features = ["rt", "macros"] }

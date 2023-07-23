@@ -1,24 +1,20 @@
-use std::str::FromStr;
-
-use crate::{
-    context::SharedContext,
-    graphql::modules::post::types::{Post, PostError, PostErrorCode},
-    services::auth::Token,
-};
-
-use async_graphql::{Context, InputObject, Result, SimpleObject, ID};
+use async_graphql::{Context, InputObject, Result, SimpleObject};
 use gabble::post::service::CreatePostDto;
-use pxid::Pxid;
+use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default, InputObject)]
+use crate::context::SharedContext;
+use crate::graphql::modules::post::types::{Post, PostError, PostErrorCode};
+use crate::services::auth::Token;
+
+#[derive(Debug, InputObject)]
 pub struct PostCreateInput {
-    pub parent_id: Option<ID>,
     pub title: String,
     pub content: String,
+    pub parent_id: Option<Pxid>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
+#[derive(Debug, Deserialize, Serialize, SimpleObject)]
 pub struct PostCreate {
     post: Option<Post>,
     error: Option<PostError>,
@@ -30,27 +26,10 @@ impl PostCreate {
 
         if let Some(jwt) = ctx.data_opt::<Token>() {
             let claims = context.services.auth.verify_token(jwt).unwrap();
-            let is_head = input.parent_id.is_some();
-            let parent_id = match input.parent_id {
-                Some(parent_id_str) => match Pxid::from_str(&parent_id_str) {
-                    Ok(pxid) => Some(pxid),
-                    Err(_) => {
-                        return Ok(Self {
-                            post: None,
-                            error: Some(PostError {
-                                code: PostErrorCode::InvalidParentId,
-                                message: "Invalid parent id provided".to_string(),
-                            }),
-                        });
-                    }
-                },
-                None => None,
-            };
-
+            let parent_id = input.parent_id.map(|id| id.into_inner());
             let dto = CreatePostDto {
                 author_id: claims.uid,
-                parent_id: parent_id,
-                head: is_head,
+                parent_id,
                 title: input.title,
                 content: input.content,
             };

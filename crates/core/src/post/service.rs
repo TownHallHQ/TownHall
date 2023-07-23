@@ -5,11 +5,10 @@ use super::model::Post;
 use super::repository::{InsertPostDto, PostRepository};
 
 pub struct CreatePostDto {
-    pub author_id: Pxid,
-    pub parent_id: Option<Pxid>,
-    pub head: bool,
     pub title: String,
     pub content: String,
+    pub author_id: Pxid,
+    pub parent_id: Option<Pxid>,
 }
 
 #[derive(Clone)]
@@ -29,9 +28,9 @@ impl PostService {
             .repository
             .insert(InsertPostDto {
                 id: Post::generate_id()?.to_string(),
-                author_id: dto.author_id.to_string(),
-                parent_id: dto.parent_id.map(|pxid| pxid.to_string()),
-                head: dto.head,
+                author_id: dto.author_id,
+                parent_id: dto.parent_id,
+                head: dto.parent_id.is_none(),
                 title: dto.title,
                 content: dto.content,
             })

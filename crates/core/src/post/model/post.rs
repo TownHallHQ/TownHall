@@ -56,8 +56,8 @@ impl TryFrom<PostRecord> for Post {
     fn try_from(value: PostRecord) -> Result<Self> {
         Ok(Post {
             id: Pxid::from_str(&value.id)?,
-            author_id: Pxid::from_str(&value.author_id)?,
-            parent_id: value.parent_id.map(|pxid| Pxid::from_str(&pxid).unwrap()),
+            author_id: value.author_id,
+            parent_id: value.parent_id,
             head: value.head,
             title: value.title,
             content: value.content,

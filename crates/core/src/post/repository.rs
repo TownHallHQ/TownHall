@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use chrono::{DateTime, Utc};
 use pxid::Pxid;
-use sea_orm::{ActiveModelTrait, Set};
+use sea_orm::{ActiveModelTrait, EntityTrait, Set};
 use serde::{Deserialize, Serialize};
 
 use crate::common::Database;
@@ -51,6 +51,21 @@ impl PostRepository {
             created_at: DateTime::from_utc(model.created_at, Utc),
             updated_at: DateTime::from_utc(model.updated_at, Utc),
         }
+    }
+
+    pub async fn list(&self) -> Result<Vec<PostRecord>> {
+        let models = entity::post::Entity::find()
+            .all(&*self.db)
+            .await
+            .map_err(|err| {
+                tracing::error!(%err, "Failed to query database");
+                PostError::DatabaseError
+            })?;
+
+        Ok(models
+            .into_iter()
+            .map(PostRepository::into_record)
+            .collect())
     }
 
     pub async fn insert(&self, dto: InsertPostDto) -> Result<PostRecord> {

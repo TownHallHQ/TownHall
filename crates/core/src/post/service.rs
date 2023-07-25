@@ -23,6 +23,25 @@ impl PostService {
         }
     }
 
+    /// Retrieves every post in the database.
+    pub async fn list(&self) -> Result<Vec<Post>> {
+        let posts = self
+            .repository
+            .list()
+            .await?
+            .into_iter()
+            .map_while(|rec| match Post::try_from(rec) {
+                Ok(post) => Some(post),
+                Err(err) => {
+                    tracing::error!(%err, "Failed to convert record to post, skipping");
+                    None
+                }
+            })
+            .collect();
+
+        Ok(posts)
+    }
+
     pub async fn create(&self, dto: CreatePostDto) -> Result<Post> {
         let record = self
             .repository

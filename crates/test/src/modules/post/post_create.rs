@@ -4,6 +4,8 @@ use async_graphql::{Request, Variables};
 use pxid::Pxid;
 use serde_json::json;
 
+use libserver::graphql::guard::{GENERIC_FORBIDDEN_ERROR, GENERIC_FORBIDDEN_ERROR_CODE};
+
 use crate::TestUtil;
 
 #[tokio::test]
@@ -242,9 +244,18 @@ async fn create_post_without_a_token() {
             }))),
         )
         .await;
-    let data = result.data.into_json().unwrap();
-    let post_error = &data["postCreate"]["error"];
+    let errors = result.errors;
+    let first_error = errors.first().unwrap();
+    let error_code = first_error.extensions.clone().unwrap();
+    let error_code = error_code.get("code").unwrap().to_owned();
 
-    assert_eq!(post_error["code"], "UNAUTHORIZED");
-    assert_eq!(post_error["message"], "Invalid token provided");
+    assert_eq!(
+        first_error.message, GENERIC_FORBIDDEN_ERROR,
+        "unexpected error message received"
+    );
+    assert_eq!(
+        error_code.into_json().unwrap(),
+        GENERIC_FORBIDDEN_ERROR_CODE,
+        "unexpected error code received"
+    );
 }

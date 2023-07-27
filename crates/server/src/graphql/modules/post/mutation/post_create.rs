@@ -23,42 +23,33 @@ pub struct PostCreate {
 impl PostCreate {
     pub async fn exec(ctx: &Context<'_>, input: PostCreateInput) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
+        let token = ctx.data_unchecked::<Token>();
 
-        if let Some(jwt) = ctx.data_opt::<Token>() {
-            let claims = context.services.auth.verify_token(jwt).unwrap();
-            let parent_id = input.parent_id.map(|id| id.into_inner());
-            let dto = CreatePostDto {
-                author_id: claims.uid,
-                parent_id,
-                title: input.title,
-                content: input.content,
-            };
+        let claims = context.services.auth.verify_token(jwt).unwrap();
+        let parent_id = input.parent_id.map(|id| id.into_inner());
+        let dto = CreatePostDto {
+            author_id: claims.uid,
+            parent_id,
+            title: input.title,
+            content: input.content,
+        };
 
-            match context.services.post.create(dto).await {
-                Ok(post) => {
-                    return Ok(Self {
-                        post: Some(Post::from(post)),
-                        error: None,
-                    })
-                }
-                Err(err) => {
-                    return Ok(Self {
-                        post: None,
-                        error: Some(PostError {
-                            code: PostErrorCode::Unknown,
-                            message: format!("An error ocurred: {err}", err = err),
-                        }),
-                    })
-                }
+        match context.services.post.create(dto).await {
+            Ok(post) => {
+                return Ok(Self {
+                    post: Some(Post::from(post)),
+                    error: None,
+                })
+            }
+            Err(err) => {
+                return Ok(Self {
+                    post: None,
+                    error: Some(PostError {
+                        code: PostErrorCode::Unknown,
+                        message: format!("An error ocurred: {err}", err = err),
+                    }),
+                })
             }
         }
-
-        Ok(Self {
-            post: None,
-            error: Some(PostError {
-                code: PostErrorCode::Unauthorized,
-                message: String::from("Invalid token provided"),
-            }),
-        })
     }
 }

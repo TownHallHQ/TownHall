@@ -14,7 +14,7 @@ path = "src/bin/main.rs"
 
 [dependencies]
 clap = { version = "4.3.11", features = ["std", "derive", "env"] }
-sea-orm-cli = { version = "0.11.3", default-features = false, features = [ "codegen", "runtime-tokio-rustls" ] }
+sea-orm-cli = { version = "0.12.1", default-features = false, features = [ "codegen", "runtime-tokio-rustls" ] }
 
 # Workspace Dependencies
 dotenv = { workspace = true }

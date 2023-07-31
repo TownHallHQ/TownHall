@@ -37,6 +37,11 @@ pub struct InsertUserDto {
     pub password_hash: String,
 }
 
+pub struct UpdateUserDto {
+    pub name: Option<String>,
+    pub surname: Option<String>,
+}
+
 #[derive(Clone)]
 pub struct UserRepository {
     db: Database,
@@ -94,6 +99,33 @@ impl UserRepository {
         })?;
 
         Ok(UserRepository::into_record(model))
+    }
+
+    pub async fn update(&self, id: Pxid, dto: UpdateUserDto) -> Result<UserRecord> {
+        let user = entity::prelude::User::find_by_id(&id.to_string())
+            .one(&*self.db)
+            .await
+            .map_err(|_| UserError::DatabaseError)?;
+
+        if let Some(u) = user {
+            let mut active_model: entity::user::ActiveModel = u.into();
+
+            if let Some(name) = dto.name {
+                active_model.name = Set(name);
+            }
+            if let Some(surname) = dto.surname {
+                active_model.surname = Set(surname);
+            }
+
+            let record = active_model
+                .update(&*self.db)
+                .await
+                .map_err(|_| UserError::DatabaseError)?;
+
+            return Ok(Self::into_record(record));
+        }
+
+        Err(UserError::UserNotFound)
     }
 
     pub async fn find(&self, filter: Option<UserFilter>) -> Result<Vec<UserRecord>> {

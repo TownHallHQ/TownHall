@@ -1,6 +1,8 @@
+use pxid::Pxid;
+
 use super::error::Result;
 use super::model::{Email, Password, User, Username};
-use super::repository::{InsertUserDto, UserFilter, UserRepository};
+use super::repository::{InsertUserDto, UpdateUserDto, UserFilter, UserRepository};
 
 pub struct CreateUserDto {
     pub name: String,
@@ -47,5 +49,13 @@ impl UserService {
             .collect();
 
         Ok(users)
+    }
+
+    pub async fn update(&self, id: Pxid, dto: UpdateUserDto) -> Result<User> {
+        let record = self.repository.update(id, dto).await?;
+
+        let user = User::try_from(record)?;
+
+        Ok(user)
     }
 }

@@ -2181,9 +2181,9 @@ dependencies = [
 
 [[package]]
 name = "pxid"
-version = "0.2.1"
+version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3c522bf5f7e57cb45f966a9cd0bd7a1493269d847b5fa8c1c57345ece924070"
+checksum = "d77707fe3d6ad5dc964801e5a9aba438c0929fe8f650291a791dfd8ca52a3ec9"
 dependencies = [
  "async-graphql",
  "crc32fast",

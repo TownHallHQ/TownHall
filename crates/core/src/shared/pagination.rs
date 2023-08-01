@@ -1,6 +1,7 @@
 use std::fmt::Display;
 
 use pxid::Pxid;
+use sea_orm::{Cursor, FromQueryResult, SelectModel};
 use thiserror::Error;
 
 /// The default amount of items to paginate when no cursor fields are provided
@@ -20,8 +21,6 @@ pub enum PaginationError {
     AmbiguousCursorStart,
     #[error("You must provide either one of `first` or `last` not both")]
     AmbiguousCursorSelection,
-    #[error("The provided PXID string instance is not valid")]
-    PxidError(#[from] pxid::Error),
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -75,8 +74,8 @@ impl Pagination {
     pub fn new(
         after: Option<Pxid>,
         before: Option<Pxid>,
-        first: Option<i32>,
-        last: Option<i32>,
+        first: Option<usize>,
+        last: Option<usize>,
     ) -> Result<Self, PaginationError> {
         if first.is_some() && before.is_some() {
             return Err(PaginationError::NotCombinableArguments(
@@ -111,6 +110,23 @@ impl Pagination {
         };
 
         Ok(Self { start, selection })
+    }
+
+    pub fn apply<T: FromQueryResult>(&self, cursor: &mut Cursor<SelectModel<T>>) {
+        match self.start() {
+            Some(CursorStart::After(value)) => {
+                cursor.after(value.to_string());
+            }
+            Some(CursorStart::Before(value)) => {
+                cursor.before(value.to_string());
+            }
+            None => {}
+        };
+
+        match self.selection() {
+            CursorSelection::First(value) => cursor.first(value),
+            CursorSelection::Last(value) => cursor.last(value),
+        };
     }
 
     /// Creates a cursor pagination instance fetching the first value

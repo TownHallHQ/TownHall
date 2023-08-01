@@ -2,7 +2,7 @@ use clap::{Parser, Subcommand};
 use sea_orm_cli::commands::generate::run_generate_command;
 use sea_orm_cli::{DateTimeCrate, GenerateSubcommands};
 
-use gabble::common::Database;
+use gabble::shared::database::Database;
 use migration::{Migrator, MigratorTrait};
 
 use crate::config::DATABASE_URL_ENV_VAR;

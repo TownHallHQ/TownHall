@@ -1,0 +1,29 @@
+query GetPosts {
+  posts {
+    edges {
+      node {
+        ...CurrentPost
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    nodes {
+      ...CurrentPost
+    }
+  }
+}
+
+fragment CurrentPost on Post {
+  id
+  authorId
+  parentId
+  head
+  title
+  content
+  createdAt
+  updatedAt
+}

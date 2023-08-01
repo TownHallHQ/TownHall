@@ -53,6 +53,19 @@ export type MutationRootUserRegisterArgs = {
   input: UserRegisterInput;
 };
 
+/** Information about pagination in a connection */
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
 export type Post = {
   __typename?: 'Post';
   authorId: Scalars['Pxid']['output'];
@@ -65,6 +78,16 @@ export type Post = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type PostConnection = {
+  __typename?: 'PostConnection';
+  /** A list of edges. */
+  edges: Array<PostEdge>;
+  /** A list of nodes. */
+  nodes: Array<Post>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
 export type PostCreate = {
   __typename?: 'PostCreate';
   error?: Maybe<PostError>;
@@ -75,6 +98,15 @@ export type PostCreateInput = {
   content: Scalars['String']['input'];
   parentId?: InputMaybe<Scalars['Pxid']['input']>;
   title: Scalars['String']['input'];
+};
+
+/** An edge in a connection. */
+export type PostEdge = {
+  __typename?: 'PostEdge';
+  /** A cursor for use in pagination */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge */
+  node: Post;
 };
 
 export type PostError = {
@@ -92,6 +124,15 @@ export enum PostErrorCode {
 export type QueryRoot = {
   __typename?: 'QueryRoot';
   me: Me;
+  posts: PostConnection;
+};
+
+
+export type QueryRootPostsArgs = {
+  after?: InputMaybe<Scalars['Pxid']['input']>;
+  before?: InputMaybe<Scalars['Pxid']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type TokenCreate = {
@@ -146,6 +187,13 @@ export type GetCurrentUserQuery = { __typename?: 'QueryRoot', me: { __typename?:
 
 export type CurrentUserFragment = { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any };
 
+export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPostsQuery = { __typename?: 'QueryRoot', posts: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content: string, createdAt: any, updatedAt: any } }>, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content: string, createdAt: any, updatedAt: any }> } };
+
+export type CurrentPostFragment = { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content: string, createdAt: any, updatedAt: any };
+
 export type PostCreateMutationVariables = Exact<{
   input: PostCreateInput;
 }>;
@@ -179,6 +227,18 @@ export const CurrentUserFragmentDoc = gql`
   updatedAt
 }
     `;
+export const CurrentPostFragmentDoc = gql`
+    fragment CurrentPost on Post {
+  id
+  authorId
+  parentId
+  head
+  title
+  content
+  createdAt
+  updatedAt
+}
+    `;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   me {
@@ -188,6 +248,26 @@ export const GetCurrentUserDocument = gql`
   }
 }
     ${CurrentUserFragmentDoc}`;
+export const GetPostsDocument = gql`
+    query GetPosts {
+  posts {
+    edges {
+      node {
+        ...CurrentPost
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    nodes {
+      ...CurrentPost
+    }
+  }
+}
+    ${CurrentPostFragmentDoc}`;
 export const PostCreateDocument = gql`
     mutation PostCreate($input: PostCreateInput!) {
   postCreate(input: $input) {

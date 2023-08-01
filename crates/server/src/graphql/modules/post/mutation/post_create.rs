@@ -43,7 +43,7 @@ impl PostCreate {
                 post: None,
                 error: Some(PostError {
                     code: PostErrorCode::Unknown,
-                    message: format!("An error ocurred: {err}", err = err),
+                    message: format!("An error ocurred: {err}"),
                 }),
             }),
         }

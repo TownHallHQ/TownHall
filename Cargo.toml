@@ -17,6 +17,7 @@ dotenv = "0.15.0"
 pxid = { version = "0.2.4", features = ["async-graphql", "serde"] }
 serde = { version = "1.0.175" }
 serde_json = { version = "1.0.100" }
+thiserror = "1.0.38"
 tokio = { version = "1.29.1", features = ["rt", "macros"] }
 tracing = "0.1.37"
 tracing-subscriber = "0.3.15"

@@ -2,11 +2,15 @@ use std::str::FromStr;
 
 use chrono::{DateTime, Utc};
 use pxid::Pxid;
-use sea_orm::{ActiveModelTrait, EntityTrait, Set};
+use sea_orm::{
+    ActiveModelTrait, CursorTrait, EntityTrait, PaginatorTrait, QuerySelect, Set, TransactionTrait,
+};
 use serde::{Deserialize, Serialize};
 
-use crate::common::Database;
 use crate::post::error::{PostError, Result};
+use crate::shared::database::Database;
+use crate::shared::pagination::Pagination;
+use crate::shared::query_set::QuerySet;
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
 pub struct PostRecord {
@@ -53,19 +57,44 @@ impl PostRepository {
         }
     }
 
-    pub async fn list(&self) -> Result<Vec<PostRecord>> {
-        let models = entity::post::Entity::find()
-            .all(&*self.db)
+    pub async fn list(&self, pagination: Option<Pagination>) -> Result<QuerySet<PostRecord>> {
+        self.db
+            .transaction::<_, QuerySet<PostRecord>, PostError>(|txn| {
+                Box::pin(async move {
+                    let query = entity::post::Entity::find();
+                    let count = query
+                        .clone()
+                        .select_only()
+                        .count(txn)
+                        .await
+                        .map_err(|err| {
+                            tracing::error!(%err, "Failed to count total posts");
+                            PostError::DatabaseError
+                        })?;
+
+                    let pagination = pagination.unwrap_or_default();
+                    let mut query = query.cursor_by(entity::post::Column::Id);
+
+                    pagination.apply(&mut query);
+
+                    let active_records = query.all(txn).await.map_err(|err| {
+                        tracing::error!(%err, "Failed to retrieve posts");
+                        PostError::DatabaseError
+                    })?;
+
+                    if active_records.is_empty() {
+                        return Ok(QuerySet::empty());
+                    }
+                    let records = active_records.into_iter().map(Self::into_record).collect();
+
+                    Ok(QuerySet::new(records, count))
+                })
+            })
             .await
             .map_err(|err| {
-                tracing::error!(%err, "Failed to query database");
+                tracing::error!(%err, "Failed to retrieve posts");
                 PostError::DatabaseError
-            })?;
-
-        Ok(models
-            .into_iter()
-            .map(PostRepository::into_record)
-            .collect())
+            })
     }
 
     pub async fn insert(&self, dto: InsertPostDto) -> Result<PostRecord> {

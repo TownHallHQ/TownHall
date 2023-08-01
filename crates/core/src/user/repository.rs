@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, QueryFilter, Set};
 
-use crate::common::Database;
+use crate::shared::database::Database;
 use crate::user::error::{Result, UserError};
 use crate::user::model::{Email, User};
 

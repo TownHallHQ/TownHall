@@ -1,5 +1,8 @@
 use pxid::Pxid;
 
+use crate::shared::pagination::Pagination;
+use crate::shared::query_set::QuerySet;
+
 use super::error::Result;
 use super::model::Post;
 use super::repository::{InsertPostDto, PostRepository};
@@ -23,23 +26,12 @@ impl PostService {
         }
     }
 
-    /// Retrieves every post in the database.
-    pub async fn list(&self) -> Result<Vec<Post>> {
-        let posts = self
-            .repository
-            .list()
-            .await?
-            .into_iter()
-            .map_while(|rec| match Post::try_from(rec) {
-                Ok(post) => Some(post),
-                Err(err) => {
-                    tracing::error!(%err, "Failed to convert record to post, skipping");
-                    None
-                }
-            })
-            .collect();
+    /// Retrieves posts in the platform
+    pub async fn list(&self, pagination: Option<Pagination>) -> Result<QuerySet<Post>> {
+        let records = self.repository.list(pagination).await?;
+        let qs = records.inner_map(|record| Post::try_from(record).unwrap());
 
-        Ok(posts)
+        Ok(qs)
     }
 
     pub async fn create(&self, dto: CreatePostDto) -> Result<Post> {

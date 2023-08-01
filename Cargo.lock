@@ -2763,6 +2763,7 @@ dependencies = [
  "rand",
  "rust-argon2",
  "serde",
+ "thiserror",
  "tokio",
  "tower-http",
  "tracing",

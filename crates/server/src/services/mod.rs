@@ -2,9 +2,9 @@ pub mod auth;
 
 use std::sync::Arc;
 
-use gabble::common::Database;
 use gabble::post::repository::PostRepository;
 use gabble::post::service::PostService;
+use gabble::shared::database::Database;
 use gabble::user::repository::UserRepository;
 use gabble::user::service::UserService;
 

@@ -36,7 +36,7 @@ impl Display for CursorStart {
             CursorStart::Before(_) => "before",
         };
 
-        write!(f, "{}", as_str)
+        write!(f, "{as_str}")
     }
 }
 
@@ -53,7 +53,7 @@ impl Display for CursorSelection {
             CursorSelection::Last(_) => "last",
         };
 
-        write!(f, "{}", as_str)
+        write!(f, "{as_str}")
     }
 }
 

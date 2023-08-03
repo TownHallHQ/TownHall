@@ -1,10 +1,10 @@
-version: '3'
+version: "3"
 
 services:
   database:
-    image: 'postgres:14.1-alpine'
+    image: "postgres:14.1-alpine"
     ports:
-      - '5432:5432'
+      - "5433:5432"
     volumes:
       - database:/var/lib/postgresql/data
     env_file:

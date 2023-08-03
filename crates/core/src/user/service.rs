@@ -1,5 +1,8 @@
 use pxid::Pxid;
 
+use crate::shared::pagination::Pagination;
+use crate::shared::query_set::QuerySet;
+
 use super::error::Result;
 use super::model::{Email, Password, User, Username};
 use super::repository::{InsertUserDto, UpdateUserDto, UserFilter, UserRepository};
@@ -41,14 +44,16 @@ impl UserService {
         Ok(user)
     }
 
-    pub async fn find(&self, filter: Option<UserFilter>) -> Result<Vec<User>> {
-        let records = self.repository.find(filter).await?;
-        let users = records
-            .into_iter()
-            .map_while(|record| User::try_from(record).ok())
-            .collect();
+    pub async fn list(
+        &self,
+        pagination: Option<Pagination>,
+        filter: Option<UserFilter>,
+    ) -> Result<QuerySet<User>> {
+        let records = self.repository.list(pagination, filter).await?;
 
-        Ok(users)
+        let qs = records.inner_map(|record| User::try_from(record).unwrap());
+
+        Ok(qs)
     }
 
     pub async fn update(&self, id: Pxid, dto: UpdateUserDto) -> Result<User> {

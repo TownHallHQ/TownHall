@@ -1,4 +1,5 @@
 use async_graphql::{Context, Result, SimpleObject};
+use gabble::shared::pagination::Pagination;
 use gabble::user::repository::UserFilter;
 use serde::{Deserialize, Serialize};
 
@@ -22,10 +23,13 @@ impl Me {
             let records = context
                 .services
                 .user
-                .find(Some(UserFilter {
-                    id: Some(claims.uid),
-                    ..Default::default()
-                }))
+                .list(
+                    Some(Pagination::first()),
+                    Some(UserFilter {
+                        id: Some(claims.uid),
+                        ..Default::default()
+                    }),
+                )
                 .await?;
 
             if records.len() != 1 {

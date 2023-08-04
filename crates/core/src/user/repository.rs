@@ -2,16 +2,22 @@ use chrono::{DateTime, Utc};
 use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
-use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, QueryFilter, Set};
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, CursorTrait, EntityTrait, PaginatorTrait, QueryFilter,
+    QuerySelect, Set, TransactionTrait,
+};
 
 use crate::shared::database::Database;
+use crate::shared::pagination::Pagination;
+use crate::shared::query_set::QuerySet;
 use crate::user::error::{Result, UserError};
-use crate::user::model::{Email, User};
+use crate::user::model::{Email, User, Username};
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
 pub struct UserFilter {
     pub id: Option<Pxid>,
     pub email: Option<Email>,
+    pub username: Option<Username>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -128,27 +134,64 @@ impl UserRepository {
         Err(UserError::UserNotFound)
     }
 
-    pub async fn find(&self, filter: Option<UserFilter>) -> Result<Vec<UserRecord>> {
-        let mut query = entity::user::Entity::find();
+    pub async fn list(
+        &self,
+        pagination: Option<Pagination>,
+        filter: Option<UserFilter>,
+    ) -> Result<QuerySet<UserRecord>> {
+        self.db
+            .transaction::<_, QuerySet<UserRecord>, UserError>(|txn| {
+                Box::pin(async move {
+                    let mut query = entity::user::Entity::find();
 
-        if let Some(filter) = filter {
-            if let Some(id) = filter.id {
-                query = query.filter(entity::user::Column::Id.eq(id.to_string()));
-            }
+                    if let Some(filter) = filter {
+                        if let Some(id) = filter.id {
+                            query = query.filter(entity::user::Column::Id.eq(id.to_string()));
+                        }
 
-            if let Some(email) = filter.email {
-                query = query.filter(entity::user::Column::Email.eq(email.to_string()));
-            }
-        }
+                        if let Some(email) = filter.email {
+                            query = query.filter(entity::user::Column::Email.eq(email.to_string()));
+                        }
 
-        let models = query.all(&*self.db).await.map_err(|err| {
-            tracing::error!(%err, "Failed to find from database");
-            UserError::DatabaseError
-        })?;
+                        if let Some(username) = filter.username {
+                            query = query
+                                .filter(entity::user::Column::Username.eq(username.to_string()));
+                        }
+                    }
 
-        Ok(models
-            .into_iter()
-            .map(UserRepository::into_record)
-            .collect())
+                    let count = query
+                        .clone()
+                        .select_only()
+                        .count(txn)
+                        .await
+                        .map_err(|err| {
+                            tracing::error!(%err, "Failed to count total users");
+                            UserError::DatabaseError
+                        })?;
+
+                    let pagination = pagination.unwrap_or_default();
+
+                    let mut query = query.cursor_by(entity::user::Column::Id);
+
+                    pagination.apply(&mut query);
+
+                    let active_records = query.all(txn).await.map_err(|err| {
+                        tracing::error!(%err, "Failed to retrieve users");
+                        UserError::DatabaseError
+                    })?;
+
+                    if active_records.is_empty() {
+                        return Ok(QuerySet::empty());
+                    }
+                    let records = active_records.into_iter().map(Self::into_record).collect();
+
+                    Ok(QuerySet::new(records, count))
+                })
+            })
+            .await
+            .map_err(|err| {
+                tracing::error!(%err, "Failed to retrieve users");
+                UserError::DatabaseError
+            })
     }
 }

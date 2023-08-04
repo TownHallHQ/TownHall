@@ -1,6 +1,7 @@
 use std::str::FromStr;
 
 use async_graphql::{Context, Result, SimpleObject};
+use gabble::shared::pagination::Pagination;
 use serde::{Deserialize, Serialize};
 
 use gabble::user::model::Email;
@@ -33,11 +34,12 @@ impl TokenCreate {
         let Ok(records) = context
             .services
             .user
-            .find(Some(UserFilter {
+            .list(Some(Pagination::first())
+            ,Some(UserFilter {
               email: Some(email),
               ..Default::default()
-            })).await else {
-                tracing::error!("Failed to retrieve user from repository");
+            }) ).await else {
+                 tracing::error!("Failed to retrieve user from repository");
 
                 return Ok(Self {
                     token: None,

@@ -77,8 +77,6 @@ impl Users {
                 Ok::<UsersConnection, async_graphql::Error>(connection)
             },
         )
-        .await;
-
-        todo!()
+        .await
     }
 }

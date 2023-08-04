@@ -11,7 +11,7 @@ use crate::context::SharedContext;
 use crate::graphql::connection_details::ConnectionDetails;
 use crate::graphql::modules::user::types::User;
 
-pub type UsersConnection = Connection<Pxid, Users, ConnectionDetails, EmptyFields>;
+pub type UsersConnection = Connection<Pxid, User, ConnectionDetails, EmptyFields>;
 
 pub struct Users;
 
@@ -46,7 +46,7 @@ impl Users {
                     last,
                 )?;
                 let filter = UserFilter {
-                    id: id.and_then(|i| Some(i.into_inner())),
+                    id: id.map(|i| i.into_inner()),
                     email: email.and_then(|s| Email::from_str(&s).ok()),
                     username: username.and_then(|s| Username::from_str(&s).ok()),
                 };
@@ -66,7 +66,7 @@ impl Users {
 
                 connection.edges.extend(users.into_iter().filter_map(|u| {
                     match User::try_from(u) {
-                        Ok(p) => Some(Edge::new(u.id, u)),
+                        Ok(p) => Some(Edge::new(p.id, p)),
                         Err(err) => {
                             tracing::error!(%err, "Failed to create post instance from result");
                             None

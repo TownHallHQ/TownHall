@@ -47,10 +47,8 @@ impl TokenCreate {
                         code: UserErrorCode::Internal,
                         message: String::from("An error ocurred")
                     }),
-                });             
+                });
             };
-
-
 
         if records.len() != 1 {
             tracing::error!("More than 1 record found");

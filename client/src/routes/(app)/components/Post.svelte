@@ -16,7 +16,12 @@
         <span class="text-slate-400">@{post.author.username}</span>
       </h1>
       <time class="text-gray-400 text-sm" datetime={post.createdAt}
-        >{new Date(post.createdAt).toLocaleDateString()}</time
+        >{new Date(post.createdAt).toLocaleDateString('en-us', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })}</time
       >
     </div>
   </header>

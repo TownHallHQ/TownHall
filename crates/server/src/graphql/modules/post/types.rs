@@ -21,6 +21,7 @@ pub struct PostError {
 }
 
 #[derive(Debug, Deserialize, Serialize, SimpleObject)]
+#[graphql(complex)]
 pub struct Post {
     pub id: Pxid,
     pub author_id: Pxid,
@@ -34,7 +35,7 @@ pub struct Post {
 
 #[ComplexObject]
 impl Post {
-    pub async fn author(&self, ctx: &Context<'_>) -> User {
+    async fn author(&self, ctx: &Context<'_>) -> User {
         // Safely uses `unwrap` given that a Post cannot exist without an author
         let context = ctx.data_unchecked::<SharedContext>();
         let qs = context

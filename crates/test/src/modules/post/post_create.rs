@@ -5,12 +5,39 @@ use gabble::user::{
     model::{Email, Password, Username},
     service::CreateUserDto,
 };
-use pxid::Pxid;
 use serde_json::json;
 
 use libserver::graphql::guard::{GENERIC_FORBIDDEN_ERROR, GENERIC_FORBIDDEN_ERROR_CODE};
 
 use crate::TestUtil;
+
+const CREATE_POST_MUTATION: &str = r#"
+mutation ($payload: PostCreateInput!) {
+  postCreate(input: $payload) {
+    post {
+      id
+      authorId
+      parentId
+      head
+      title
+      content
+      author {
+        id
+        name
+        surname
+        username
+        email
+      }
+      createdAt
+      updatedAt
+    }
+    error {
+      code
+      message
+    }
+  }
+}
+"#;
 
 #[tokio::test]
 async fn create_post() {
@@ -32,36 +59,9 @@ async fn create_post() {
         .await
         .unwrap();
     let token = TestUtil::token_create(&test_util, user.id).await;
-    let mutation = "
-      mutation ($payload: PostCreateInput!) {
-        postCreate(input: $payload) {
-          post {
-            id
-            authorId
-            parentId
-            head
-            title
-            content
-            author {
-              name
-              surname
-              username
-              email
-            }
-            createdAt
-            updatedAt
-          }
-          error {
-            code
-            message
-          }
-        }
-      }
-    ";
-
     let result = schema
         .execute(
-            Request::new(mutation)
+            Request::new(CREATE_POST_MUTATION)
                 .data(token)
                 .variables(Variables::from_json(json!({
                   "payload":{
@@ -71,7 +71,6 @@ async fn create_post() {
                 }))),
         )
         .await;
-
     let data = result.data.into_json().unwrap();
     let post_data = &data["postCreate"]["post"];
 
@@ -92,71 +91,26 @@ async fn create_post() {
 #[tokio::test]
 async fn creates_post_with_parent() {
     let test_util = TestUtil::new_cleared().await;
-    let (_, schema) = test_util.parts();
-
-    let user_create_mutation: &str = "
-      mutation RegisterUser($payload: UserRegisterInput!) {
-          userRegister(input: $payload) {
-              user {
-                  id
-                  name
-                  surname
-                  username
-                  email
-                  createdAt
-                  updatedAt
-              }
-              error {
-                  code
-                  message
-              }
-          }
-      }
-    ";
-
-    let result_user = schema
-        .execute(
-            Request::new(user_create_mutation).variables(Variables::from_json(json!({
-                    "payload": {
-                        "name": "John",
-                        "surname": "Appleseed",
-                        "username": "john_appleseed",
-                        "password": "Root$1234",
-                        "email": "john_appleseed@whizzes.io",
-                }
-            }))),
-        )
-        .await;
-
-    let user_data = result_user.data.into_json().unwrap();
-    let user_uid = user_data["userRegister"]["user"]["id"].as_str().unwrap();
-
-    let token = TestUtil::token_create(&test_util, Pxid::from_str(user_uid).unwrap()).await;
-
-    let mutation = "
-      mutation ($payload: PostCreateInput!) {
-        postCreate(input: $payload) {
-          post {
-            id
-            authorId
-            parentId
-            head
-            title
-            content
-            createdAt
-            updatedAt
-          }
-          error {
-            code
-            message
-          }
-        }
-      }
-    ";
-
+    let (context, schema) = test_util.parts();
+    let username = Username::from_str("john_appleseed").unwrap();
+    let email = Email::from_str("john_appleseed@whizzes.io").unwrap();
+    let password = Password::from_str("Root$1234").unwrap();
+    let user = context
+        .services
+        .user
+        .create(CreateUserDto {
+            name: "John".to_string(),
+            surname: "Appleseed".to_string(),
+            username,
+            password,
+            email,
+        })
+        .await
+        .unwrap();
+    let token = TestUtil::token_create(&test_util, user.id).await;
     let result_parent = schema
         .execute(
-            Request::new(mutation)
+            Request::new(CREATE_POST_MUTATION)
                 .data(token)
                 .variables(Variables::from_json(json!({
                   "payload":{
@@ -169,10 +123,10 @@ async fn creates_post_with_parent() {
 
     let post_parent_data = result_parent.data.into_json().unwrap();
     let post_parent_id = &post_parent_data["postCreate"]["post"]["id"];
-    let token = TestUtil::token_create(&test_util, Pxid::from_str(user_uid).unwrap()).await;
+    let token = TestUtil::token_create(&test_util, user.id).await;
     let result = schema
         .execute(
-            Request::new(mutation)
+            Request::new(CREATE_POST_MUTATION)
                 .data(token)
                 .variables(Variables::from_json(json!({
                   "payload":{
@@ -192,7 +146,7 @@ async fn creates_post_with_parent() {
         post_data["content"].as_str().unwrap(),
         "Hello, new post again!"
     );
-    assert_eq!(post_data["authorId"], user_uid);
+    assert_eq!(post_data["authorId"], user.id.to_string());
     assert_eq!(
         post_data["head"], false,
         "should not be head given that is a comment"
@@ -206,31 +160,9 @@ async fn creates_post_with_parent() {
 async fn create_post_without_a_token() {
     let test_util = TestUtil::new_cleared().await;
     let (_, schema) = test_util.parts();
-
-    let mutation = "
-      mutation ($payload: PostCreateInput!) {
-        postCreate(input: $payload) {
-          post {
-            id
-            authorId
-            parentId
-            head
-            title
-            content
-            createdAt
-            updatedAt
-          }
-          error {
-            code
-            message
-          }
-        }
-      }
-    ";
-
     let result = schema
         .execute(
-            Request::new(mutation).variables(Variables::from_json(json!({
+            Request::new(CREATE_POST_MUTATION).variables(Variables::from_json(json!({
               "payload":{
                 "title":"Hello World!",
                 "content":"Hello, new post!"

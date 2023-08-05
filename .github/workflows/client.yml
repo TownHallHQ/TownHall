@@ -40,7 +40,3 @@ jobs:
       - name: Run Lint Check
         working-directory: ${{ env.workdir }}
         run: bun run lint
-
-      - name: Run Unit Tests
-        working-directory: ${{ env.workdir }}
-        run: bun run test

@@ -23,7 +23,20 @@ fragment CurrentPost on Post {
   parentId
   head
   title
+  author {
+    ...Author
+  }
   content
+  createdAt
+  updatedAt
+}
+
+fragment Author on User {
+  id
+  name
+  surname
+  username
+  email
   createdAt
   updatedAt
 }

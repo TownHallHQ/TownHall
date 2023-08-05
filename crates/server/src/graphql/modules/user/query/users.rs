@@ -1,17 +1,35 @@
 use std::str::FromStr;
 
 use async_graphql::connection::{query, Connection, Edge, EmptyFields};
-use async_graphql::{Context, Result};
+use async_graphql::{Context, InputObject, Result};
+use pxid::graphql::Pxid;
+
 use gabble::shared::pagination::Pagination;
 use gabble::user::model::{Email, Username};
 use gabble::user::repository::UserFilter;
-use pxid::graphql::Pxid;
 
 use crate::context::SharedContext;
 use crate::graphql::connection_details::ConnectionDetails;
 use crate::graphql::modules::user::types::User;
 
 pub type UsersConnection = Connection<Pxid, User, ConnectionDetails, EmptyFields>;
+
+#[derive(Debug, Default, InputObject)]
+pub struct UserFilterInput {
+    pub id: Option<Pxid>,
+    pub email: Option<String>,
+    pub username: Option<String>,
+}
+
+impl From<UserFilterInput> for UserFilter {
+    fn from(value: UserFilterInput) -> Self {
+        UserFilter {
+            id: value.id.map(|id| id.into_inner()),
+            email: value.email.and_then(|s| Email::from_str(&s).ok()),
+            username: value.username.and_then(|s| Username::from_str(&s).ok()),
+        }
+    }
+}
 
 pub struct Users;
 
@@ -22,9 +40,7 @@ impl Users {
         before: Option<Pxid>,
         first: Option<i32>,
         last: Option<i32>,
-        id: Option<Pxid>,
-        email: Option<String>,
-        username: Option<String>,
+        filter: Option<UserFilterInput>,
     ) -> Result<UsersConnection> {
         let context = ctx.data_unchecked::<SharedContext>();
         let after = after.map(|a| a.to_string());
@@ -45,15 +61,10 @@ impl Users {
                     first,
                     last,
                 )?;
-                let filter = UserFilter {
-                    id: id.map(|i| i.into_inner()),
-                    email: email.and_then(|s| Email::from_str(&s).ok()),
-                    username: username.and_then(|s| Username::from_str(&s).ok()),
-                };
                 let query_set = context
                     .services
                     .user
-                    .list(Some(pagination), Some(filter))
+                    .list(Some(pagination), Some(filter.unwrap_or_default().into()))
                     .await?;
                 let total_count = query_set.count();
                 let users = query_set.records();

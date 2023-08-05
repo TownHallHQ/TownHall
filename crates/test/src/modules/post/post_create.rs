@@ -1,6 +1,10 @@
 use std::str::FromStr;
 
 use async_graphql::{Request, Variables};
+use gabble::user::{
+    model::{Email, Password, Username},
+    service::CreateUserDto,
+};
 use pxid::Pxid;
 use serde_json::json;
 
@@ -11,44 +15,23 @@ use crate::TestUtil;
 #[tokio::test]
 async fn create_post() {
     let test_util = TestUtil::new_cleared().await;
-    let (_, schema) = test_util.parts();
-    let user_create_mutation: &str = "
-      mutation RegisterUser($payload: UserRegisterInput!) {
-          userRegister(input: $payload) {
-              user {
-                  id
-                  name
-                  surname
-                  username
-                  email
-                  createdAt
-                  updatedAt
-              }
-              error {
-                  code
-                  message
-              }
-          }
-      }
-    ";
-
-    let result_user = schema
-        .execute(
-            Request::new(user_create_mutation).variables(Variables::from_json(json!({
-                    "payload": {
-                        "name": "John",
-                        "surname": "Appleseed",
-                        "username": "john_appleseed",
-                        "password": "Root$1234",
-                        "email": "john_appleseed@whizzes.io",
-                }
-            }))),
-        )
-        .await;
-
-    let user_data = result_user.data.into_json().unwrap();
-    let user_uid = user_data["userRegister"]["user"]["id"].as_str().unwrap();
-    let token = TestUtil::token_create(&test_util, Pxid::from_str(user_uid).unwrap()).await;
+    let (context, schema) = test_util.parts();
+    let username = Username::from_str("john_appleseed").unwrap();
+    let email = Email::from_str("john_appleseed@whizzes.io").unwrap();
+    let password = Password::from_str("Root$1234").unwrap();
+    let user = context
+        .services
+        .user
+        .create(CreateUserDto {
+            name: "John".to_string(),
+            surname: "Appleseed".to_string(),
+            username,
+            password,
+            email,
+        })
+        .await
+        .unwrap();
+    let token = TestUtil::token_create(&test_util, user.id).await;
     let mutation = "
       mutation ($payload: PostCreateInput!) {
         postCreate(input: $payload) {
@@ -59,6 +42,12 @@ async fn create_post() {
             head
             title
             content
+            author {
+              name
+              surname
+              username
+              email
+            }
             createdAt
             updatedAt
           }
@@ -88,7 +77,12 @@ async fn create_post() {
 
     assert_eq!(post_data["title"], "Hello World!");
     assert_eq!(post_data["content"], "Hello, new post!");
-    assert_eq!(post_data["authorId"], user_uid);
+    assert_eq!(post_data["authorId"], user.id.to_string());
+    assert_eq!(post_data["author"]["id"], user.id.to_string());
+    assert_eq!(post_data["author"]["name"], user.name);
+    assert_eq!(post_data["author"]["surname"], user.surname);
+    assert_eq!(post_data["author"]["username"], user.username.to_string());
+    assert_eq!(post_data["author"]["email"], user.email.to_string());
     assert_eq!(post_data["head"], true);
     assert!(post_data["parentId"].is_null());
     assert!(post_data["createdAt"].is_string());

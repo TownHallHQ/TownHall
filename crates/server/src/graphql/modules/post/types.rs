@@ -1,7 +1,11 @@
-use async_graphql::{Enum, SimpleObject};
+use async_graphql::{ComplexObject, Context, Enum, SimpleObject};
 use chrono::{DateTime, Utc};
+use gabble::{shared::pagination::Pagination, user::repository::UserFilter};
 use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
+
+use crate::context::SharedContext;
+use crate::graphql::modules::user::types::User;
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]
 pub enum PostErrorCode {
@@ -26,6 +30,29 @@ pub struct Post {
     pub content: String,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
+}
+
+#[ComplexObject]
+impl Post {
+    pub async fn author(&self, ctx: &Context<'_>) -> User {
+        // Safely uses `unwrap` given that a Post cannot exist without an author
+        let context = ctx.data_unchecked::<SharedContext>();
+        let qs = context
+            .services
+            .user
+            .list(
+                Some(Pagination::first()),
+                Some(UserFilter {
+                    id: Some(self.author_id.into_inner()),
+                    ..Default::default()
+                }),
+            )
+            .await
+            .unwrap();
+        let user = qs.first().unwrap().to_owned();
+
+        User::try_from(user).unwrap()
+    }
 }
 
 impl From<gabble::post::model::Post> for Post {

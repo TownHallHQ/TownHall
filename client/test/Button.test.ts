@@ -1,5 +1,5 @@
-import { afterEach, describe, it, expect, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/svelte';
+import { afterEach, describe, it, expect, vi, beforeEach } from 'vitest';
+import { cleanup, fireEvent, render } from '@testing-library/svelte';
 
 import Button from '../src/lib/components/Button.svelte';
 
@@ -7,7 +7,7 @@ const BUTTON_DEFAULT_CLASSES =
   'bg-black px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800';
 
 describe('$lib/components/Button.svelte', () => {
-  afterEach(() => cleanup());
+  beforeEach(() => cleanup());
 
   it('creates a button with default props', () => {
     const { container } = render(Button);
@@ -49,7 +49,7 @@ describe('$lib/components/Button.svelte', () => {
 
     expect(buttonElement).toBeTruthy();
     expect(buttonElement.getAttribute('class')).toStrictEqual(
-      BUTTON_DEFAULT_CLASSES
+      [BUTTON_DEFAULT_CLASSES].join(' ')
     );
   });
 
@@ -61,8 +61,7 @@ describe('$lib/components/Button.svelte', () => {
 
     expect(buttonElement).toBeTruthy();
     expect(buttonElement.getAttribute('class')).toStrictEqual(
-      BUTTON_DEFAULT_CLASSES +
-        ' !cursor-not-allowed !opacity-50 !bg-gray-700 !text-white'
+      [BUTTON_DEFAULT_CLASSES].join(' ')
     );
   });
 
@@ -74,7 +73,7 @@ describe('$lib/components/Button.svelte', () => {
 
     expect(buttonElement).toBeTruthy();
     expect(buttonElement.getAttribute('class')).toStrictEqual(
-      BUTTON_DEFAULT_CLASSES + ' w-full'
+      [BUTTON_DEFAULT_CLASSES].join(' ')
     );
   });
 

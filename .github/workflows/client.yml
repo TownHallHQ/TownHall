@@ -1,0 +1,42 @@
+name: Client CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      workdir: ./client
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        working-directory: ${{ env.workdir }}
+        run: bun i
+
+      - name: Build Check
+        working-directory: ${{ env.workdir }}
+        env:
+          NODE_ENV: production
+          UNSPLASH_ACCESS_KEY: testing
+        run: bun run build
+
+      - name: Run Lint Check
+        working-directory: ${{ env.workdir }}
+        run: bun run lint

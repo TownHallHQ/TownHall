@@ -6,10 +6,8 @@ use pxid::graphql::Pxid;
 
 use crate::graphql::guard::AuthenticationGuard;
 
-use self::{
-    me::Me,
-    users::{Users, UsersConnection},
-};
+use self::me::Me;
+use self::users::{UserFilterInput, Users, UsersConnection};
 
 #[derive(Debug, Default)]
 pub struct UserQueryRoot;
@@ -21,6 +19,7 @@ impl UserQueryRoot {
         Me::exec(ctx).await
     }
 
+    #[allow(clippy::too_many_arguments)]
     async fn user(
         &self,
         ctx: &Context<'_>,
@@ -28,10 +27,8 @@ impl UserQueryRoot {
         before: Option<Pxid>,
         first: Option<i32>,
         last: Option<i32>,
-        id: Option<Pxid>,
-        email: Option<String>,
-        username: Option<String>,
+        filter: Option<UserFilterInput>,
     ) -> Result<UsersConnection> {
-        Users::exec(ctx, after, before, first, last, id, email, username).await
+        Users::exec(ctx, after, before, first, last, filter).await
     }
 }

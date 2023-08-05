@@ -29,7 +29,7 @@
     "@urql/core": "^4.1.1",
     "@urql/exchange-auth": "^2.1.6",
     "@urql/svelte": "^4.0.4",
-    "@whizzes/svelte-forms": "^0.2.1",
+    "@whizzes/svelte-forms": "^0.2.3",
     "@whizzes/svelte-notifications": "^0.1.5",
     "autoprefixer": "^10.4.14",
     "classnames": "^2.3.2",

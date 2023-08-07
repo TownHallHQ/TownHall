@@ -10,12 +10,6 @@ async function getPosts(
     before?: string | null;
   },
 ) {
-  const cleanObjectVaribles = Object.fromEntries(
-    Object.entries(variables).filter(([_, v]) => v != null),
-  );
-
-  console.log(cleanObjectVaribles);
-
   const response = await urqlClient
     .query(GetPostsDocument, variables, {
       requestPolicy: 'network-only',

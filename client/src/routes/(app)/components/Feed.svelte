@@ -6,10 +6,10 @@
 
   import type { Post as PostType } from '$lib/graphql/schema';
 
-  let pageNumber = 10;
   let posts: PostType[] = [];
   let loading = false;
   let lastPostId: string = '';
+  let noMorePosts: boolean = false;
 
   onMount(() => {
     fetchData();
@@ -18,17 +18,16 @@
   async function fetchData() {
     try {
       loading = true;
-      const response = await fetch(
-        `/get-posts?first=${pageNumber}&after=${lastPostId}`
-      );
+      const response = await fetch(`/get-posts?first=20&after=${lastPostId}`);
       const data: PostType[] = await response.json();
 
-      posts = [...posts, ...data];
+      if (data.length > 0) {
+        posts = [...posts, ...data];
 
-      lastPostId = data.pop()?.id;
-
-      console.log(posts);
-
+        lastPostId = data[data.length - 1].id;
+      } else {
+        noMorePosts = true;
+      }
       loading = false;
     } catch (error) {
       console.log(error);
@@ -36,7 +35,6 @@
   }
 
   const load = () => {
-    pageNumber = pageNumber + 10;
     fetchData();
   };
 
@@ -54,9 +52,12 @@
 
 <div class="mb-96">
   {#if loading}
-    <div class="mb-96">Cargando...</div>
+    <span class="mb-20">Loading...</span>
   {/if}
-  {#if loading === false}
-    <div class="mb-96" bind:this={elementRef}>Cargando</div>
+  {#if loading === false && !noMorePosts}
+    <span class="mb-20" bind:this={elementRef}>Loading</span>
+  {/if}
+  {#if noMorePosts}
+    <span>No more posts</span>
   {/if}
 </div>

@@ -3,7 +3,8 @@ use std::str::FromStr;
 use chrono::{DateTime, Utc};
 use pxid::Pxid;
 use sea_orm::{
-    ActiveModelTrait, CursorTrait, EntityTrait, PaginatorTrait, QuerySelect, Set, TransactionTrait,
+    ActiveModelTrait, ColumnTrait, CursorTrait, EntityTrait, PaginatorTrait, QueryFilter,
+    QuerySelect, Set, TransactionTrait,
 };
 use serde::{Deserialize, Serialize};
 
@@ -39,6 +40,11 @@ pub struct PostRepository {
     db: Database,
 }
 
+#[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
+pub struct PostFilter {
+    pub user_id: Option<Pxid>,
+}
+
 impl PostRepository {
     pub fn new(db: &Database) -> Self {
         Self { db: db.to_owned() }
@@ -57,11 +63,22 @@ impl PostRepository {
         }
     }
 
-    pub async fn list(&self, pagination: Option<Pagination>) -> Result<QuerySet<PostRecord>> {
+    pub async fn list(
+        &self,
+        pagination: Option<Pagination>,
+        filter: Option<PostFilter>,
+    ) -> Result<QuerySet<PostRecord>> {
         self.db
             .transaction::<_, QuerySet<PostRecord>, PostError>(|txn| {
                 Box::pin(async move {
-                    let query = entity::post::Entity::find();
+                    let mut query = entity::post::Entity::find();
+
+                    if let Some(filter) = filter {
+                        if let Some(id) = filter.user_id {
+                            query = query.filter(entity::post::Column::AuthorId.eq(id.to_string()));
+                        }
+                    }
+
                     let count = query
                         .clone()
                         .select_only()

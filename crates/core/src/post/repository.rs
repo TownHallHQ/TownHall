@@ -42,7 +42,7 @@ pub struct PostRepository {
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
 pub struct PostFilter {
-    pub user_id: Option<Pxid>,
+    pub author_id: Option<Pxid>,
 }
 
 impl PostRepository {
@@ -74,7 +74,7 @@ impl PostRepository {
                     let mut query = entity::post::Entity::find();
 
                     if let Some(filter) = filter {
-                        if let Some(id) = filter.user_id {
+                        if let Some(id) = filter.author_id {
                             query = query.filter(entity::post::Column::AuthorId.eq(id.to_string()));
                         }
                     }

@@ -1,5 +1,6 @@
 use async_graphql::connection::{query, Connection, Edge, EmptyFields};
-use async_graphql::{Context, Result};
+use async_graphql::{Context, InputObject, Result};
+use gabble::post::repository::PostFilter;
 use pxid::graphql::Pxid;
 
 use gabble::shared::pagination::Pagination;
@@ -10,6 +11,19 @@ use crate::graphql::modules::post::types::Post;
 
 pub type PostsConnection = Connection<Pxid, Post, ConnectionDetails, EmptyFields>;
 
+#[derive(Debug, Default, InputObject)]
+pub struct PostFilterInput {
+    pub author_id: Option<Pxid>,
+}
+
+impl From<PostFilterInput> for PostFilter {
+    fn from(value: PostFilterInput) -> Self {
+        PostFilter {
+            author_id: value.author_id.map(|id| id.into_inner()),
+        }
+    }
+}
+
 pub struct Posts;
 
 impl Posts {
@@ -19,6 +33,7 @@ impl Posts {
         before: Option<Pxid>,
         first: Option<i32>,
         last: Option<i32>,
+        filter: Option<PostFilterInput>,
     ) -> Result<PostsConnection> {
         let context = ctx.data_unchecked::<SharedContext>();
         let after = after.map(|a| a.to_string());
@@ -39,7 +54,11 @@ impl Posts {
                     first,
                     last,
                 )?;
-                let query_set = context.services.post.list(Some(pagination)).await?;
+                let query_set = context
+                    .services
+                    .post
+                    .list(Some(pagination), Some(filter.unwrap_or_default().into()))
+                    .await?;
                 let total_count = query_set.count();
                 let posts = query_set.records();
                 let page_info = pagination.get_page_info(total_count);

@@ -243,7 +243,12 @@ export type GetCurrentUserQuery = { __typename?: 'QueryRoot', me: { __typename?:
 
 export type CurrentUserFragment = { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any };
 
-export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetPostsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['Pxid']['input']>;
+  before?: InputMaybe<Scalars['Pxid']['input']>;
+}>;
 
 
 export type GetPostsQuery = { __typename?: 'QueryRoot', posts: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content: string, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } } }>, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content: string, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } }> } };
@@ -321,8 +326,8 @@ export const GetCurrentUserDocument = gql`
 }
     ${CurrentUserFragmentDoc}`;
 export const GetPostsDocument = gql`
-    query GetPosts {
-  posts {
+    query GetPosts($first: Int, $last: Int, $after: Pxid, $before: Pxid) {
+  posts(first: $first, last: $last, after: $after, before: $before) {
     edges {
       node {
         ...CurrentPost

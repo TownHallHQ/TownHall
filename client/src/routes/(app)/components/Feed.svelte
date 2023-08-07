@@ -1,30 +1,42 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { onMount } from 'svelte';
+
   import intersectionObserver from '$lib/actions/intersection-observer';
   import Post from './Post.svelte';
 
-  let pageNumber = 0;
-  let posts = $page.data.posts;
-  let Loading = false;
+  import type { Post as PostType } from '$lib/graphql/schema';
+
+  let pageNumber = 10;
+  let posts: PostType[] = [];
+  let loading = false;
+  let lastPostId: string = '';
+
+  onMount(() => {
+    fetchData();
+  });
 
   async function fetchData() {
     try {
-      Loading = true;
-      const response = await fetch(`/get-posts?page=${pageNumber}`, {
-        method: 'GET',
-      });
-      const data = await response.json();
+      loading = true;
+      const response = await fetch(
+        `/get-posts?first=${pageNumber}&after=${lastPostId}`
+      );
+      const data: PostType[] = await response.json();
 
-      posts = [...(posts || []), ...data];
+      posts = [...posts, ...data];
 
-      Loading = false;
+      lastPostId = data.pop()?.id;
+
+      console.log(posts);
+
+      loading = false;
     } catch (error) {
       console.log(error);
     }
   }
 
   const load = () => {
-    pageNumber = pageNumber + 1;
+    pageNumber = pageNumber + 10;
     fetchData();
   };
 
@@ -36,16 +48,15 @@
   }
 </script>
 
-{#each posts || [] as { node: post }}
+{#each posts as post}
   <Post {post} />
 {/each}
 
 <div class="mb-96">
-  {#if Loading}
+  {#if loading}
     <div class="mb-96">Cargando...</div>
   {/if}
-  <!-- ELEMENT OBSERVER -->
-  {#if Loading === false}
+  {#if loading === false}
     <div class="mb-96" bind:this={elementRef}>Cargando</div>
   {/if}
 </div>

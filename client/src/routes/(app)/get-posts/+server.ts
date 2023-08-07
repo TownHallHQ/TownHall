@@ -1,7 +1,7 @@
 import { GetPostsDocument, type PostConnection } from '$lib/graphql/schema';
 import { Client, cacheExchange, createClient, fetchExchange } from '@urql/core';
 
-async function getPosts(urqlClient: Client) {
+async function getPosts(urqlClient: Client, pageNumber: number) {
   const response = await urqlClient
     .query(GetPostsDocument, {}, { requestPolicy: 'network-only' })
     .toPromise();
@@ -21,12 +21,15 @@ async function getPosts(urqlClient: Client) {
 
 export const GET = async ({ request }: { request: Request }) => {
   try {
+    const url = new URL(request.url);
+    const pageNumber = Number(url.searchParams.get('page')) || 0;
+
     const urqlClient = createClient({
       url: import.meta.env.VITE_GRAPHQL_URL,
       exchanges: [cacheExchange, fetchExchange],
     });
 
-    const posts = await getPosts(urqlClient);
+    const posts = await getPosts(urqlClient, pageNumber);
 
     return new Response(JSON.stringify(posts), { status: 200 });
   } catch (err) {

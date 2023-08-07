@@ -5,7 +5,7 @@ use crate::shared::query_set::QuerySet;
 
 use super::error::Result;
 use super::model::Post;
-use super::repository::{InsertPostDto, PostRepository};
+use super::repository::{InsertPostDto, PostFilter, PostRepository};
 
 pub struct CreatePostDto {
     pub title: String,
@@ -27,8 +27,12 @@ impl PostService {
     }
 
     /// Retrieves posts in the platform
-    pub async fn list(&self, pagination: Option<Pagination>) -> Result<QuerySet<Post>> {
-        let records = self.repository.list(pagination).await?;
+    pub async fn list(
+        &self,
+        pagination: Option<Pagination>,
+        filter: Option<PostFilter>,
+    ) -> Result<QuerySet<Post>> {
+        let records = self.repository.list(pagination, filter).await?;
         let qs = records.inner_map(|record| Post::try_from(record).unwrap());
 
         Ok(qs)

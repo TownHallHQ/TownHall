@@ -4,7 +4,7 @@
   import intersectionObserver from '$lib/actions/intersection-observer';
   import Post from './Post.svelte';
 
-  import type { Post as PostType } from '$lib/graphql/schema';
+  import type { PostConnection, Post as PostType } from '$lib/graphql/schema';
 
   let posts: PostType[] = [];
   let loading = false;
@@ -19,12 +19,12 @@
     try {
       loading = true;
       const response = await fetch(`/get-posts?first=20&after=${lastPostId}`);
-      const data: PostType[] = await response.json();
+      const data: PostConnection = await response.json();
 
-      if (data.length > 0) {
-        posts = [...posts, ...data];
+      if (data.nodes.length > 0) {
+        posts = [...posts, ...data.nodes];
 
-        lastPostId = data[data.length - 1].id;
+        lastPostId = data.pageInfo.endCursor || '';
       } else {
         noMorePosts = true;
       }

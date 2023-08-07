@@ -26,7 +26,7 @@ async function getPosts(
     throw response?.error;
   }
 
-  return (response?.data?.posts as PostConnection).nodes;
+  return response?.data?.posts as PostConnection;
 }
 
 export const GET = async ({ request }: { request: Request }) => {

@@ -13,7 +13,7 @@ async-trait = "0.1.71"
 chrono = { version = "0.4.26", features = ["serde"] }
 lazy_static = "1.4.0"
 rand = "0.8.5"
-regex = "1.9.0"
+regex = "1.9.3"
 rust-argon2 = "1.0.0"
 sea-orm = { version = "0.11.2", features = [ "sqlx-postgres", "runtime-tokio-rustls", "macros", "with-chrono", "mock" ] }
 serde = { version = "1.0.175", features = ["derive"] }

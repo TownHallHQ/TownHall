@@ -86,7 +86,7 @@ impl UserRepository {
         let model = active_model.insert(&*self.db).await.map_err(|err| {
             tracing::error!(%err, "Failed to insert into database");
             match err {
-                migration::DbErr::Query(sea_orm::RuntimeErr::SqlxError(err)) => {
+                sea_orm::DbErr::Query(sea_orm::RuntimeErr::SqlxError(err)) => {
                     if let Some(db_err) = err.into_database_error() {
                         if let Some(constraint) = db_err.constraint() {
                             if constraint == "user_username_key" {

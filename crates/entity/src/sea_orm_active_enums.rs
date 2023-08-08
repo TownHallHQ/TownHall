@@ -4,10 +4,18 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum, Serialize, Deserialize)]
-#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "message_kind")]
-pub enum MessageKind {
-    #[sea_orm(string_value = "image")]
-    Image,
-    #[sea_orm(string_value = "text")]
-    Text,
+#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "image_mime_type")]
+pub enum ImageMimeType {
+    #[sea_orm(string_value = "image/jpeg")]
+    ImageJpeg,
+    #[sea_orm(string_value = "image/png")]
+    ImagePng,
+}
+#[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum, Serialize, Deserialize)]
+#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "image_use_case")]
+pub enum ImageUseCase {
+    #[sea_orm(string_value = "avatar")]
+    Avatar,
+    #[sea_orm(string_value = "post")]
+    Post,
 }

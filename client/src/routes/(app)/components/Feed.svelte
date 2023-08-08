@@ -21,7 +21,7 @@
     try {
       loadingPosts = true;
 
-      const response = await fetch(`/get-posts?first=3&after=${lastPostId}`);
+      const response = await fetch(`/get-posts?first=20&after=${lastPostId}`);
       const data: PostConnection = await response.json();
 
       if (data.nodes.length > 0) {

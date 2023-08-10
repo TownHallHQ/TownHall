@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  export type AvatarSize = 'sm' | 'md';
+  export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 </script>
 
 <script lang="ts">
@@ -7,8 +7,9 @@
 
   import type { CurrentUserFragment } from '$lib/graphql/schema';
   import { clickOutside } from '$lib/actions/click-outside';
+  import { page } from '$app/stores';
 
-  export let user: CurrentUserFragment;
+  export let user: CurrentUserFragment = $page.data.user;
   export let size: AvatarSize = 'md';
   export let dropdown: true | false = false;
 
@@ -21,6 +22,8 @@
   const sizeClassNames = classNames({
     'text-md h-[44px] w-[44px]': size === 'sm',
     'text-lg h-[50px] w-[50px]': size === 'md',
+    'text-xl h-[60px] w-[60px]': size === 'lg',
+    'text-2xl h-[75px] w-[75px]': size === 'xl',
   });
 
   const initialsClassNames = classNames(

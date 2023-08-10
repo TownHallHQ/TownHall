@@ -1,7 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-
-  import Profile from './Navbar/Avatar.svelte';
+  import Avatar from '$lib/components/Avatar.svelte';
   import Button from '$lib/components/Button.svelte';
   import Divider from '$lib/components/Divider.svelte';
 </script>
@@ -10,7 +9,7 @@
   class="bg-slate-50 border-r border-slate-200 w-96 sm:flex flex-col hidden p-2 text-black"
 >
   <div class="flex items-center">
-    <Profile user={$page.data.user} />
+    <Avatar />
     <span class="flex ml-2"
       >{$page.data.user.name} {$page.data.user.surname}</span
     >

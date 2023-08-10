@@ -59,18 +59,17 @@ async fn create_post() {
         .await
         .unwrap();
     let token = TestUtil::token_create(&test_util, user.id).await;
-    let result = schema
-        .execute(
-            Request::new(CREATE_POST_MUTATION)
-                .data(token)
-                .variables(Variables::from_json(json!({
+    let result =
+        schema
+            .execute(Request::new(CREATE_POST_MUTATION).data(token).variables(
+                Variables::from_json(json!({
                   "payload":{
                     "title":"Hello World!",
                     "content":"Hello, new post!"
                   }
-                }))),
-        )
-        .await;
+                })),
+            ))
+            .await;
     let data = result.data.into_json().unwrap();
     let post_data = &data["postCreate"]["post"];
 
@@ -108,35 +107,33 @@ async fn creates_post_with_parent() {
         .await
         .unwrap();
     let token = TestUtil::token_create(&test_util, user.id).await;
-    let result_parent = schema
-        .execute(
-            Request::new(CREATE_POST_MUTATION)
-                .data(token)
-                .variables(Variables::from_json(json!({
+    let result_parent =
+        schema
+            .execute(Request::new(CREATE_POST_MUTATION).data(token).variables(
+                Variables::from_json(json!({
                   "payload":{
                     "title":"Hello World!",
                     "content":"Hello, new post!",
                   }
-                }))),
-        )
-        .await;
+                })),
+            ))
+            .await;
 
     let post_parent_data = result_parent.data.into_json().unwrap();
     let post_parent_id = &post_parent_data["postCreate"]["post"]["id"];
     let token = TestUtil::token_create(&test_util, user.id).await;
-    let result = schema
-        .execute(
-            Request::new(CREATE_POST_MUTATION)
-                .data(token)
-                .variables(Variables::from_json(json!({
+    let result =
+        schema
+            .execute(Request::new(CREATE_POST_MUTATION).data(token).variables(
+                Variables::from_json(json!({
                   "payload":{
                     "title":"Hello again!",
                     "content":"Hello, new post again!",
                     "parentId":post_parent_id
                   }
-                }))),
-        )
-        .await;
+                })),
+            ))
+            .await;
 
     let data = result.data.into_json().unwrap();
     let post_data = &data["postCreate"]["post"];

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import Feed from './components/Feed.svelte';
-  import Post from './components/Post.svelte';
   import PostBox from './components/PostBox.svelte';
 </script>
 

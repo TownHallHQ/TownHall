@@ -1,8 +1,9 @@
 <script lang="ts">
+  import Avatar from '$lib/components/Avatar.svelte';
   import Card from '$lib/components/Card.svelte';
+
   import type { Post } from '$lib/graphql/schema';
 
-  import Avatar from './Navbar/Avatar.svelte';
   export let post: Post;
 </script>
 

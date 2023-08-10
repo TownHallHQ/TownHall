@@ -6,8 +6,8 @@
   import Button from '$lib/components/Button.svelte';
   import Card from '$lib/components/Card.svelte';
   import TextField from '$lib/components/TextField.svelte';
-  import Avatar from './Navbar/Avatar.svelte';
   import { notifications } from '@whizzes/svelte-notifications';
+  import Avatar from '$lib/components/Avatar.svelte';
 
   let customClassName: string | null = null;
   export { customClassName as class };
@@ -46,7 +46,7 @@
 <Card class={customClassName}>
   <form on:submit={handleSubmit}>
     <div class="flex space-x-4">
-      <Avatar size="sm" user={$page.data.user} />
+      <Avatar size="sm" />
       <div class="w-full">
         <TextField
           class="w-full"

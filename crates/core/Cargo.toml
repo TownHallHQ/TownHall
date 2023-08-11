@@ -27,7 +27,6 @@ url = { workspace = true }
 
 # Local Dependencies
 entity = { path = "../entity" }
-migration = { path = "../migration" }
 
 [dev-dependencies]
 tokio = { version = "1.29.1", features = ["rt", "macros"] }

@@ -11,5 +11,31 @@ services:
       - .env
     restart: always
 
+  minio:
+    image: minio/minio
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio:/data
+    env_file:
+      - .env
+    command: server --console-address ":9001" /data
+
+  minio_client:
+    image: minio/mc
+    depends_on:
+      - minio
+    env_file:
+      - .env
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add myminio http://minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
+      /usr/bin/mc mb --ignore-existing myminio/gabble;
+      /usr/bin/mc anonymous set public myminio/gabble;
+      exit 0;
+      "
+
 volumes:
   database:
+  minio:

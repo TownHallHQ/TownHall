@@ -44,7 +44,7 @@
             <li class="mr-2">
               <a
                 href="#feed"
-                class="inline-block p-4 border-b border-transparent rounded-t-lg hover:text-gray-900 hover:border-gray-400"
+                class="inline-block p-4 border-b border-transparent rounded-t-lg hover:text-gray-900 border-gray-400"
                 >Feed</a
               >
             </li>
@@ -56,7 +56,7 @@
       {#if user.id === currentUser.id}
         <PostBox />
       {/if}
-      <Feed />
+      <Feed username={user.username} />
     </main>
   </div>
 </div>

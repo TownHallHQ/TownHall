@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
+  export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 </script>
 
 <script lang="ts">
@@ -24,6 +24,8 @@
     'text-lg h-[50px] w-[50px]': size === 'md',
     'text-xl h-[60px] w-[60px]': size === 'lg',
     'text-2xl h-[75px] w-[75px]': size === 'xl',
+    'text-3xl h-[90px] w-[90px]': size === '2xl',
+    'text-4xl h-[110px] w-[110px]': size === '3xl',
   });
 
   const initialsClassNames = classNames(

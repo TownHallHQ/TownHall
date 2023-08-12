@@ -264,6 +264,15 @@ export type PostCreateMutationVariables = Exact<{
 
 export type PostCreateMutation = { __typename?: 'MutationRoot', postCreate: { __typename?: 'PostCreate', post?: { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content: string, createdAt: any, updatedAt: any } | null, error?: { __typename?: 'PostError', code: PostErrorCode, message: string } | null } };
 
+export type GetUsersQueryVariables = Exact<{
+  filter?: InputMaybe<UserFilterInput>;
+}>;
+
+
+export type GetUsersQuery = { __typename?: 'QueryRoot', user: { __typename?: 'UserConnection', nodes: Array<{ __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any }> } };
+
+export type UserFragment = { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any };
+
 export type TokenCreateMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -316,6 +325,17 @@ export const CurrentPostFragmentDoc = gql`
   updatedAt
 }
     ${AuthorFragmentDoc}`;
+export const UserFragmentDoc = gql`
+    fragment User on User {
+  id
+  name
+  surname
+  username
+  email
+  createdAt
+  updatedAt
+}
+    `;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   me {
@@ -365,6 +385,15 @@ export const PostCreateDocument = gql`
   }
 }
     `;
+export const GetUsersDocument = gql`
+    query GetUsers($filter: UserFilterInput) {
+  user(filter: $filter) {
+    nodes {
+      ...User
+    }
+  }
+}
+    ${UserFragmentDoc}`;
 export const TokenCreateDocument = gql`
     mutation TokenCreate($email: String!, $password: String!) {
   tokenCreate(email: $email, password: $password) {

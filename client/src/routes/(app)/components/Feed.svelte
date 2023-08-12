@@ -8,6 +8,8 @@
 
   import type { PostConnection, Post as PostType } from '$lib/graphql/schema';
 
+  export let username: string = '';
+
   let posts: PostType[] = [];
   let loadingPosts = false;
   let lastPostId: string = '';
@@ -21,7 +23,9 @@
     try {
       loadingPosts = true;
 
-      const response = await fetch(`/get-posts?first=20&after=${lastPostId}`);
+      const response = await fetch(
+        `/get-posts?first=20&after=${lastPostId}&username=${username}`
+      );
       const data: PostConnection = await response.json();
 
       if (data.nodes.length > 0) {

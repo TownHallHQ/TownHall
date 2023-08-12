@@ -5,7 +5,7 @@
 </script>
 
 <header
-  class="fixed top-0 flex justify-between items-center px-12 bg-white h-[64px] shadow-md w-full"
+  class="fixed top-0 flex justify-between z-20 items-center px-12 bg-white h-[64px] shadow-md w-full"
 >
   <figure>
     <img

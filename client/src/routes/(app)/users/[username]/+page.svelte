@@ -1,0 +1,48 @@
+<script lang="ts">
+  import { page } from '$app/stores';
+  import Avatar from '$lib/components/Avatar.svelte';
+  import Button from '$lib/components/Button.svelte';
+  import type { User as UserType } from '$lib/graphql/schema';
+
+  const user: UserType = $page.data.profileUser;
+</script>
+
+<div class="flex justify-center w-full">
+  <header class="relative h-fit">
+    <img
+      width="1000"
+      height="1000"
+      class="object-cover h-[50vh] md:w-[80vw] md:h-[40vh] xl:h-[50vh]"
+      src="https://images.unsplash.com/photo-1569317002804-ab77bcf1bce4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dW5zcGxhc2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80"
+      alt={`${user.username} cover image`}
+    />
+    <div class="absolute w-full -bottom-5 rounded-t-3xl bg-white">
+      <div class="md:flex justify-around items-end relative bottom-6">
+        <div class="md:flex items-end ml-5 md:ml-0">
+          <Avatar {user} size="3xl" />
+          <div class="mt-2 md:ml-5">
+            <h1 class="text-2xl md:text-4xl font-medium">
+              {user.name}
+              {user.surname}
+            </h1>
+            <span class="text text-slate-400">@{user.username}</span>
+          </div>
+        </div>
+        <div class="text-end">
+          <Button variant="primary" class="mt-6 mr-5 md:mt-0">Follow</Button>
+        </div>
+      </div>
+      <nav class="border-b-2 border-gray-200 font-medium text-center">
+        <ul class="flex flex-wrap -mb-px">
+          <li class="mr-2">
+            <a
+              href="#feed"
+              class="inline-block p-4 border-b-4 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
+              >Feed</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>

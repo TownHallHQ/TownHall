@@ -47,10 +47,7 @@ impl MigrationTrait for Migration {
                     )
                     .col(
                         ColumnDef::new(Image::UseCase)
-                            .enumeration(
-                                UseCase::Type,
-                                vec![UseCase::Avatar, UseCase::Post],
-                            )
+                            .enumeration(UseCase::Type, vec![UseCase::Avatar, UseCase::Post])
                             .not_null(),
                     )
                     .col(ColumnDef::new(Image::ProviderId).string_len(256).not_null())
@@ -142,7 +139,7 @@ impl Iden for UseCase {
             match self {
                 Self::Type => "image_use_case",
                 Self::Avatar => "avatar",
-                Self::Post => "post"
+                Self::Post => "post",
             }
         )
         .unwrap();

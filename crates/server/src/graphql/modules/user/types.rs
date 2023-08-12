@@ -33,6 +33,7 @@ pub struct UserError {
 
 /// A Platform's User
 #[derive(Debug, Deserialize, Serialize, SimpleObject)]
+#[graphql(complex)]
 pub struct User {
     pub id: Pxid,
     pub name: String,

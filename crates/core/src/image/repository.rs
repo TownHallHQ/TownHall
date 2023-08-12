@@ -112,13 +112,10 @@ impl ImageRepository {
             ..Default::default()
         };
 
-        let image_model = image_active_model
-            .insert(&*self.db)
-            .await
-            .map_err(|err| {
-                tracing::error!(%err, "Failed to insert Image into the database");
-                ImageError::RepositoryError
-            })?;
+        let image_model = image_active_model.insert(&*self.db).await.map_err(|err| {
+            tracing::error!(%err, "Failed to insert Image into the database");
+            ImageError::RepositoryError
+        })?;
         let image_record = Self::into_image_record(image_model);
 
         Ok(image_record)

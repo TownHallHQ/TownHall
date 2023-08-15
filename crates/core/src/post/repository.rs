@@ -20,7 +20,7 @@ pub struct PostRecord {
     pub parent_id: Option<Pxid>,
     pub head: bool,
     pub title: String,
-    pub content: String,
+    pub content: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -32,7 +32,7 @@ pub struct InsertPostDto {
     pub parent_id: Option<Pxid>,
     pub head: bool,
     pub title: String,
-    pub content: String,
+    pub content: Option<String>,
 }
 
 #[derive(Clone)]

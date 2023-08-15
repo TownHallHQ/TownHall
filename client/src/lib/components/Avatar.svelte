@@ -5,9 +5,10 @@
 <script lang="ts">
   import classNames from 'classnames';
 
-  import type { CurrentUserFragment } from '$lib/graphql/schema';
   import { clickOutside } from '$lib/actions/click-outside';
   import { page } from '$app/stores';
+
+  import type { CurrentUserFragment } from '$lib/graphql/schema';
 
   export let user: CurrentUserFragment = $page.data.user;
   export let size: AvatarSize = 'md';
@@ -34,8 +35,8 @@
     {
       'bg-slate-400': userNameCharAtZero === 'A' || userNameCharAtZero === 'W',
       'bg-gray-400': userNameCharAtZero === 'B' || userNameCharAtZero === 'X',
-      'bg-zinc-400': userNameCharAtZero === 'C' || userNameCharAtZero === 'Y',
-      'bg-neutral-400':
+      'bg-slate-400': userNameCharAtZero === 'C' || userNameCharAtZero === 'Y',
+      'bg-slate-400':
         userNameCharAtZero === 'D' || userNameCharAtZero === 'Z',
       'bg-stone-400': userNameCharAtZero === 'E',
       'bg-red-400': userNameCharAtZero === 'F',

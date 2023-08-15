@@ -28,6 +28,7 @@ pub struct UserRecord {
     pub username: String,
     pub email: String,
     pub password_hash: String,
+    pub avatar_id: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub deleted_at: Option<DateTime<Utc>>,
@@ -66,6 +67,7 @@ impl UserRepository {
             username: model.username,
             email: model.email,
             password_hash: model.password_hash,
+            avatar_id: None,
             created_at: DateTime::from_utc(model.created_at, Utc),
             updated_at: DateTime::from_utc(model.updated_at, Utc),
             deleted_at: model.deleted_at.map(|naive| DateTime::from_utc(naive, Utc)),
@@ -193,5 +195,30 @@ impl UserRepository {
                 tracing::error!(%err, "Failed to retrieve users");
                 UserError::DatabaseError
             })
+    }
+
+    pub async fn update_avatar(&self, id: Pxid, avatar_id: Pxid) -> Result<UserRecord> {
+        let maybe_user = entity::prelude::User::find()
+            .filter(entity::user::Column::Id.eq(id.to_string()))
+            .one(&*self.db)
+            .await
+            .map_err(|err| {
+                tracing::error!(%err, %id, %avatar_id, "Failed to find User by ID");
+                UserError::DatabaseError
+            })?;
+
+        if let Some(user_model) = maybe_user {
+            let mut active_user: entity::user::ActiveModel = user_model.into();
+
+            active_user.avatar_id = Set(Some(avatar_id.to_string()));
+            let user_model = active_user.update(&*self.db).await.map_err(|err| {
+                tracing::error!(%err, "Failed to update user avatar");
+                UserError::UserNotFound
+            })?;
+
+            return Ok(Self::into_record(user_model));
+        }
+
+        Err(UserError::UserNotFound)
     }
 }

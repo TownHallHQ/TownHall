@@ -37,7 +37,7 @@
 </script>
 
 <div class="flex flex-col justify-center h-full">
-  <div class="py-4">
+  <div class="text-lg py-4">
     <h1 class="font-semibold">Welcome to Gabble!</h1>
     <span>
      Create an account to continue

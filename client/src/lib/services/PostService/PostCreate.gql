@@ -1,18 +1,22 @@
 mutation PostCreate($input: PostCreateInput!) {
   postCreate(input: $input) {
     post {
-      id
-      authorId
-      parentId
-      head
-      title
-      content
-      createdAt
-      updatedAt
+      ...PostCreateFields
     }
     error {
       code
       message
     }
   }
+}
+
+fragment PostCreateFields on Post {
+  id
+  authorId
+  parentId
+  head
+  title
+  content
+  createdAt
+  updatedAt
 }

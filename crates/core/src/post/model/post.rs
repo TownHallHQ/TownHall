@@ -18,7 +18,7 @@ pub struct Post {
     pub parent_id: Option<Pxid>,
     pub head: bool,
     pub title: String,
-    pub content: String,
+    pub content: Option<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -28,7 +28,7 @@ pub struct NewPostDto {
     pub parent_id: Option<Pxid>,
     pub head: bool,
     pub title: String,
-    pub content: String,
+    pub content: Option<String>,
 }
 
 impl Post {

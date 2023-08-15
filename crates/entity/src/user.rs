@@ -18,12 +18,28 @@ pub struct Model {
     pub created_at: DateTime,
     pub updated_at: DateTime,
     pub deleted_at: Option<DateTime>,
+    #[sea_orm(unique)]
+    pub avatar_id: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
+    #[sea_orm(
+        belongs_to = "super::image::Entity",
+        from = "Column::AvatarId",
+        to = "super::image::Column::Id",
+        on_update = "SetDefault",
+        on_delete = "SetDefault"
+    )]
+    Image,
     #[sea_orm(has_many = "super::post::Entity")]
     Post,
+}
+
+impl Related<super::image::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Image.def()
+    }
 }
 
 impl Related<super::post::Entity> for Entity {

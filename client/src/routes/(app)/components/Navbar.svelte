@@ -5,23 +5,16 @@
 </script>
 
 <header
-  class="fixed top-0 flex justify-between z-20 items-center px-12 bg-white h-[64px] shadow-md w-full"
+  class="fixed top-0 flex justify-between z-20 items-center px-12 h-[64px] shadow-md w-full bg-slate-50 text-black dark:bg-neutral-900 dark:text-white"
 >
-  <figure>
-    <img
-      src="https://via.placeholder.com/120x40"
-      alt="Nexus Logo"
-      height="40"
-      width="120"
-    />
-  </figure>
+  <a href="/" class="flex items-center justify-center">
+    <span class="text-2xl">🪴</span>
+    <strong class="text-xl font-semibold">gabble</strong>
+  </a>
   <div class="flex gap-4">
     {#if $page.data.user}
       <article class="flex items-center">
         <Avatar dropdown size="sm" />
-        <span class="pl-2">
-          Hi, {$page.data.user.username}!
-        </span>
       </article>
     {:else}
       <Button

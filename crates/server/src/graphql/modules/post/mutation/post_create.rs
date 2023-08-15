@@ -10,7 +10,7 @@ use crate::services::auth::Token;
 #[derive(Debug, InputObject)]
 pub struct PostCreateInput {
     pub title: String,
-    pub content: String,
+    pub content: Option<String>,
     pub parent_id: Option<Pxid>,
 }
 

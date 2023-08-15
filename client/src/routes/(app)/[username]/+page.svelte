@@ -2,12 +2,13 @@
   import { page } from '$app/stores';
   import Avatar from '$lib/components/Avatar.svelte';
   import Button from '$lib/components/Button.svelte';
-  import type { User as UserType } from '$lib/graphql/schema';
-  import Feed from '../../components/Feed.svelte';
-  import PostBox from '../../components/PostBox.svelte';
+  import Feed from '$lib/components/Feed/Feed.svelte';
+  import PostBox from '$lib/components/PostBox.svelte';
+  
+  import type { User } from '$lib/graphql/schema';
 
-  const user: UserType = $page.data.profileUser;
-  const currentUser: UserType = $page.data.user;
+  const user: User = $page.data.profileUser;
+  const currentUser: User = $page.data.user;
 </script>
 
 <svelte:head>
@@ -23,7 +24,7 @@
         src="https://images.unsplash.com/photo-1569317002804-ab77bcf1bce4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dW5zcGxhc2h8ZW58MHx8MHx8fDA%3D&w=1000&q=80"
         alt={`${user.username} cover image`}
       />
-      <div class="absolute w-full -bottom-5 rounded-t-3xl bg-white">
+      <div class="absolute w-full -bottom-5 rounded-t-3xl bg-white dark:bg-neutral-900">
         <div class="md:flex justify-around items-end relative bottom-6">
           <div class="md:flex items-end ml-5 md:ml-0">
             <Avatar {user} size="3xl" />

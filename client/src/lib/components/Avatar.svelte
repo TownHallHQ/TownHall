@@ -35,9 +35,8 @@
     {
       'bg-slate-400': userNameCharAtZero === 'A' || userNameCharAtZero === 'W',
       'bg-gray-400': userNameCharAtZero === 'B' || userNameCharAtZero === 'X',
-      'bg-slate-400': userNameCharAtZero === 'C' || userNameCharAtZero === 'Y',
-      'bg-slate-400':
-        userNameCharAtZero === 'D' || userNameCharAtZero === 'Z',
+      'bg-slate-300': userNameCharAtZero === 'C' || userNameCharAtZero === 'Y',
+      'bg-slate-500': userNameCharAtZero === 'D' || userNameCharAtZero === 'Z',
       'bg-stone-400': userNameCharAtZero === 'E',
       'bg-red-400': userNameCharAtZero === 'F',
       'bg-orange-400': userNameCharAtZero === 'G',
@@ -78,12 +77,12 @@
   </figure>
 </button>
 {#if isDropdownOpen && dropdown}
-  <div class="fixed top-12">
+  <div class="relative">
     <div
       use:clickOutside
       on:clickOutside={handleDropdownClick}
       id="dropdown"
-      class="z-[100] relative bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+      class="z-[100] -right-0 top-7 absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
     >
       <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
         <div class="truncate">

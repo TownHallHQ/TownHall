@@ -5,19 +5,17 @@
 <script lang="ts">
   import classNames from 'classnames';
 
-  import { clickOutside } from '$lib/actions/click-outside';
   import { page } from '$app/stores';
 
   import type { CurrentUserFragment } from '$lib/graphql/schema';
+  import { goto } from '$app/navigation';
 
   export let user: CurrentUserFragment = $page.data.user;
   export let size: AvatarSize = 'md';
-  export let dropdown: true | false = false;
+  export let redirect: true | false = false;
 
   let customClassName: string | null = null;
   export { customClassName as class };
-
-  let isDropdownOpen = false;
 
   const userNameCharAtZero = user.name.charAt(0).toUpperCase();
   const sizeClassNames = classNames({
@@ -64,39 +62,17 @@
     customClassName
   );
 
-  const handleDropdownClick = () => {
-    isDropdownOpen = !isDropdownOpen;
+  const handleClick = () => {
+    if (redirect) {
+      goto(`/${user.username}`);
+    }
   };
 </script>
 
-<button type="button" on:click={handleDropdownClick}>
+<button type="button" on:click={handleClick}>
   <figure class={containerClassNames}>
     <span class={initialsClassNames}
       >{user.name.charAt(0)}{user.surname.charAt(0)}</span
     >
   </figure>
 </button>
-{#if isDropdownOpen && dropdown}
-  <div class="relative">
-    <div
-      use:clickOutside
-      on:clickOutside={handleDropdownClick}
-      id="dropdown"
-      class="z-[100] -right-0 top-7 absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
-    >
-      <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-        <div class="truncate">
-          {user.name + ' ' + user.surname}
-        </div>
-        <div class="font-medium truncate">{user.username}</div>
-      </div>
-      <div class="py-2">
-        <a
-          href="/logout"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-          >Sign out</a
-        >
-      </div>
-    </div>
-  </div>
-{/if}

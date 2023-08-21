@@ -14,7 +14,7 @@ path = "src/lib.rs"
 
 [dependencies]
 anyhow = "1.0.69"
-async-graphql-axum = "5.0.7"
+async-graphql-axum = "6.0.4"
 axum = "0.6.18"
 base64 = "0.21.2"
 jsonwebtoken = "8.3"

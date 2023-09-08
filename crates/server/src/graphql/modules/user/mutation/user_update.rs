@@ -1,5 +1,5 @@
 use async_graphql::{Context, InputObject, Result, SimpleObject};
-use gabble::user::repository::UpdateUserDto;
+use playa::user::repository::UpdateUserDto;
 use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
 

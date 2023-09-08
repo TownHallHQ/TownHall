@@ -3,8 +3,8 @@ use std::str::FromStr;
 use async_graphql::{Context, InputObject, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 
-use gabble::user::model::{Email, Password, Username};
-use gabble::user::service::CreateUserDto;
+use playa::user::model::{Email, Password, Username};
+use playa::user::service::CreateUserDto;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{User, UserError, UserErrorCode};

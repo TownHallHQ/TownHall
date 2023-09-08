@@ -31,8 +31,8 @@ services:
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc config host add myminio http://minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
-      /usr/bin/mc mb --ignore-existing myminio/gabble;
-      /usr/bin/mc anonymous set public myminio/gabble;
+      /usr/bin/mc mb --ignore-existing myminio/playa;
+      /usr/bin/mc anonymous set public myminio/playa;
       exit 0;
       "
 

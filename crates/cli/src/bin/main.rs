@@ -5,16 +5,16 @@ use tracing::info;
 use libcli::database::DatabseSub;
 use libserver::start;
 
-const ABOUT: &str = "gabble Application Command Line Interface";
+const ABOUT: &str = "playa Application Command Line Interface";
 
 #[derive(Debug, Parser)]
 #[command(next_line_help = true)]
-#[command(name = "gabble", author, version, about, long_about = Some(ABOUT))]
+#[command(name = "playa", author, version, about, long_about = Some(ABOUT))]
 pub enum Cli {
     /// Manage Database
     #[clap(subcommand)]
     Database(DatabseSub),
-    /// Initializes and starts Gabble Server
+    /// Initializes and starts playa Server
     Serve,
 }
 

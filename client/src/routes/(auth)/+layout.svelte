@@ -23,10 +23,10 @@
     </div>
     <footer class="footer">
       <small>
-        Gabble is an MIT Licensed solution
+        playa is an MIT Licensed solution
         <br />
         Contribute to the project on{" "}
-        <a href="https://github.com/whizzes/gabble" class="text-blue-600 underline" target="_blank"> GitHub </a>
+        <a href="https://github.com/whizzes/playa" class="text-blue-600 underline" target="_blank"> GitHub </a>
       </small>
     </footer>
   </article>
@@ -39,7 +39,7 @@
     on
     <a
       class="underline font-medium"
-      href="https://unsplash.com/?utm_source=gabble&utm_medium=referral"
+      href="https://unsplash.com/?utm_source=playa&utm_medium=referral"
     >
       Unsplash</a
     ></small

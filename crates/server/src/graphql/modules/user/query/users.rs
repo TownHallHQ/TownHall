@@ -4,9 +4,9 @@ use async_graphql::connection::{query, Connection, Edge, EmptyFields};
 use async_graphql::{Context, InputObject, Result};
 use pxid::graphql::Pxid;
 
-use gabble::shared::pagination::Pagination;
-use gabble::user::model::{Email, Username};
-use gabble::user::repository::UserFilter;
+use playa::shared::pagination::Pagination;
+use playa::user::model::{Email, Username};
+use playa::user::repository::UserFilter;
 
 use crate::context::SharedContext;
 use crate::graphql::connection_details::ConnectionDetails;

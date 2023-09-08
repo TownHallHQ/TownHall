@@ -1,6 +1,6 @@
 use sea_orm_migration::prelude::*;
 
-use gabble::image::model::{IMAGE_JPEG, IMAGE_PNG};
+use playa::image::model::{IMAGE_JPEG, IMAGE_PNG};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;

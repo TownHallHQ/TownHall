@@ -1,16 +1,17 @@
-<div>
-  <h1 align="center">gabble</h1>
+<div align="center">
+  <span style="font-size: 64px;">🏖️</span>
+  <h1 align="center">playa</h1>
   <p align="center">
-    A "Host Yourself" Chat powered by Rust and Whizzes Contributors
+    Decentralized Social Platform powered by Rust and Whizzes Contributors
   </p>
 </div>
 
 <div align="center">
 
   [![Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/yde6mcgs2C)
-  ![Build](https://github.com/whizzes/gabble/workflows/build/badge.svg)
-  ![Clippy](https://github.com/whizzes/gabble/workflows/clippy/badge.svg)
-  ![Formatter](https://github.com/whizzes/gabble/workflows/fmt/badge.svg)
+  ![Build](https://github.com/whizzes/playa/workflows/build/badge.svg)
+  ![Clippy](https://github.com/whizzes/playa/workflows/clippy/badge.svg)
+  ![Formatter](https://github.com/whizzes/playa/workflows/fmt/badge.svg)
 
 </div>
 
@@ -29,16 +30,20 @@
 cargo install just
 
 # clone this repository
-git clone https://github.com/whizzes/gabble.git
+git clone https://github.com/whizzes/playa.git
+
 
 # step into repository directory
-cd ./gabble
+cd ./playa
 
-# prepare project (depends on unix shell)
+# open a termital window and spin up Docker Containers
+just dev
+
+# create a new terminal window and run database migrations
 just prepare
 
 # execute the server (next time you just run this command)
-just serve
+cargo run serve
 ```
 
 > Note: As of today migrations runs when bootstrapping the server automatically

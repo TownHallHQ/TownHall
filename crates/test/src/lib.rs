@@ -3,7 +3,7 @@ use std::sync::Arc;
 use anyhow::Result;
 use pxid::Pxid;
 
-use gabble::shared::database::Database;
+use playa::shared::database::Database;
 use libserver::config::Config;
 use libserver::context::Context;
 use libserver::graphql::schema::{build_schema_with_context, GraphQLSchema};

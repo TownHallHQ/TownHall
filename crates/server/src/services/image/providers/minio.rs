@@ -5,11 +5,11 @@ use s3::bucket::Bucket;
 use s3::creds::Credentials;
 use s3::region::Region;
 
-use gabble::image::error::{ImageError, Result};
-use gabble::image::model::MimeType;
-use gabble::image::service::{ImageProvider, ImageProviderResource};
+use playa::image::error::{ImageError, Result};
+use playa::image::model::MimeType;
+use playa::image::service::{ImageProvider, ImageProviderResource};
 
-const BUCKET_NAME: &str = "gabble";
+const BUCKET_NAME: &str = "playa";
 const MINIO_DEVELOPMENT_URL: &str = "http://127.0.0.1:9000";
 const PXID_PREFIX: &str = "mnio";
 

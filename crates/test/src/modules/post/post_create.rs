@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
 use async_graphql::{Request, Variables};
-use gabble::user::{
+use playa::user::{
     model::{Email, Password, Username},
     service::CreateUserDto,
 };

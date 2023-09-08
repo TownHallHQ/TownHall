@@ -1,8 +1,8 @@
 use async_graphql::connection::{query, Connection, Edge, EmptyFields};
 use async_graphql::{ComplexObject, Context, Enum, Result, SimpleObject};
 use chrono::{DateTime, Utc};
-use gabble::post::repository::PostFilter;
-use gabble::shared::pagination::Pagination;
+use playa::post::repository::PostFilter;
+use playa::shared::pagination::Pagination;
 use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
 
@@ -110,8 +110,8 @@ impl User {
     }
 }
 
-impl From<gabble::user::model::User> for User {
-    fn from(value: gabble::user::model::User) -> Self {
+impl From<playa::user::model::User> for User {
+    fn from(value: playa::user::model::User) -> Self {
         User {
             id: value.id.into(),
             name: value.name,

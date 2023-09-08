@@ -1,11 +1,11 @@
 use std::str::FromStr;
 
 use async_graphql::{Context, Result, SimpleObject};
-use gabble::shared::pagination::Pagination;
+use playa::shared::pagination::Pagination;
 use serde::{Deserialize, Serialize};
 
-use gabble::user::model::Email;
-use gabble::user::repository::UserFilter;
+use playa::user::model::Email;
+use playa::user::repository::UserFilter;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{AccessToken, UserError, UserErrorCode};

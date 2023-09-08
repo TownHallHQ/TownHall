@@ -3,13 +3,13 @@ pub mod image;
 
 use std::sync::Arc;
 
-use gabble::image::repository::ImageRepository;
-use gabble::image::service::{ImageProvider, ImageService};
-use gabble::post::repository::PostRepository;
-use gabble::post::service::PostService;
-use gabble::shared::database::Database;
-use gabble::user::repository::UserRepository;
-use gabble::user::service::UserService;
+use playa::image::repository::ImageRepository;
+use playa::image::service::{ImageProvider, ImageService};
+use playa::post::repository::PostRepository;
+use playa::post::service::PostService;
+use playa::shared::database::Database;
+use playa::user::repository::UserRepository;
+use playa::user::service::UserService;
 
 use crate::config::Config;
 

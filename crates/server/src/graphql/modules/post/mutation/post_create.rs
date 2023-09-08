@@ -1,5 +1,5 @@
 use async_graphql::{Context, InputObject, Result, SimpleObject};
-use gabble::post::service::CreatePostDto;
+use playa::post::service::CreatePostDto;
 use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
 

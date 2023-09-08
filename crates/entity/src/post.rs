@@ -12,7 +12,7 @@ pub struct Model {
     pub parent_id: Option<String>,
     pub head: bool,
     pub title: String,
-    pub content: String,
+    pub content: Option<String>,
     pub created_at: DateTime,
     pub updated_at: DateTime,
 }

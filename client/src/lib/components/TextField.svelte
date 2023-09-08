@@ -77,7 +77,8 @@
 
   .input {
     @apply bg-gray-200 border border-transparent rounded text-gray-800;
-    @apply w-full p-3 text-[.9rem];
+    @apply w-full p-3 text-[.9rem] bg-neutral-100 dark:bg-neutral-600;
+    @apply text-black dark:text-white;
   }
 
   .input:active,

@@ -5,8 +5,11 @@
   import { NotificationList, Position } from '@whizzes/svelte-notifications';
 
   import { page } from '$app/stores';
+  import { browser } from '$app/environment';
   import Notification from '$lib/components/Notification/Notification.svelte';
+  import ui from '$lib/stores/ui';
 
+  import "@fontsource/inter";
   import '../app.css';
 
   const initializeAuthState = () => {
@@ -50,12 +53,17 @@
     ],
   });
 
+  if (browser) {
+    ui.syncPreferredScheme();
+  }
+
   setContextClient(client);
 </script>
 
-<div class="background-light">
+<div class="font-inter bg-slate-50 text-black dark:bg-neutral-800 dark:text-white">
   <slot />
 </div>
+
 <NotificationList position={Position.TopRight} let:notification>
   <Notification {notification} />
 </NotificationList>

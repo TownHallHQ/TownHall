@@ -10,7 +10,7 @@
   import TextField from "$lib/components/TextField.svelte";
   import Button from "$lib/components/Button.svelte";
 
-  import type { Unsplash } from "../../api/unsplash/+server";
+  import type { Unsplash } from "$routes/api/unsplash/+server";
 
   let cover: Unsplash | null = null;
   let error: string | null = null;
@@ -62,7 +62,7 @@
 </script>
 
 <div class="flex flex-col justify-center h-full">
-  <div class="py-4">
+  <div class="text-lg py-4">
     <h1 class="font-semibold">Welcome Back!</h1>
     <span>
       Log in to your account to continue

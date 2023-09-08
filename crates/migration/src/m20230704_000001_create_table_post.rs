@@ -33,7 +33,7 @@ impl MigrationTrait for Migration {
                             .string_len(MAX_TITLE_CONTENT_LENGTH)
                             .not_null(),
                     )
-                    .col(ColumnDef::new(Post::Content).string().not_null())
+                    .col(ColumnDef::new(Post::Content).string().null())
                     .col(
                         ColumnDef::new(Post::CreatedAt)
                             .timestamp()

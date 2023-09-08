@@ -17,6 +17,41 @@ query GetPosts ($first: Int, $last: Int, $after: Pxid, $before: Pxid) {
   }
 }
 
+query GetUserPosts($username: String, $first: Int, $last: Int, $after: Pxid, $before: Pxid) {
+  user(filter:{username:$username}){
+    edges {
+      node {
+        ...Author
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+    nodes {
+      ...Author
+      posts(first: $first, last: $last, after: $after, before: $before) {
+          edges {
+            node {
+              ...CurrentPost
+            }
+          }
+          pageInfo {
+            hasPreviousPage
+            hasNextPage
+            startCursor
+            endCursor
+          }
+          nodes {
+            ...CurrentPost
+          }
+        }
+    }
+  }
+}
+
 fragment CurrentPost on Post {
   id
   authorId

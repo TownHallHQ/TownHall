@@ -1,5 +1,7 @@
 use thiserror::Error;
 
+use crate::image::error::ImageError;
+
 use super::model::EmailError;
 use super::model::PasswordError;
 use super::model::UsernameError;
@@ -24,6 +26,8 @@ pub enum UserError {
     DatabaseError,
     #[error("User not found")]
     UserNotFound,
+    #[error("An error ocurred in the image service layer. {0}")]
+    ImageError(#[from] ImageError),
 }
 
 impl From<EmailError> for UserError {

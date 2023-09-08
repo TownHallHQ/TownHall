@@ -9,7 +9,7 @@ use super::repository::{InsertPostDto, PostFilter, PostRepository};
 
 pub struct CreatePostDto {
     pub title: String,
-    pub content: String,
+    pub content: Option<String>,
     pub author_id: Pxid,
     pub parent_id: Option<Pxid>,
 }

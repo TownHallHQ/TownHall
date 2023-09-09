@@ -82,6 +82,32 @@ Directory | Description
 `crates/entities` | Entities generated from database
 `crates/migrations` | Database migrations
 
+## Testing
+
+## Running E2E Tests
+
+E2E Tests run by default on a different database, this allow us to have a
+database for development and another for testing, speeding up the development
+process.
+
+The dedicated E2E Database will be builded along with other containers when running `just dev`.
+
+You can also execute a single E2E Test by specifying the name of the test
+function along with the `just e2e_test` command:
+
+```bash
+just e2e_test my_super_test_function_name
+```
+
+To run every test just execute:
+
+```bash
+just e2e_test
+```
+
+Teardown containers using `just undev`.
+
+
 ## Contributors
 
 <table>

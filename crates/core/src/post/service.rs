@@ -14,6 +14,12 @@ pub struct CreatePostDto {
     pub parent_id: Option<Pxid>,
 }
 
+pub struct CreateCommentDto {
+    pub content: Option<String>,
+    pub author_id: Pxid,
+    pub parent_id: Option<Pxid>,
+}
+
 #[derive(Clone)]
 pub struct PostService {
     repository: Box<PostRepository>,
@@ -47,6 +53,24 @@ impl PostService {
                 parent_id: dto.parent_id,
                 head: dto.parent_id.is_none(),
                 title: dto.title,
+                content: dto.content,
+            })
+            .await?;
+
+        let post = Post::try_from(record)?;
+
+        Ok(post)
+    }
+
+    pub async fn create_comment(&self, dto: CreateCommentDto) -> Result<Post> {
+        let record = self
+            .repository
+            .insert(InsertPostDto {
+                id: Post::generate_id()?.to_string(),
+                author_id: dto.author_id,
+                parent_id: dto.parent_id,
+                head: dto.parent_id.is_none(),
+                title: "".to_string(),
                 content: dto.content,
             })
             .await?;

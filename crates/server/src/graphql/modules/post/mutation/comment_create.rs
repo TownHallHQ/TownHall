@@ -2,7 +2,7 @@ use crate::context::SharedContext;
 use crate::graphql::modules::post::types::{Post, PostError};
 use crate::services::auth::Token;
 use async_graphql::{Context, InputObject, Result, SimpleObject};
-use playa::post::service::CreatePostDto;
+use playa::post::service::{CreateCommentDto, CreatePostDto};
 use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
 #[derive(Debug, InputObject)]
@@ -22,14 +22,13 @@ impl CommentCreate {
         let context = ctx.data_unchecked::<SharedContext>();
         let token = ctx.data_unchecked::<Token>();
         let claims = context.services.auth.verify_token(token)?;
-        let dto = CreatePostDto {
+        let dto = CreateCommentDto {
             author_id: claims.uid,
             parent_id: Some(input.parent_id.into_inner()),
-            title: "".to_string(),
             content: Some(input.content),
         };
 
-        match context.services.post.create(dto).await {
+        match context.services.post.create_comment(dto).await {
             Ok(post) => Ok(Self {
                 comment: Some(Post::from(post)),
                 error: None,

@@ -15,6 +15,12 @@
 
 </div>
 
+### Collab Strategy 
+
+Playa is collaborative project for novice-to-intermediate Rust (backend) and JS/TS (frontend) web developers. We’re learning-by-doing together, in the making of a community platform modeled after the likes of Discord (chat) and Discourse (forum).
+
+The project leader and default mentor for new contributors is @EstebanBorai. New mentors and mentees alike are always welcome!
+
 ## Development
 
 ### Requirements

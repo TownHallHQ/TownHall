@@ -15,9 +15,9 @@ pub struct CreatePostDto {
 }
 
 pub struct CreateCommentDto {
-    pub content: Option<String>,
+    pub content: String,
     pub author_id: Pxid,
-    pub parent_id: Option<Pxid>,
+    pub parent_id: Pxid,
 }
 
 #[derive(Clone)]
@@ -68,10 +68,10 @@ impl PostService {
             .insert(InsertPostDto {
                 id: Post::generate_id()?.to_string(),
                 author_id: dto.author_id,
-                parent_id: dto.parent_id,
-                head: dto.parent_id.is_none(),
+                parent_id: Some(dto.parent_id),
+                head: false,
                 title: "".to_string(),
-                content: dto.content,
+                content: Some(dto.content),
             })
             .await?;
 

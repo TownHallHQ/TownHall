@@ -12,13 +12,14 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "generate": "graphql-codegen --config codegen.yml -r dotenv/config",
-    "lint": "rome format ./src && rome check ./src",
-    "format": "rome format --write ./src && rome check --apply ./src",
-    "format:unsafe": "rome format --write ./src && rome check --apply-unsafe ./src",
+    "lint": "biome format ./src && biome check ./src",
+    "format": "biome format --write ./src && biome check --apply ./src",
+    "format:unsafe": "biome format --write ./src && biome check --apply-unsafe ./src",
     "test": "vitest",
     "test:watch": "vitest --watch"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.1.2",
     "@fontsource/inter": "^5.0.8",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/typescript": "^4.0.1",

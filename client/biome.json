@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+		"organizeImports": {
+		"enabled": false
+	},
+	"linter": {
+		"enabled": true,
+		"ignore": [
+			"./src/lib/graphql/schema.ts"
+		],
+		"rules": {
+			"recommended": true
+		}
+	},
+	"formatter": {
+		"enabled": true,
+		"ignore": [
+			"./src/lib/graphql/schema.ts"
+		],
+		"indentStyle": "space"
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single"
+		}
+	}
+}

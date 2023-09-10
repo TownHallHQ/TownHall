@@ -33,7 +33,10 @@ export class PostService {
       return response.data?.postCreate?.post;
     }
 
-    const { code, message } = response.data?.postCreate?.error;
+    const { code, message } = response.data?.postCreate?.error || {
+      code: 'UNKNOWN',
+      message: 'Unknown error',
+    };
 
     throw new PostError(code, message);
   }

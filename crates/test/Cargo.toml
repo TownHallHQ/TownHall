@@ -10,7 +10,7 @@ path = "src/lib.rs"
 
 [dependencies]
 anyhow = "1.0.75"
-fake = "2.6.1"
+fake = "2.8.0"
 rand = "0.8.5"
 
 # Workspace Dependencies

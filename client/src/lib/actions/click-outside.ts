@@ -1,5 +1,5 @@
 /** Dispatch event on click outside of node */
-// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function clickOutside(node: HTMLElement): any {
   const handleClick = (event: MouseEvent) => {
     if (

@@ -1,6 +1,6 @@
 {
-	"$schema": "https://docs.rome.tools/schemas/12.1.2/schema.json",
-	"organizeImports": {
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+		"organizeImports": {
 		"enabled": false
 	},
 	"linter": {

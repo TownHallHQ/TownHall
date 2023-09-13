@@ -2,6 +2,7 @@
 
 pub mod prelude;
 
+pub mod followers;
 pub mod image;
 pub mod post;
 pub mod sea_orm_active_enums;

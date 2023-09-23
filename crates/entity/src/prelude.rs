@@ -4,3 +4,4 @@ pub use super::image::Entity as Image;
 pub use super::post::Entity as Post;
 pub use super::seaql_migrations::Entity as SeaqlMigrations;
 pub use super::user::Entity as User;
+pub use super::user_followers::Entity as UserFollowers;

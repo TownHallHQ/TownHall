@@ -1,33 +1,29 @@
-use std::str::FromStr;
-
 use async_graphql::http::GraphiQLSource;
-use async_graphql::ServerError;
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::http::HeaderMap;
 use axum::response::{Html, IntoResponse};
 use axum::Extension;
 
+use crate::context::SharedContext;
+use crate::graphql::context::token::try_extract_token;
 use crate::graphql::schema::GraphQLSchema;
-use crate::services::auth::Token;
 
 pub async fn schema(
     Extension(schema): Extension<GraphQLSchema>,
+    Extension(ctx): Extension<SharedContext>,
     headers: HeaderMap,
     req: GraphQLRequest,
 ) -> GraphQLResponse {
     let mut req = req.into_inner();
 
-    if let Some(maybe_token) = headers
-        .get("Authorization")
-        .and_then(|value| value.to_str().map(Token::from_str).ok())
-    {
-        match maybe_token {
-            Ok(token) => req = req.data(token),
-            Err(err) => {
-                return GraphQLResponse::from(async_graphql::Response::from_errors(vec![
-                    ServerError::new(err.to_string(), None),
-                ]));
+    match try_extract_token(&ctx.services.auth, &headers) {
+        Ok(maybe_token) => {
+            if let Some(token) = maybe_token {
+                req = req.data(token);
             }
+        }
+        Err(err) => {
+            return GraphQLResponse::from(async_graphql::Response::new(err.to_string()));
         }
     }
 

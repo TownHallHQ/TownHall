@@ -3,12 +3,12 @@ use std::sync::Arc;
 use anyhow::Result;
 use pxid::Pxid;
 
-use playa::shared::database::Database;
 use libserver::config::Config;
 use libserver::context::Context;
 use libserver::graphql::schema::{build_schema_with_context, GraphQLSchema};
 use libserver::services::auth::Token;
 use migration::{Migrator, MigratorTrait};
+use playa::shared::database::Database;
 
 pub const TEST_ADMIN_EMAIL: &str = "admin@whizzes.io";
 pub const TEST_ADMIN_PASSWORD: &str = "R00tP@ssw0rd";

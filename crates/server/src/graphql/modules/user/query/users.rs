@@ -6,7 +6,7 @@ use pxid::graphql::Pxid;
 
 use playa::shared::pagination::Pagination;
 use playa::user::model::{Email, Username};
-use playa::user::repository::UserFilter;
+use playa::user::repository::user::UserFilter;
 
 use crate::context::SharedContext;
 use crate::graphql::connection_details::ConnectionDetails;

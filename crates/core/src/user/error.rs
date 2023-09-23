@@ -1,4 +1,3 @@
-use pxid::Pxid;
 use thiserror::Error;
 
 use crate::image::error::ImageError;
@@ -6,15 +5,9 @@ use crate::image::error::ImageError;
 use super::model::EmailError;
 use super::model::PasswordError;
 use super::model::UsernameError;
+use super::service::FollowPeers;
 
 pub type Result<T> = std::result::Result<T, UserError>;
-
-/// Represents the association between two users where one follows the other
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct FollowPeers {
-    pub follower_id: Pxid,
-    pub followee_id: Pxid,
-}
 
 #[derive(Clone, Debug, Error, PartialEq, Eq)]
 pub enum UserError {

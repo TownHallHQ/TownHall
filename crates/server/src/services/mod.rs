@@ -8,6 +8,7 @@ use playa::image::service::{ImageProvider, ImageService};
 use playa::post::repository::PostRepository;
 use playa::post::service::PostService;
 use playa::shared::database::Database;
+use playa::user::repository::follower::UserFollowersRepository;
 use playa::user::repository::user::UserRepository;
 use playa::user::service::UserService;
 
@@ -34,7 +35,12 @@ impl<P: ImageProvider + Clone> Services<P> {
         let image_repository = ImageRepository::new(&db_pool);
         let image_service = ImageService::new(image_repository, image_provider);
         let user_repository = UserRepository::new(&db_pool);
-        let user_service = UserService::new(user_repository, image_service.clone());
+        let user_followers_repository = UserFollowersRepository::new(&db_pool);
+        let user_service = UserService::new(
+            user_repository,
+            user_followers_repository,
+            image_service.clone(),
+        );
         let post_repository = PostRepository::new(&db_pool);
         let post_service = PostService::new(post_repository);
 

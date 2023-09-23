@@ -11,16 +11,17 @@ use serde::{Deserialize, Serialize};
 use crate::shared::database::Database;
 use crate::shared::pagination::Pagination;
 use crate::shared::query_set::QuerySet;
-use crate::user::error::{FollowPeers, Result, UserError};
+use crate::user::error::{Result, UserError};
+use crate::user::service::FollowPeers;
 
 const FK_USER_FOLLOWERS_FOLLOWER_USER: &str = "FK_user_followers_follower_user";
 const FK_USER_FOLLOWERS_FOLLOWEE_USER: &str = "FK_user_followers_followee_user";
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct UserFollowersRecord {
-    follower_id: Pxid,
-    followee_id: Pxid,
-    created_at: DateTime<Utc>,
+    pub follower_id: Pxid,
+    pub followee_id: Pxid,
+    pub created_at: DateTime<Utc>,
 }
 
 impl From<entity::user_followers::Model> for UserFollowersRecord {
@@ -40,6 +41,7 @@ pub struct InsertUserFollowersDto {
     pub followee_id: Pxid,
 }
 
+#[derive(Debug, Default)]
 pub struct UserFollowersFilter {
     pub follower_id: Option<Pxid>,
     pub followee_id: Option<Pxid>,

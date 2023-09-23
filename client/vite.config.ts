@@ -1,27 +1,28 @@
-import { sveltekit } from '@sveltejs/kit/vite';
-import path from 'path';
-import { FileSystemIconLoader } from 'unplugin-icons/loaders';
-import Icons from 'unplugin-icons/vite';
-
-import type { UserConfig } from 'vite';
+import { sveltekit } from "@sveltejs/kit/vite";
+import path from "path";
+import { FileSystemIconLoader } from "unplugin-icons/loaders";
+import Icons from "unplugin-icons/vite";
+import { SvelteKitPWA } from "@vite-pwa/sveltekit";
+import type { UserConfig } from "vite";
 
 const config: UserConfig = {
   resolve: {
     alias: {
-      $app: path.resolve('./src/routes/(app)'),
-      $auth: path.resolve('./src/routes/(auth)'),
-      $routes: path.resolve('./src/routes')
-    }
+      $app: path.resolve("./src/routes/(app)"),
+      $auth: path.resolve("./src/routes/(auth)"),
+      $routes: path.resolve("./src/routes"),
+    },
   },
   plugins: [
     sveltekit(),
+    SvelteKitPWA(),
     Icons({
-      compiler: 'svelte',
+      compiler: "svelte",
       customCollections: {
-        custom: FileSystemIconLoader('./static/icons')
-      }
-    })
-  ]
+        custom: FileSystemIconLoader("./static/icons"),
+      },
+    }),
+  ],
 };
 
 export default config;

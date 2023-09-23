@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "types": ["unplugin-icons/types/svelte"],
+    "types": ["unplugin-icons/types/svelte", "vite-plugin-pwa/info"],
     "paths": {
       "unplugin-icons/loaders": ["node_modules/unplugin-icons/dist/loaders"],
       "unplugin-icons/vite": ["node_modules/unplugin-icons/dist/vite"],

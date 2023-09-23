@@ -16,7 +16,8 @@
     "format": "biome format --write ./src && biome check --apply ./src",
     "format:unsafe": "biome format --write ./src && biome check --apply-unsafe ./src",
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "generate-pwa-assets": "pwa-assets-generator"
   },
   "devDependencies": {
     "@biomejs/biome": "1.1.2",
@@ -33,6 +34,7 @@
     "@urql/core": "^4.1.1",
     "@urql/exchange-auth": "^2.1.6",
     "@urql/svelte": "^4.0.4",
+    "@vite-pwa/sveltekit": "^0.2.7",
     "@whizzes/svelte-forms": "^0.2.3",
     "@whizzes/svelte-notifications": "^0.1.4",
     "@whizzes/svelte-placeholder": "^0.1.0",
@@ -53,5 +55,8 @@
     "vitest": "^0.34.1",
     "yup": "^1.2.0"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "vite-plugin-pwa": "^0.16.5"
+  }
 }

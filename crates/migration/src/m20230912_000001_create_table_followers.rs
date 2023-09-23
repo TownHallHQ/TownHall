@@ -11,65 +11,61 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(Followers::Table)
+                    .table(UserFollowers::Table)
                     .if_not_exists()
+                    .primary_key(
+                        Index::create()
+                            .name("PK_user_followers_follower_followee")
+                            .col(UserFollowers::FollowerId)
+                            .col(UserFollowers::FolloweeId),
+                    )
                     .col(
-                        ColumnDef::new(Followers::Follower)
+                        ColumnDef::new(UserFollowers::FollowerId)
                             .string_len(PXID_LENGTH)
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(Followers::Followee)
+                        ColumnDef::new(UserFollowers::FolloweeId)
                             .string_len(PXID_LENGTH)
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(Followers::CreatedAt)
+                        ColumnDef::new(UserFollowers::CreatedAt)
                             .timestamp()
                             .not_null()
                             .extra(String::from("DEFAULT NOW()::timestamp")),
                     )
                     .foreign_key(
                         ForeignKey::create()
-                            .name("FK_follower_user")
-                            .from(Followers::Table, Followers::Follower)
+                            .name("FK_user_followers_follower_user")
+                            .from(UserFollowers::Table, UserFollowers::FollowerId)
                             .to(User::Table, User::Id)
                             .on_delete(ForeignKeyAction::Cascade),
                     )
                     .foreign_key(
                         ForeignKey::create()
-                            .name("FK_followee_user")
-                            .from(Followers::Table, Followers::Followee)
+                            .name("FK_user_followers_followee_user")
+                            .from(UserFollowers::Table, UserFollowers::FolloweeId)
                             .to(User::Table, User::Id)
                             .on_delete(ForeignKeyAction::Cascade),
                     )
                     .to_owned(),
             )
-            .await?;
-
-          let follower_followee_index = Index::create()
-            .name("IDX_follower_followee")
-            .table(Followers::Table)
-            .col(Followers::Follower)
-            .col(Followers::Followee)
-            .unique()
-            .to_owned();
-
-          manager.create_index(follower_followee_index).await
+            .await
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(Followers::Table).to_owned())
+            .drop_table(Table::drop().table(UserFollowers::Table).to_owned())
             .await
     }
 }
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-pub enum Followers {
+pub enum UserFollowers {
     Table,
-    Follower,
-    Followee,
+    FollowerId,
+    FolloweeId,
     CreatedAt,
 }

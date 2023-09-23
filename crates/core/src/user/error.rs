@@ -1,3 +1,4 @@
+use pxid::Pxid;
 use thiserror::Error;
 
 use crate::image::error::ImageError;
@@ -7,6 +8,13 @@ use super::model::PasswordError;
 use super::model::UsernameError;
 
 pub type Result<T> = std::result::Result<T, UserError>;
+
+/// Represents the association between two users where one follows the other
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct FollowPeers {
+    pub follower_id: Pxid,
+    pub followee_id: Pxid,
+}
 
 #[derive(Clone, Debug, Error, PartialEq, Eq)]
 pub enum UserError {
@@ -28,6 +36,8 @@ pub enum UserError {
     UserNotFound,
     #[error("An error ocurred in the image service layer. {0}")]
     ImageError(#[from] ImageError),
+    #[error("User follow relationship wasnt found")]
+    UserFollowNotFound(FollowPeers),
 }
 
 impl From<EmailError> for UserError {

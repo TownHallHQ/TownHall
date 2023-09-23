@@ -8,7 +8,7 @@ use playa::image::service::{ImageProvider, ImageService};
 use playa::post::repository::PostRepository;
 use playa::post::service::PostService;
 use playa::shared::database::Database;
-use playa::user::repository::UserRepository;
+use playa::user::repository::user::UserRepository;
 use playa::user::service::UserService;
 
 use crate::config::Config;

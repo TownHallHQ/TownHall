@@ -4,7 +4,7 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
-#[sea_orm(table_name = "followers")]
+#[sea_orm(table_name = "user_followers")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub follower_id: String,

@@ -1,8 +1,10 @@
 use async_graphql::{ComplexObject, Context, Enum, SimpleObject};
 use chrono::{DateTime, Utc};
-use playa::{shared::pagination::Pagination, user::repository::UserFilter};
 use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
+
+use playa::shared::pagination::Pagination;
+use playa::user::repository::user::UserFilter;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::User;

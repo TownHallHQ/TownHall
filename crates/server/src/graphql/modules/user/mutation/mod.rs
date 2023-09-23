@@ -1,11 +1,15 @@
 mod token_create;
+mod user_follow;
 mod user_register;
+mod user_unfollow;
 mod user_update;
 
 use async_graphql::{Context, Object, Result};
 use pxid::graphql::Pxid;
 
 use self::token_create::TokenCreate;
+// use self::user_follow::UserFollow;
+// use self::user_unfollow::UserUnfollow;
 use self::user_register::{UserRegister, UserRegisterInput};
 use self::user_update::{UserUpdate, UserUpdateInput};
 

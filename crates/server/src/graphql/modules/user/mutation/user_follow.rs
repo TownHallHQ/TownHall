@@ -1,9 +1,9 @@
 use std::str::FromStr;
 
 use async_graphql::{Context, Result, SimpleObject};
-use playa::shared::pagination::Pagination;
 use serde::{Deserialize, Serialize};
 
+use playa::shared::pagination::Pagination;
 use playa::user::model::Email;
 use playa::user::repository::user::UserFilter;
 
@@ -11,12 +11,12 @@ use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{AccessToken, UserError, UserErrorCode};
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
-pub struct TokenCreate {
+pub struct UserFollow {
     token: Option<AccessToken>,
     error: Option<UserError>,
 }
 
-impl TokenCreate {
+impl UserFollow {
     pub async fn exec(ctx: &Context<'_>, email: String, password: String) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
         let Ok(email) = Email::from_str(&email) else {

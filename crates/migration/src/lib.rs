@@ -18,7 +18,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20230704_000001_create_table_post::Migration),
             Box::new(m20230807_000001_create_table_image::Migration),
             Box::new(m20230813_000001_add_column_avatar_id_user::Migration),
-            Box::new(m20230912_000001_create_table_followers::Migration)
+            Box::new(m20230912_000001_create_table_followers::Migration),
         ]
     }
 }

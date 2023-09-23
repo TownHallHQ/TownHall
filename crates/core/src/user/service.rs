@@ -7,7 +7,7 @@ use crate::shared::query_set::QuerySet;
 
 use super::error::{Result, UserError};
 use super::model::{Email, Password, User, Username};
-use super::repository::{InsertUserDto, UpdateUserDto, UserFilter, UserRepository};
+use super::repository::user::{InsertUserDto, UpdateUserDto, UserFilter, UserRepository};
 
 pub struct CreateUserDto {
     pub name: String,
@@ -102,8 +102,8 @@ impl<P: ImageProvider> UserService<P> {
             })?;
 
         let Some(user) = self.find_by_id(id).await? else {
-                return Err(UserError::UserNotFound);
-            };
+            return Err(UserError::UserNotFound);
+        };
 
         if let Some(avatar_id) = user.avatar_id {
             // Delete current avatar before proceeding

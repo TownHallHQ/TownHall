@@ -87,7 +87,7 @@ impl TokenCreate {
 
             return Ok(Self {
                 token: Some(AccessToken {
-                    access_token: access_token.0,
+                    access_token: access_token.raw,
                 }),
                 error: None,
             });

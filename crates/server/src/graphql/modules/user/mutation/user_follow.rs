@@ -1,106 +1,39 @@
-use std::str::FromStr;
-
 use async_graphql::{Context, Result, SimpleObject};
+use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
 
-use playa::shared::pagination::Pagination;
-use playa::user::model::Email;
-use playa::user::repository::user::UserFilter;
+use playa::user::service::FollowPeers;
 
 use crate::context::SharedContext;
-use crate::graphql::modules::user::types::{AccessToken, UserError, UserErrorCode};
+use crate::graphql::modules::user::types::{UserError, UserErrorCode};
+use crate::services::auth::Token;
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
 pub struct UserFollow {
-    token: Option<AccessToken>,
     error: Option<UserError>,
 }
 
 impl UserFollow {
-    pub async fn exec(ctx: &Context<'_>, email: String, password: String) -> Result<Self> {
+    pub async fn exec(ctx: &Context<'_>, followee_id: Pxid) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
-        let Ok(email) = Email::from_str(&email) else {
-            tracing::warn!(%email, "Invalid email provided");
+        let user_id = ctx.data_unchecked::<Token>().user_id();
 
-            return Ok(Self {
-                token: None,
-                error: Some(UserError {
-                    code: UserErrorCode::EmailTaken,
-                    message: String::from("Invalid email provided"),
-                }),
-            });
-        };
-
-        let Ok(records) = context
+        match context
             .services
             .user
-            .list(
-                Some(Pagination::first()),
-                Some(UserFilter {
-                    email: Some(email),
-                    ..Default::default()
-                }),
-            )
+            .follow(FollowPeers {
+                follower_id: user_id,
+                followee_id: followee_id.into_inner(),
+            })
             .await
-        else {
-            tracing::error!("Failed to retrieve user from repository");
-
-            return Ok(Self {
-                token: None,
+        {
+            Ok(_) => Ok(Self { error: None }),
+            Err(err) => Ok(Self {
                 error: Some(UserError {
                     code: UserErrorCode::Internal,
-                    message: String::from("An error ocurred"),
+                    message: format!("An error ocurred: {err}"),
                 }),
-            });
-        };
-
-        if records.len() != 1 {
-            tracing::error!("More than 1 record found");
-
-            return Ok(Self {
-                token: None,
-                error: Some(UserError {
-                    code: UserErrorCode::Unauthorized,
-                    message: String::from("Invalid credentials"),
-                }),
-            });
-        }
-
-        let user = records.get(0).unwrap();
-
-        if context
-            .services
-            .auth
-            .validate_password(&user.password.to_string(), &password)
-        {
-            let Ok(access_token) = context.services.auth.sign_token(user.id) else {
-                tracing::error!("Failed to sign token");
-
-                return Ok(Self {
-                    token: None,
-                    error: Some(UserError {
-                        code: UserErrorCode::Internal,
-                        message: String::from("An error ocurred"),
-                    }),
-                });
-            };
-
-            return Ok(Self {
-                token: Some(AccessToken {
-                    access_token: access_token.0,
-                }),
-                error: None,
-            });
-        }
-
-        tracing::warn!("Invalid credentials provided");
-
-        Ok(Self {
-            token: None,
-            error: Some(UserError {
-                code: UserErrorCode::Unauthorized,
-                message: String::from("Invalid credentials"),
             }),
-        })
+        }
     }
 }

@@ -7,7 +7,9 @@ use crate::shared::query_set::QuerySet;
 
 use super::error::{Result, UserError};
 use super::model::{Email, Password, User, Username};
-use super::repository::follower::{InsertUserFollowersDto, UserFollowersRepository};
+use super::repository::follower::{
+    InsertUserFollowersDto, UserFollowersFilter, UserFollowersRepository,
+};
 use super::repository::user::{InsertUserDto, UpdateUserDto, UserFilter, UserRepository};
 
 /// Represents the association between two users where one follows the other
@@ -15,6 +17,15 @@ use super::repository::user::{InsertUserDto, UpdateUserDto, UserFilter, UserRepo
 pub struct FollowPeers {
     pub follower_id: Pxid,
     pub followee_id: Pxid,
+}
+
+impl From<super::repository::follower::UserFollowersRecord> for FollowPeers {
+    fn from(value: super::repository::follower::UserFollowersRecord) -> Self {
+        Self {
+            follower_id: value.follower_id,
+            followee_id: value.followee_id,
+        }
+    }
 }
 
 pub struct CreateUserDto {
@@ -168,20 +179,26 @@ impl<P: ImageProvider> UserService<P> {
             .await
     }
 
-    /// Retrieves the list of users who follow this user
+    /// Retrieves a list (`Vec`) of relationships [`FollowPeers`] where the
+    /// `followee` is always the same
     pub async fn followers(
         &self,
         followee_id: Pxid,
         pagination: Option<Pagination>,
-    ) -> Result<QuerySet<User>> {
-        todo!()
-        // let records = self.user_followers.list(pagination, Some(UserFollowersFilter {
-        //     followee_id: Some(followee_id),
-        //     ..Default::default()
-        // })).await?;
+    ) -> Result<QuerySet<FollowPeers>> {
+        let records = self
+            .user_followers
+            .list(
+                pagination,
+                Some(UserFollowersFilter {
+                    followee_id: Some(followee_id),
+                    ..Default::default()
+                }),
+            )
+            .await?;
 
-        // let qs = records.inner_map(|record| User::try_from(record).unwrap());
+        let qs = records.inner_map(FollowPeers::from);
 
-        // Ok(qs)
+        Ok(qs)
     }
 }

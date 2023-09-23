@@ -172,7 +172,10 @@ impl UserFollowersRepository {
                         )
                         .one(txn)
                         .await
-                        .unwrap();
+                        .map_err(|err| {
+                            tracing::error!(%err, "Failed to find user follow relationship");
+                            UserError::DatabaseError
+                        })?;
 
                     if let Some(model) = maybe_model {
                         model.delete(txn).await.map_err(|err| {

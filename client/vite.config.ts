@@ -26,7 +26,7 @@ const config: UserConfig = {
         prefer_related_applications: true,
         icons: [
           {
-            src: "./static/maskable_icon.png",
+            src: "/maskable_icon.png",
             sizes: "196x196",
             type: "image/png",
             purpose: "any maskable",
@@ -37,7 +37,7 @@ const config: UserConfig = {
             sizes: "192x192",
           },
           {
-            src: "./static/android-chrome-512x512.png",
+            src: "/android-chrome-512x512.png",
             type: "image/png",
             sizes: "512x512",
           },

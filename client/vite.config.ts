@@ -15,7 +15,35 @@ const config: UserConfig = {
   },
   plugins: [
     sveltekit(),
-    SvelteKitPWA(),
+    SvelteKitPWA({
+      manifest: {
+        name: "Playa",
+        short_name: "Playa",
+        background_color: "#fff",
+        theme_color: "#448aff",
+        start_url: "/",
+        display: "standalone",
+        prefer_related_applications: true,
+        icons: [
+          {
+            src: "./static/maskable_icon.png",
+            sizes: "196x196",
+            type: "image/png",
+            purpose: "any maskable",
+          },
+          {
+            src: "/android-chrome-192x192.png",
+            type: "image/png",
+            sizes: "192x192",
+          },
+          {
+            src: "./static/android-chrome-512x512.png",
+            type: "image/png",
+            sizes: "512x512",
+          },
+        ],
+      },
+    }),
     Icons({
       compiler: "svelte",
       customCollections: {

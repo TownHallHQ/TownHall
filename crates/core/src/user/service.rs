@@ -7,7 +7,26 @@ use crate::shared::query_set::QuerySet;
 
 use super::error::{Result, UserError};
 use super::model::{Email, Password, User, Username};
-use super::repository::{InsertUserDto, UpdateUserDto, UserFilter, UserRepository};
+use super::repository::follower::{
+    InsertUserFollowersDto, UserFollowersFilter, UserFollowersRepository,
+};
+use super::repository::user::{InsertUserDto, UpdateUserDto, UserFilter, UserRepository};
+
+/// Represents the association between two users where one follows the other
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct FollowPeers {
+    pub follower_id: Pxid,
+    pub followee_id: Pxid,
+}
+
+impl From<super::repository::follower::UserFollowersRecord> for FollowPeers {
+    fn from(value: super::repository::follower::UserFollowersRecord) -> Self {
+        Self {
+            follower_id: value.follower_id,
+            followee_id: value.followee_id,
+        }
+    }
+}
 
 pub struct CreateUserDto {
     pub name: String,
@@ -24,13 +43,19 @@ pub struct UploadAvatarDto {
 #[derive(Clone)]
 pub struct UserService<P: ImageProvider> {
     repository: Box<UserRepository>,
+    user_followers: Box<UserFollowersRepository>,
     image_service: ImageService<P>,
 }
 
 impl<P: ImageProvider> UserService<P> {
-    pub fn new(repository: UserRepository, image_service: ImageService<P>) -> Self {
+    pub fn new(
+        repository: UserRepository,
+        user_followers: UserFollowersRepository,
+        image_service: ImageService<P>,
+    ) -> Self {
         Self {
             repository: Box::new(repository),
+            user_followers: Box::new(user_followers),
             image_service,
         }
     }
@@ -102,8 +127,8 @@ impl<P: ImageProvider> UserService<P> {
             })?;
 
         let Some(user) = self.find_by_id(id).await? else {
-                return Err(UserError::UserNotFound);
-            };
+            return Err(UserError::UserNotFound);
+        };
 
         if let Some(avatar_id) = user.avatar_id {
             // Delete current avatar before proceeding
@@ -126,5 +151,54 @@ impl<P: ImageProvider> UserService<P> {
             Ok(user_record) => User::try_from(user_record),
             Err(err) => Err(err),
         }
+    }
+
+    /// Creates a new Follow relationship between 2 users
+    ///
+    /// This receives an instance of [`FollowPeers`] and retrieves another
+    /// instance of [`FollowPeers`] which comes from the database.
+    pub async fn follow(&self, dto: FollowPeers) -> Result<FollowPeers> {
+        let followers = self
+            .user_followers
+            .insert(InsertUserFollowersDto {
+                follower_id: dto.follower_id,
+                followee_id: dto.followee_id,
+            })
+            .await?;
+
+        Ok(FollowPeers {
+            follower_id: followers.follower_id,
+            followee_id: followers.followee_id,
+        })
+    }
+
+    /// Deletes a Follow relationship between 2 users
+    pub async fn unfollow(&self, dto: FollowPeers) -> Result<()> {
+        self.user_followers
+            .delete(dto.follower_id, dto.followee_id)
+            .await
+    }
+
+    /// Retrieves a list (`Vec`) of relationships [`FollowPeers`] where the
+    /// `followee` is always the same
+    pub async fn followers(
+        &self,
+        followee_id: Pxid,
+        pagination: Option<Pagination>,
+    ) -> Result<QuerySet<FollowPeers>> {
+        let records = self
+            .user_followers
+            .list(
+                pagination,
+                Some(UserFollowersFilter {
+                    followee_id: Some(followee_id),
+                    ..Default::default()
+                }),
+            )
+            .await?;
+
+        let qs = records.inner_map(FollowPeers::from);
+
+        Ok(qs)
     }
 }

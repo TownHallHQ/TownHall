@@ -5,7 +5,7 @@ use playa::shared::pagination::Pagination;
 use serde::{Deserialize, Serialize};
 
 use playa::user::model::Email;
-use playa::user::repository::UserFilter;
+use playa::user::repository::user::UserFilter;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{AccessToken, UserError, UserErrorCode};
@@ -26,29 +26,33 @@ impl TokenCreate {
                 token: None,
                 error: Some(UserError {
                     code: UserErrorCode::EmailTaken,
-                    message: String::from("Invalid email provided")
+                    message: String::from("Invalid email provided"),
                 }),
             });
-          };
+        };
 
         let Ok(records) = context
             .services
             .user
-            .list(Some(Pagination::first())
-            ,Some(UserFilter {
-              email: Some(email),
-              ..Default::default()
-            }) ).await else {
-                 tracing::error!("Failed to retrieve user from repository");
+            .list(
+                Some(Pagination::first()),
+                Some(UserFilter {
+                    email: Some(email),
+                    ..Default::default()
+                }),
+            )
+            .await
+        else {
+            tracing::error!("Failed to retrieve user from repository");
 
-                return Ok(Self {
-                    token: None,
-                    error: Some(UserError {
-                        code: UserErrorCode::Internal,
-                        message: String::from("An error ocurred")
-                    }),
-                });
-            };
+            return Ok(Self {
+                token: None,
+                error: Some(UserError {
+                    code: UserErrorCode::Internal,
+                    message: String::from("An error ocurred"),
+                }),
+            });
+        };
 
         if records.len() != 1 {
             tracing::error!("More than 1 record found");
@@ -76,14 +80,14 @@ impl TokenCreate {
                     token: None,
                     error: Some(UserError {
                         code: UserErrorCode::Internal,
-                        message: String::from("An error ocurred")
+                        message: String::from("An error ocurred"),
                     }),
                 });
             };
 
             return Ok(Self {
                 token: Some(AccessToken {
-                    access_token: access_token.0,
+                    access_token: access_token.raw,
                 }),
                 error: None,
             });

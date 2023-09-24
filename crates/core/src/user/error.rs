@@ -5,6 +5,7 @@ use crate::image::error::ImageError;
 use super::model::EmailError;
 use super::model::PasswordError;
 use super::model::UsernameError;
+use super::service::FollowPeers;
 
 pub type Result<T> = std::result::Result<T, UserError>;
 
@@ -28,6 +29,8 @@ pub enum UserError {
     UserNotFound,
     #[error("An error ocurred in the image service layer. {0}")]
     ImageError(#[from] ImageError),
+    #[error("User follow relationship wasnt found")]
+    UserFollowNotFound(FollowPeers),
 }
 
 impl From<EmailError> for UserError {

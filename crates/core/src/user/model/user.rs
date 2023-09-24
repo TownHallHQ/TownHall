@@ -5,7 +5,7 @@ use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
 use crate::user::error::{Result, UserError};
-use crate::user::repository::UserRecord;
+use crate::user::repository::user::UserRecord;
 
 use super::email::Email;
 use super::password::Password;

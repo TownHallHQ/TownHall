@@ -1,6 +1,6 @@
 use async_graphql::{Context, Result, SimpleObject};
 use playa::shared::pagination::Pagination;
-use playa::user::repository::UserFilter;
+use playa::user::repository::user::UserFilter;
 use serde::{Deserialize, Serialize};
 
 use crate::context::SharedContext;

@@ -53,10 +53,9 @@
     "unsplash-js": "^7.0.18",
     "vite": "^4.4.8",
     "vitest": "^0.34.1",
-    "yup": "^1.2.0"
+    "yup": "^1.2.0",
+    "vite-plugin-pwa": "^0.16.5"
   },
   "type": "module",
-  "dependencies": {
-    "vite-plugin-pwa": "^0.16.5"
-  }
+  "dependencies": {}
 }

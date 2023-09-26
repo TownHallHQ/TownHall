@@ -1,16 +1,20 @@
 <script lang="ts">
-  import { page } from "$app/stores";
-  import Avatar from "$lib/components/Avatar.svelte";
-  import Button from "$lib/components/Button.svelte";
-  import Feed from "$lib/components/Feed/Feed.svelte";
-  import PostBox from "$lib/components/PostBox.svelte";
-  import UploadModal from "$lib/components/upload-modal/index.svelte";
+  import { page } from '$app/stores';
+  import Avatar from '$lib/components/Avatar.svelte';
+  import Button from '$lib/components/Button.svelte';
+  import Feed from '$lib/components/Feed/Feed.svelte';
+  import PostBox from '$lib/components/PostBox.svelte';
+  import UploadModal from '$lib/components/upload-modal/index.svelte';
+  import EditUserModal from '$lib/components/edit-user-modal/index.svelte';
+  import EditFilledIcon from '$lib/icons/edit-filled-icon.svelte';
 
-  import type { User } from "$lib/graphql/schema";
+  import type { User } from '$lib/graphql/schema';
 
   const user: User = $page.data.profileUser;
   const currentUser: User = $page.data.user;
+
   let showAvatarModal = false;
+  let showEditUserModal = false;
 </script>
 
 <svelte:head>
@@ -35,10 +39,21 @@
               <Avatar {user} size="3xl" />
             </button>
             <div class="mt-2 md:ml-5">
-              <h1 class="text-2xl md:text-4xl font-medium">
-                {user.name}
-                {user.surname}
-              </h1>
+              <div class="flex items-center">
+                <h1 class="text-2xl md:text-4xl font-medium">
+                  {user.name}
+                  {user.surname}
+                </h1>
+                {#if user.id === currentUser.id}
+                  <button on:click={() => (showEditUserModal = true)}>
+                    <EditFilledIcon
+                      height="40"
+                      width="40"
+                      color="currentColor"
+                    />
+                  </button>
+                {/if}
+              </div>
               <span class="text text-slate-400">@{user.username}</span>
             </div>
           </div>
@@ -69,3 +84,4 @@
 </div>
 
 <UploadModal bind:show={showAvatarModal} />
+<EditUserModal bind:show={showEditUserModal} />

@@ -1,16 +1,16 @@
 <script lang="ts">
-  import Warning from "~icons/custom/warning";
+  import Warning from '~icons/custom/warning';
 
-  export let type: "text" | "number" | "email" | "password" | "date" = "text";
+  export let type: 'text' | 'number' | 'email' | 'password' | 'date' = 'text';
   export let name: string;
-  export let id = "";
+  export let id = '';
   export let error: string | null = null;
   export let value: string | number | Date | null = null;
   export let label: string | null = null;
   export let placeholder: string | undefined = undefined;
   export let required = false;
-  export let autocomplete: "true" | "false" | undefined = undefined;
-  let className = "";
+  export let autocomplete: 'true' | 'false' | undefined = undefined;
+  let className = '';
   export { className as class };
 
   const handleInput = (event: Event): void => {
@@ -24,7 +24,8 @@
     for={name}
     class:underline={!!error}
     class:text-rose-600={!!error}
-    class="block text-sm font-medium text-gray-700">{label}</label
+    class="block text-sm font-medium text-gray-700 dark:text-white"
+    >{label}</label
   >
 {/if}
 
@@ -43,9 +44,9 @@
       on:input={handleInput}
     />
     {#if error}
-    <figure class="icon_error_icon_container">
-      <Warning class="input_error_icon" />
-    </figure>
+      <figure class="icon_error_icon_container">
+        <Warning class="input_error_icon" />
+      </figure>
     {/if}
   </div>
   {#if error}

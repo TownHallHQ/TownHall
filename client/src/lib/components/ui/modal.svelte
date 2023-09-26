@@ -14,7 +14,7 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation>
     {#if $$slots.header}
-      <header class="p-4">
+      <header>
         <slot name="header" />
       </header>
     {/if}

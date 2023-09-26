@@ -256,12 +256,20 @@ export type PostCreateMutation = { __typename?: 'MutationRoot', postCreate: { __
 
 export type PostCreateFieldsFragment = { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any };
 
+export type UserUpdateMutationVariables = Exact<{
+  id: Scalars['Pxid']['input'];
+  input: UserUpdateInput;
+}>;
+
+
+export type UserUpdateMutation = { __typename?: 'MutationRoot', userUpdate: { __typename?: 'UserUpdate', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any } | null, error?: { __typename?: 'UserError', code: UserErrorCode, message: string } | null } };
+
+export type CurrentUserFragment = { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any };
+
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCurrentUserQuery = { __typename?: 'QueryRoot', me: { __typename?: 'Me', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any } | null } };
-
-export type CurrentUserFragment = { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any };
 
 export type GetPostsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -385,6 +393,19 @@ export const PostCreateDocument = gql`
   }
 }
     ${PostCreateFieldsFragmentDoc}`;
+export const UserUpdateDocument = gql`
+    mutation UserUpdate($id: Pxid!, $input: UserUpdateInput!) {
+  userUpdate(id: $id, input: $input) {
+    user {
+      ...CurrentUser
+    }
+    error {
+      code
+      message
+    }
+  }
+}
+    ${CurrentUserFragmentDoc}`;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   me {

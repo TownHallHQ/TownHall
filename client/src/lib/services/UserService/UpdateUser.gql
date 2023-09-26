@@ -1,0 +1,21 @@
+mutation UserUpdate($id: Pxid!, $input: UserUpdateInput!) {
+  userUpdate(id: $id, input: $input) {
+    user {
+      ...CurrentUser
+    }
+    error {
+      code
+      message
+    }
+  }
+}
+
+fragment CurrentUser on User {
+  id
+  name
+  surname
+  email
+  username
+  createdAt
+  updatedAt
+}

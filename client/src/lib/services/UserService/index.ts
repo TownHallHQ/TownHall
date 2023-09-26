@@ -18,7 +18,7 @@ export class UserService {
   static async edit(
     urqlClient: Client,
     id: string,
-    input: UserUpdateInput
+    input: UserUpdateInput,
   ): Promise<UserFragment> {
     const response = await urqlClient
       .mutation(UserUpdateDocument, {

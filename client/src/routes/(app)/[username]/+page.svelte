@@ -9,12 +9,20 @@
   import EditFilledIcon from '$lib/icons/edit-filled-icon.svelte';
 
   import type { User } from '$lib/graphql/schema';
+  import { notifications } from '@whizzes/svelte-notifications';
 
   const user: User = $page.data.profileUser;
   const currentUser: User = $page.data.user;
 
   let showAvatarModal = false;
   let showEditUserModal = false;
+
+  function handleUserEdited(event: CustomEvent<{ user: User }>) {
+    console.log('user edited', event.detail);
+    notifications.notifySuccess('User edited with success');
+    // TODO: close modal and update user
+    location.reload();
+  }
 </script>
 
 <svelte:head>
@@ -84,4 +92,4 @@
 </div>
 
 <UploadModal bind:show={showAvatarModal} />
-<EditUserModal bind:show={showEditUserModal} />
+<EditUserModal bind:show={showEditUserModal} on:userEdited={handleUserEdited} />

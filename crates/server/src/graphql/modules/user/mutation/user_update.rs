@@ -6,6 +6,7 @@ use playa::user::repository::user::UpdateUserDto;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{User, UserError, UserErrorCode};
+use crate::services::auth::Token;
 
 #[derive(Debug, Default, InputObject)]
 pub struct UserUpdateInput {
@@ -20,14 +21,15 @@ pub struct UserUpdate {
 }
 
 impl UserUpdate {
-    pub async fn exec(ctx: &Context<'_>, id: Pxid, input: UserUpdateInput) -> Result<Self> {
+    pub async fn exec(ctx: &Context<'_>, input: UserUpdateInput) -> Result<Self> {
         let context = ctx.data_unchecked::<SharedContext>();
+        let user_id = ctx.data_unchecked::<Token>().user_id();
         let dto = UpdateUserDto {
             name: input.name,
             surname: input.surname,
         };
 
-        match context.services.user.update(id.into_inner(), dto).await {
+        match context.services.user.update(user_id, dto).await {
             Ok(user) => Ok(Self {
                 user: Some(User::from(user)),
                 error: None,

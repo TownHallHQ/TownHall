@@ -1,11 +1,10 @@
 use std::str::FromStr;
 
 use async_graphql::{Request, Variables};
-use playa::user::{
-    model::{Email, Password, Username},
-    service::CreateUserDto,
-};
 use serde_json::json;
+
+use playa::user::model::{Email, Password, Username};
+use playa::user::service::CreateUserDto;
 
 use crate::TestUtil;
 
@@ -28,8 +27,8 @@ async fn updates_a_user() {
         .unwrap();
 
     let mutation: &str = "
-        mutation UpdateUser($id: Pxid, $payload: UserUpdateInput!) {
-            userUpdate(id:$id, input: $payload) {
+        mutation UpdateUser($payload: UserUpdateInput!) {
+            userUpdate(input: $payload) {
                 user {
                     id
                     name
@@ -43,19 +42,19 @@ async fn updates_a_user() {
         }
     ";
 
+    let token = TestUtil::token_create(&test_util, user.id).await;
     let result = schema
         .execute(
-            Request::new(mutation).variables(Variables::from_json(json!({
-                    "id": user.id.to_string(),
-                    "payload": {
-                        "name": "John",
-                        "surname": "Appleseed",
-                }
-            }))),
+            Request::new(mutation)
+                .data(token)
+                .variables(Variables::from_json(json!({
+                        "payload": {
+                            "name": "John",
+                            "surname": "Appleseed",
+                    }
+                }))),
         )
         .await;
-
-    println!("{result:#?}");
 
     let data = result.data.into_json().unwrap();
     let user_update_user = &data["userUpdate"]["user"];

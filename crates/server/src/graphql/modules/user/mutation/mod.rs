@@ -35,13 +35,8 @@ impl UserMutationRoot {
         UserRegister::exec(ctx, input).await
     }
 
-    async fn user_update(
-        &self,
-        ctx: &Context<'_>,
-        id: Pxid,
-        input: UserUpdateInput,
-    ) -> Result<UserUpdate> {
-        UserUpdate::exec(ctx, id, input).await
+    async fn user_update(&self, ctx: &Context<'_>, input: UserUpdateInput) -> Result<UserUpdate> {
+        UserUpdate::exec(ctx, input).await
     }
 
     async fn user_follow(&self, ctx: &Context<'_>, followee_id: Pxid) -> Result<UserFollow> {

@@ -7,11 +7,11 @@
 
   import { page } from '$app/stores';
   import { UserError, UserService } from '$lib/services/UserService';
-  import Modal from '../ui/modal.svelte';
-  import TextField from '../TextField.svelte';
-  import Button from '../Button.svelte';
+  import TextField from './TextField.svelte';
+  import Button from './Button.svelte';
 
   import type { User } from '$lib/graphql/schema';
+  import Modal from './ui/modal.svelte';
 
   export let show = false;
 
@@ -30,15 +30,18 @@
     }),
     async onSubmit(values, helpers) {
       try {
-        const user = await UserService.edit(urqlClient, currentUser.id, values);
+        const user = await UserService.update(
+          urqlClient,
+          currentUser.id,
+          values
+        );
 
         dispatch('userEdited', { user });
       } catch (error) {
         console.log(error);
 
         if (error instanceof UserError) {
-          notifications.notifyFailure(error.message);
-          return;
+          return notifications.notifyFailure(error.message);
         }
         notifications.notifyFailure('Something went wrong');
       }

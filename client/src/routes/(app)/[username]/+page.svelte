@@ -5,8 +5,8 @@
   import Feed from '$lib/components/Feed/Feed.svelte';
   import PostBox from '$lib/components/PostBox.svelte';
   import UploadModal from '$lib/components/upload-modal/index.svelte';
-  import EditUserModal from '$lib/components/edit-user-modal/index.svelte';
-  import EditFilledIcon from '$lib/icons/edit-filled-icon.svelte';
+  import EditUserModal from '$lib/components/EditUserModal.svelte';
+  import EditFilledIcon from '~icons/custom/edit-fill';
 
   import type { User } from '$lib/graphql/schema';
   import { notifications } from '@whizzes/svelte-notifications';
@@ -47,26 +47,23 @@
               <Avatar {user} size="3xl" />
             </button>
             <div class="mt-2 md:ml-5">
-              <div class="flex items-center">
-                <h1 class="text-2xl md:text-4xl font-medium">
-                  {user.name}
-                  {user.surname}
-                </h1>
-                {#if user.id === currentUser.id}
-                  <button on:click={() => (showEditUserModal = true)}>
-                    <EditFilledIcon
-                      height="40"
-                      width="40"
-                      color="currentColor"
-                    />
-                  </button>
-                {/if}
-              </div>
+              <h1 class="text-2xl md:text-4xl font-medium">
+                {user.name}
+                {user.surname}
+              </h1>
               <span class="text text-slate-400">@{user.username}</span>
             </div>
           </div>
           <div class="text-end">
-            <Button variant="primary" class="mt-6 mr-5 md:mt-0">Follow</Button>
+            {#if user.id === currentUser.id}
+              <Button
+                on:click={() => (showEditUserModal = true)}
+                class="mt-6 mr-5 md:mt-0">Edit profile</Button
+              >
+            {:else}
+              <Button variant="primary" class="mt-6 mr-5 md:mt-0">Follow</Button
+              >
+            {/if}
           </div>
         </div>
         <nav class="border-b-2 border-gray-200 font-medium text-center">

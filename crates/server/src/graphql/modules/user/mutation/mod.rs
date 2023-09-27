@@ -7,6 +7,8 @@ mod user_update;
 use async_graphql::{Context, Object, Result};
 use pxid::graphql::Pxid;
 
+use crate::graphql::guard::AuthenticationGuard;
+
 use self::token_create::TokenCreate;
 use self::user_follow::UserFollow;
 use self::user_register::{UserRegister, UserRegisterInput};
@@ -35,14 +37,17 @@ impl UserMutationRoot {
         UserRegister::exec(ctx, input).await
     }
 
+    #[graphql(guard = "AuthenticationGuard::new()")]
     async fn user_update(&self, ctx: &Context<'_>, input: UserUpdateInput) -> Result<UserUpdate> {
         UserUpdate::exec(ctx, input).await
     }
 
+    #[graphql(guard = "AuthenticationGuard::new()")]
     async fn user_follow(&self, ctx: &Context<'_>, followee_id: Pxid) -> Result<UserFollow> {
         UserFollow::exec(ctx, followee_id).await
     }
 
+    #[graphql(guard = "AuthenticationGuard::new()")]
     async fn user_unfollow(&self, ctx: &Context<'_>, followee_id: Pxid) -> Result<UserUnfollow> {
         UserUnfollow::exec(ctx, followee_id).await
     }

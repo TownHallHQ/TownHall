@@ -1,7 +1,8 @@
 use async_graphql::{Context, InputObject, Result, SimpleObject};
-use playa::post::service::CreatePostDto;
 use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
+
+use playa::post::service::CreatePostDto;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::post::types::{Post, PostError, PostErrorCode};

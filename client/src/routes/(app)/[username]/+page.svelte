@@ -6,7 +6,6 @@
   import PostBox from '$lib/components/PostBox.svelte';
   import UploadModal from '$lib/components/upload-modal/index.svelte';
   import EditUserModal from '$lib/components/EditUserModal.svelte';
-  import EditFilledIcon from '~icons/custom/edit-fill';
 
   import type { User } from '$lib/graphql/schema';
   import { notifications } from '@whizzes/svelte-notifications';

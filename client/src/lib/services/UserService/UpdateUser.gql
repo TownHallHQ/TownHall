@@ -1,5 +1,5 @@
-mutation UserUpdate($id: Pxid!, $input: UserUpdateInput!) {
-  userUpdate(id: $id, input: $input) {
+mutation UserUpdate($input: UserUpdateInput!) {
+  userUpdate(input: $input) {
     user {
       ...CurrentUser
     }

@@ -34,7 +34,9 @@ export type MutationRoot = {
   /** Creates a post authored by the user identified by the provided token */
   postCreate: PostCreate;
   tokenCreate: TokenCreate;
+  userFollow: UserFollow;
   userRegister: UserRegister;
+  userUnfollow: UserUnfollow;
   userUpdate: UserUpdate;
 };
 
@@ -50,13 +52,22 @@ export type MutationRootTokenCreateArgs = {
 };
 
 
+export type MutationRootUserFollowArgs = {
+  followeeId: Scalars['Pxid']['input'];
+};
+
+
 export type MutationRootUserRegisterArgs = {
   input: UserRegisterInput;
 };
 
 
+export type MutationRootUserUnfollowArgs = {
+  followeeId: Scalars['Pxid']['input'];
+};
+
+
 export type MutationRootUserUpdateArgs = {
-  id: Scalars['Pxid']['input'];
   input: UserUpdateInput;
 };
 
@@ -222,6 +233,11 @@ export type UserFilterInput = {
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UserFollow = {
+  __typename?: 'UserFollow';
+  error?: Maybe<UserError>;
+};
+
 export type UserRegister = {
   __typename?: 'UserRegister';
   error?: Maybe<UserError>;
@@ -234,6 +250,11 @@ export type UserRegisterInput = {
   password: Scalars['String']['input'];
   surname: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+export type UserUnfollow = {
+  __typename?: 'UserUnfollow';
+  error?: Maybe<UserError>;
 };
 
 export type UserUpdate = {
@@ -257,7 +278,6 @@ export type PostCreateMutation = { __typename?: 'MutationRoot', postCreate: { __
 export type PostCreateFieldsFragment = { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any };
 
 export type UserUpdateMutationVariables = Exact<{
-  id: Scalars['Pxid']['input'];
   input: UserUpdateInput;
 }>;
 
@@ -394,8 +414,8 @@ export const PostCreateDocument = gql`
 }
     ${PostCreateFieldsFragmentDoc}`;
 export const UserUpdateDocument = gql`
-    mutation UserUpdate($id: Pxid!, $input: UserUpdateInput!) {
-  userUpdate(id: $id, input: $input) {
+    mutation UserUpdate($input: UserUpdateInput!) {
+  userUpdate(input: $input) {
     user {
       ...CurrentUser
     }

@@ -59,7 +59,7 @@
       id="name"
       name="name"
       type="text"
-      placeholder="E.g. John"
+      placeholder={currentUser.name}
       label="Name"
       error={$errors.name}
       bind:value={$values.name}
@@ -68,7 +68,7 @@
       id="surname"
       name="surname"
       type="text"
-      placeholder="E.g. Appleseed"
+      placeholder={currentUser.surname}
       label="Surname"
       error={$errors.surname}
       bind:value={$values.surname}

@@ -7,11 +7,11 @@
 
   import { page } from '$app/stores';
   import { UserError, UserService } from '$lib/services/UserService';
-  import TextField from './TextField.svelte';
-  import Button from './Button.svelte';
+  import TextField from '../TextField.svelte';
+  import Button from '../Button.svelte';
 
   import type { User } from '$lib/graphql/schema';
-  import Modal from './ui/modal.svelte';
+  import Modal from '../ui/modal.svelte';
 
   export let show = false;
 

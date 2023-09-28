@@ -5,19 +5,20 @@
   import { getContextClient } from '@urql/svelte';
   import * as Yup from 'yup';
 
-  import { page } from '$app/stores';
   import { UserError, UserService } from '$lib/services/UserService';
   import TextField from '../TextField.svelte';
   import Button from '../Button.svelte';
-
-  import type { User } from '$lib/graphql/schema';
   import Modal from '../ui/modal.svelte';
 
-  export let show = false;
+  import type { User } from '$lib/graphql/schema';
 
-  const currentUser: User = $page.data.user;
   const dispatch = createEventDispatcher();
   const urqlClient = getContextClient();
+
+  export let show = false;
+  export let currentUser: User;
+
+  let modalReference: HTMLDialogElement;
 
   const { handleSubmit, values, errors } = newForm({
     initialValues: {
@@ -28,14 +29,14 @@
       name: Yup.string().required(),
       surname: Yup.string(),
     }),
-    async onSubmit(values, helpers) {
+    async onSubmit(values) {
       try {
         const user = await UserService.update(
           urqlClient,
           currentUser.id,
           values
         );
-
+        modalReference.close();
         dispatch('userEdited', { user });
       } catch (error) {
         console.log(error);
@@ -49,7 +50,7 @@
   });
 </script>
 
-<Modal bind:show>
+<Modal bind:dialog={modalReference} bind:show>
   <header slot="header" class="flex justify-between p-4 -mb-5">
     <h1 class="text-xl font-semibold">Edit profile</h1>
   </header>

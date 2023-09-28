@@ -1,26 +1,28 @@
 <script lang="ts">
+  import { notifications } from '@whizzes/svelte-notifications';
+
   import { page } from '$app/stores';
   import Avatar from '$lib/components/Avatar.svelte';
   import Button from '$lib/components/Button.svelte';
   import Feed from '$lib/components/Feed/Feed.svelte';
   import PostBox from '$lib/components/PostBox.svelte';
   import UploadModal from '$lib/components/upload-modal/index.svelte';
-  import EditUserModal from '$lib/components/EditUserModal.svelte';
+  import EditUserModal from '$lib/components/modals/EditUserModal.svelte';
 
   import type { User } from '$lib/graphql/schema';
-  import { notifications } from '@whizzes/svelte-notifications';
 
-  const user: User = $page.data.profileUser;
-  const currentUser: User = $page.data.user;
+  let user: User = $page.data.profileUser;
+  let currentUser: User = $page.data.user;
 
   let showAvatarModal = false;
   let showEditUserModal = false;
 
   function handleUserEdited(event: CustomEvent<{ user: User }>) {
-    console.log('user edited', event.detail);
     notifications.notifySuccess('User edited with success');
-    // TODO: close modal and update user
-    location.reload();
+
+    user = event.detail.user;
+    currentUser = event.detail.user;
+    showEditUserModal = false;
   }
 </script>
 
@@ -88,4 +90,8 @@
 </div>
 
 <UploadModal bind:show={showAvatarModal} />
-<EditUserModal bind:show={showEditUserModal} on:userEdited={handleUserEdited} />
+<EditUserModal
+  {currentUser}
+  bind:show={showEditUserModal}
+  on:userEdited={handleUserEdited}
+/>

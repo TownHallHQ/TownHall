@@ -1,7 +1,7 @@
-mutation UserCreate($input: UserRegisterInput!) {
+mutation UserRegister($input: UserRegisterInput!) {
   userRegister(input: $input) {
     user {
-      id
+      ...CurrentUser
     }
     error {
       code

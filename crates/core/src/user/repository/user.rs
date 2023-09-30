@@ -3,8 +3,8 @@ use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, CursorTrait, EntityTrait, PaginatorTrait, QueryFilter,
-    QuerySelect, Set, TransactionTrait,
+    ActiveModelTrait, ColumnTrait, EntityTrait, PaginatorTrait, QueryFilter, QuerySelect, Set,
+    TransactionTrait,
 };
 
 use crate::shared::database::Database;
@@ -195,6 +195,23 @@ impl UserRepository {
                 tracing::error!(%err, "Failed to retrieve users");
                 UserError::DatabaseError
             })
+    }
+
+    pub async fn find_by_email(&self, email: &Email) -> Result<Option<UserRecord>> {
+        let maybe_user = entity::prelude::User::find()
+            .filter(entity::user::Column::Email.eq(email.to_string()))
+            .one(&*self.db)
+            .await
+            .map_err(|err| {
+                tracing::error!(%err, %email, "Failed to find User by email");
+                UserError::DatabaseError
+            })?;
+
+        if let Some(user_model) = maybe_user {
+            return Ok(Some(Self::into_record(user_model)));
+        }
+
+        Ok(None)
     }
 
     pub async fn update_avatar(&self, id: Pxid, avatar_id: Pxid) -> Result<UserRecord> {

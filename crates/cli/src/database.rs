@@ -1,3 +1,4 @@
+use anyhow::Result;
 use clap::{Parser, Subcommand};
 use sea_orm_cli::commands::generate::run_generate_command;
 use sea_orm_cli::{DateTimeCrate, GenerateSubcommands};
@@ -27,7 +28,7 @@ pub enum DatabseSub {
 }
 
 impl DatabseSub {
-    pub async fn exec(&self) {
+    pub async fn exec(&self) -> Result<()> {
         match self {
             Self::Migrate(opt) => {
                 tracing::info!("Creating new Database Manager");
@@ -69,11 +70,14 @@ impl DatabseSub {
                     lib: true,
                     model_extra_derives: Vec::default(),
                     model_extra_attributes: Vec::default(),
+                    seaography: false,
                 };
 
                 tracing::info!("Generating Database Entities");
                 run_generate_command(opts, true).await.unwrap();
             }
         }
+
+        Ok(())
     }
 }

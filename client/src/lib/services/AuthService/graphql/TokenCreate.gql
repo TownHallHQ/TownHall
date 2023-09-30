@@ -1,4 +1,4 @@
-mutation TokenCreate($email: String!, $password: String!) {
+mutation TokenCreate($email: Email!, $password: String!) {
   tokenCreate(email: $email, password: $password) {
     token {
       accessToken

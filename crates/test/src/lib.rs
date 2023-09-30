@@ -28,7 +28,7 @@ impl TestUtil {
         dotenv::dotenv().ok();
 
         let config = Config::new();
-        let context = Context::new(&config).await;
+        let context = Context::new(&config).await?;
         let context = Arc::new(context);
         let schema = build_schema_with_context(&context);
         let db = Database::new(config.database_url.as_str())

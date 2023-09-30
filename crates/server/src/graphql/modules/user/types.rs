@@ -21,11 +21,6 @@ pub enum UserErrorCode {
 }
 
 #[derive(Debug, Deserialize, Serialize, SimpleObject)]
-pub struct AccessToken {
-    pub access_token: String,
-}
-
-#[derive(Debug, Deserialize, Serialize, SimpleObject)]
 pub struct UserError {
     pub code: UserErrorCode,
     pub message: String,

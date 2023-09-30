@@ -1,22 +1,32 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import type { Unsplash } from '../api/unsplash/+server';
+  import { onMount } from "svelte";
 
-  let cover: Unsplash;
+  import { UnsplashService } from "$lib/services/Unsplash";
+
+  import type { UnsplashAuthor } from "../api/unsplash/+server";
+
+  let backgroundUrl: URL | null = null;
+  let backgroutdAuthor: UnsplashAuthor;
+
+  async function mountBackground(): Promise<void> {
+    const unsplashImage = await UnsplashService.fetchUnsplashBackground();
+
+    if (unsplashImage) {
+      backgroundUrl = new URL(unsplashImage.url);
+      backgroutdAuthor = unsplashImage.author;
+      return;
+    }
+
+    // Fallback to static image
+    backgroundUrl = new URL("/img/auth-fallback-bg.jpg", import.meta.url);
+  }
 
   onMount(async () => {
-    const response = await fetch('/api/unsplash');
-    const data = await response.json();
-    cover = data.data;
-
-    document.documentElement.style.setProperty(
-      '--cover-image',
-      `url('${cover?.url}')`
-    );
+    await mountBackground();
   });
 </script>
 
-<main class="auth_view" style="background-image: url({cover?.url});">
+<main class="auth_view" style="background-image: url({backgroundUrl});">
   <article class="sidebar">
     <div class="container">
       <slot />
@@ -26,26 +36,33 @@
         playa is an MIT Licensed solution
         <br />
         Contribute to the project on{" "}
-        <a href="https://github.com/whizzes/playa" class="text-blue-600 underline" target="_blank"> GitHub </a>
+        <a
+          href="https://github.com/whizzes/playa"
+          class="text-blue-600 underline"
+          target="_blank"
+        >
+          GitHub
+        </a>
       </small>
     </footer>
   </article>
-  <small class="hidden md:inline text-sm text-white fixed bottom-4 right-4">
-    Photo by <a
-      class="underline font-semibold"
-      href="https://unsplash.com/@{cover?.author?.username}"
-      >{cover?.author?.name || ''}</a
+  {#if backgroutdAuthor}
+    <small class="hidden md:inline text-sm text-white fixed bottom-4 right-4">
+      Photo by <a
+        class="underline font-semibold"
+        href="https://unsplash.com/@{backgroutdAuthor.username}"
+        >{backgroutdAuthor.name || ""}</a
+      >
+      on
+      <a
+        class="underline font-medium"
+        href="https://unsplash.com/?utm_source=playa&utm_medium=referral"
+      >
+        Unsplash</a
+      ></small
     >
-    on
-    <a
-      class="underline font-medium"
-      href="https://unsplash.com/?utm_source=playa&utm_medium=referral"
-    >
-      Unsplash</a
-    ></small
-  >
+  {/if}
 </main>
-
 
 <style lang="postcss">
   .auth_view {

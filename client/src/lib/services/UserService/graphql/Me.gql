@@ -1,5 +1,4 @@
-# Write your query or mutation here
-query GetCurrentUser {
+query Me {
   me {
     user {
       ...CurrentUser

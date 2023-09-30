@@ -7,6 +7,7 @@ pub mod services;
 use std::net::SocketAddr;
 use std::sync::Arc;
 
+use anyhow::Result;
 use async_graphql::{EmptySubscription, Schema};
 use axum::http::{header, HeaderValue, Method};
 use axum::routing::get;
@@ -16,10 +17,11 @@ use tower_http::cors::CorsLayer;
 use crate::context::Context;
 use crate::graphql::schema::{MutationRoot, QueryRoot};
 
-pub async fn start() {
+pub async fn start() -> Result<()> {
     let config = config::Config::new();
     let addr = SocketAddr::from(([127, 0, 0, 1], config.server_port));
-    let context = Context::shared(&config).await;
+    let context = Context::new(&config).await?;
+    let context = Arc::new(context);
     let schema = Schema::build(
         QueryRoot::default(),
         MutationRoot::default(),
@@ -45,6 +47,7 @@ pub async fn start() {
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
-        .await
-        .unwrap();
+        .await?;
+
+    Ok(())
 }

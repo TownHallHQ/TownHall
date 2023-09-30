@@ -3,8 +3,8 @@ use std::str::FromStr;
 use chrono::{DateTime, Utc};
 use pxid::Pxid;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, CursorTrait, EntityTrait, ModelTrait, PaginatorTrait,
-    QueryFilter, QuerySelect, Set, TransactionTrait,
+    ActiveModelTrait, ColumnTrait, EntityTrait, ModelTrait, PaginatorTrait, QueryFilter,
+    QuerySelect, Set, TransactionTrait,
 };
 use serde::{Deserialize, Serialize};
 

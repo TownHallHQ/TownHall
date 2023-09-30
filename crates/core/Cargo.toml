@@ -9,18 +9,18 @@ name = "playa"
 path = "src/lib.rs"
 
 [dependencies]
-async-trait = "0.1.71"
 chrono = { version = "0.4.26", features = ["serde"] }
 lazy_static = "1.4.0"
 rand = "0.8.5"
 regex = "1.9.3"
 rust-argon2 = "2.0.0"
-sea-orm = { version = "0.11.2", features = [ "sqlx-postgres", "runtime-tokio-rustls", "macros", "with-chrono", "mock" ] }
 serde = { version = "1.0.188", features = ["derive"] }
 serde_json = "1.0.104"
 tracing = "0.1.37"
 
 # Workspace Dependencies
+async-trait = { workspace = true }
+sea-orm = { workspace = true, features = [ "sqlx-postgres", "runtime-tokio-rustls", "macros", "with-chrono", "mock" ] }
 thiserror = { workspace = true }
 pxid = { workspace = true }
 url = { workspace = true }

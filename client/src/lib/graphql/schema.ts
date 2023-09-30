@@ -15,6 +15,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  Email: { input: any; output: any; }
   Pxid: { input: any; output: any; }
 };
 
@@ -22,6 +23,19 @@ export type AccessToken = {
   __typename?: 'AccessToken';
   accessToken: Scalars['String']['output'];
 };
+
+export type AuthError = {
+  __typename?: 'AuthError';
+  code: AuthErrorCode;
+  message: Scalars['String']['output'];
+};
+
+export enum AuthErrorCode {
+  EmailParseError = 'EMAIL_PARSE_ERROR',
+  EmailTaken = 'EMAIL_TAKEN',
+  Internal = 'INTERNAL',
+  Unauthorized = 'UNAUTHORIZED'
+}
 
 export type Me = {
   __typename?: 'Me';
@@ -34,7 +48,9 @@ export type MutationRoot = {
   /** Creates a post authored by the user identified by the provided token */
   postCreate: PostCreate;
   tokenCreate: TokenCreate;
+  userFollow: UserFollow;
   userRegister: UserRegister;
+  userUnfollow: UserUnfollow;
   userUpdate: UserUpdate;
 };
 
@@ -45,8 +61,13 @@ export type MutationRootPostCreateArgs = {
 
 
 export type MutationRootTokenCreateArgs = {
-  email: Scalars['String']['input'];
+  email: Scalars['Email']['input'];
   password: Scalars['String']['input'];
+};
+
+
+export type MutationRootUserFollowArgs = {
+  followeeId: Scalars['Pxid']['input'];
 };
 
 
@@ -55,8 +76,12 @@ export type MutationRootUserRegisterArgs = {
 };
 
 
+export type MutationRootUserUnfollowArgs = {
+  followeeId: Scalars['Pxid']['input'];
+};
+
+
 export type MutationRootUserUpdateArgs = {
-  id: Scalars['Pxid']['input'];
   input: UserUpdateInput;
 };
 
@@ -156,7 +181,7 @@ export type QueryRootUserArgs = {
 
 export type TokenCreate = {
   __typename?: 'TokenCreate';
-  error?: Maybe<UserError>;
+  error?: Maybe<AuthError>;
   token?: Maybe<AccessToken>;
 };
 
@@ -222,6 +247,11 @@ export type UserFilterInput = {
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UserFollow = {
+  __typename?: 'UserFollow';
+  error?: Maybe<UserError>;
+};
+
 export type UserRegister = {
   __typename?: 'UserRegister';
   error?: Maybe<UserError>;
@@ -229,11 +259,16 @@ export type UserRegister = {
 };
 
 export type UserRegisterInput = {
-  email: Scalars['String']['input'];
+  email: Scalars['Email']['input'];
   name: Scalars['String']['input'];
   password: Scalars['String']['input'];
   surname: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+export type UserUnfollow = {
+  __typename?: 'UserUnfollow';
+  error?: Maybe<UserError>;
 };
 
 export type UserUpdate = {
@@ -247,6 +282,16 @@ export type UserUpdateInput = {
   surname?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type TokenCreateMutationVariables = Exact<{
+  email: Scalars['Email']['input'];
+  password: Scalars['String']['input'];
+}>;
+
+
+export type TokenCreateMutation = { __typename?: 'MutationRoot', tokenCreate: { __typename?: 'TokenCreate', token?: { __typename?: 'AccessToken', accessToken: string } | null, error?: { __typename?: 'AuthError', code: AuthErrorCode, message: string } | null } };
+
+export type AuthorFragment = { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any };
+
 export type PostCreateMutationVariables = Exact<{
   input: PostCreateInput;
 }>;
@@ -256,12 +301,42 @@ export type PostCreateMutation = { __typename?: 'MutationRoot', postCreate: { __
 
 export type PostCreateFieldsFragment = { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any };
 
-export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+export type PostListQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['Pxid']['input']>;
+  before?: InputMaybe<Scalars['Pxid']['input']>;
+}>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'QueryRoot', me: { __typename?: 'Me', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any } | null } };
+export type PostListQuery = { __typename?: 'QueryRoot', posts: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } } }>, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null } } };
+
+export type PostListFieldsFragment = { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'QueryRoot', me: { __typename?: 'Me', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any } | null } };
 
 export type CurrentUserFragment = { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any };
+
+export type UserPostsListQueryVariables = Exact<{
+  username?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['Pxid']['input']>;
+  before?: InputMaybe<Scalars['Pxid']['input']>;
+}>;
+
+
+export type UserPostsListQuery = { __typename?: 'QueryRoot', user: { __typename?: 'UserConnection', edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any, posts: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } } }>, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null } } } }>, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null } } };
+
+export type UserRegisterMutationVariables = Exact<{
+  input: UserRegisterInput;
+}>;
+
+
+export type UserRegisterMutation = { __typename?: 'MutationRoot', userRegister: { __typename?: 'UserRegister', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any } | null, error?: { __typename?: 'UserError', code: UserErrorCode, message: string } | null } };
 
 export type GetPostsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -286,8 +361,6 @@ export type GetUserPostsQuery = { __typename?: 'QueryRoot', user: { __typename?:
 
 export type CurrentPostFragment = { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } };
 
-export type AuthorFragment = { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any };
-
 export type GetUsersQueryVariables = Exact<{
   filter?: InputMaybe<UserFilterInput>;
 }>;
@@ -296,21 +369,6 @@ export type GetUsersQueryVariables = Exact<{
 export type GetUsersQuery = { __typename?: 'QueryRoot', user: { __typename?: 'UserConnection', nodes: Array<{ __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any }> } };
 
 export type UserFragment = { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any };
-
-export type TokenCreateMutationVariables = Exact<{
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-}>;
-
-
-export type TokenCreateMutation = { __typename?: 'MutationRoot', tokenCreate: { __typename?: 'TokenCreate', token?: { __typename?: 'AccessToken', accessToken: string } | null, error?: { __typename?: 'UserError', code: UserErrorCode, message: string } | null } };
-
-export type UserCreateMutationVariables = Exact<{
-  input: UserRegisterInput;
-}>;
-
-
-export type UserCreateMutation = { __typename?: 'MutationRoot', userRegister: { __typename?: 'UserRegister', user?: { __typename?: 'User', id: any } | null, error?: { __typename?: 'UserError', code: UserErrorCode, message: string } | null } };
 
 export const PostCreateFieldsFragmentDoc = gql`
     fragment PostCreateFields on Post {
@@ -324,17 +382,6 @@ export const PostCreateFieldsFragmentDoc = gql`
   updatedAt
 }
     `;
-export const CurrentUserFragmentDoc = gql`
-    fragment CurrentUser on User {
-  id
-  name
-  surname
-  email
-  username
-  createdAt
-  updatedAt
-}
-    `;
 export const AuthorFragmentDoc = gql`
     fragment Author on User {
   id
@@ -342,6 +389,32 @@ export const AuthorFragmentDoc = gql`
   surname
   username
   email
+  createdAt
+  updatedAt
+}
+    `;
+export const PostListFieldsFragmentDoc = gql`
+    fragment PostListFields on Post {
+  id
+  authorId
+  parentId
+  head
+  title
+  content
+  createdAt
+  updatedAt
+  author {
+    ...Author
+  }
+}
+    ${AuthorFragmentDoc}`;
+export const CurrentUserFragmentDoc = gql`
+    fragment CurrentUser on User {
+  id
+  name
+  surname
+  email
+  username
   createdAt
   updatedAt
 }
@@ -372,6 +445,19 @@ export const UserFragmentDoc = gql`
   updatedAt
 }
     `;
+export const TokenCreateDocument = gql`
+    mutation TokenCreate($email: Email!, $password: String!) {
+  tokenCreate(email: $email, password: $password) {
+    token {
+      accessToken
+    }
+    error {
+      code
+      message
+    }
+  }
+}
+    `;
 export const PostCreateDocument = gql`
     mutation PostCreate($input: PostCreateInput!) {
   postCreate(input: $input) {
@@ -385,11 +471,72 @@ export const PostCreateDocument = gql`
   }
 }
     ${PostCreateFieldsFragmentDoc}`;
-export const GetCurrentUserDocument = gql`
-    query GetCurrentUser {
+export const PostListDocument = gql`
+    query PostList($first: Int, $last: Int, $after: Pxid, $before: Pxid) {
+  posts(first: $first, last: $last, after: $after, before: $before) {
+    edges {
+      node {
+        ...PostListFields
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+  }
+}
+    ${PostListFieldsFragmentDoc}`;
+export const MeDocument = gql`
+    query Me {
   me {
     user {
       ...CurrentUser
+    }
+  }
+}
+    ${CurrentUserFragmentDoc}`;
+export const UserPostsListDocument = gql`
+    query UserPostsList($username: String, $first: Int, $last: Int, $after: Pxid, $before: Pxid) {
+  user(filter: {username: $username}) {
+    edges {
+      node {
+        ...Author
+        posts(first: $first, last: $last, after: $after, before: $before) {
+          edges {
+            node {
+              ...PostListFields
+            }
+          }
+          pageInfo {
+            hasPreviousPage
+            hasNextPage
+            startCursor
+            endCursor
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+  }
+}
+    ${AuthorFragmentDoc}
+${PostListFieldsFragmentDoc}`;
+export const UserRegisterDocument = gql`
+    mutation UserRegister($input: UserRegisterInput!) {
+  userRegister(input: $input) {
+    user {
+      ...CurrentUser
+    }
+    error {
+      code
+      message
     }
   }
 }
@@ -460,29 +607,3 @@ export const GetUsersDocument = gql`
   }
 }
     ${UserFragmentDoc}`;
-export const TokenCreateDocument = gql`
-    mutation TokenCreate($email: String!, $password: String!) {
-  tokenCreate(email: $email, password: $password) {
-    token {
-      accessToken
-    }
-    error {
-      code
-      message
-    }
-  }
-}
-    `;
-export const UserCreateDocument = gql`
-    mutation UserCreate($input: UserRegisterInput!) {
-  userRegister(input: $input) {
-    user {
-      id
-    }
-    error {
-      code
-      message
-    }
-  }
-}
-    `;

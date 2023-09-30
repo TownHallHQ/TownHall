@@ -1,33 +1,18 @@
 <script lang="ts">
   import { newForm } from "@whizzes/svelte-forms";
   import { notifications } from "@whizzes/svelte-notifications";
-  import { onMount } from "svelte";
   import * as Yup from "yup";
 
   import { createHeader } from "$lib/utils/basic-auth";
-  import { LoginError, type ErrorMessages } from "./shared";
-  import { UserErrorCode } from "$lib/graphql/schema";
   import TextField from "$lib/components/TextField.svelte";
   import Button from "$lib/components/Button.svelte";
+  import { LoginError } from "./+server";
 
-  import type { Unsplash } from "$routes/api/unsplash/+server";
+  import type { HttpErrorResponse } from "$lib/utils/http";
 
-  let cover: Unsplash | null = null;
   let error: string | null = null;
 
-  onMount(async () => {
-    const response = await fetch("/api/unsplash");
-    const data = await response.json();
-
-    cover = data.data;
-  });
-
-  const errorMessages: ErrorMessages = {
-    [LoginError.MissingCredentials]: "Please enter your email and password",
-    [UserErrorCode.Unauthorized]: "Invalid email or password",
-  };
-
-  const { handleSubmit, values, errors, isSubmitting } = newForm({
+  const { handleSubmit, values, errors } = newForm({
     initialValues: {
       email: "",
       password: "",
@@ -48,14 +33,18 @@
       if (response.ok) {
         notifications.notifySuccess("Logged in successfully");
         window.location.pathname = "/";
-      } else {
-        const data = await response.json();
+        return;
+      }
 
-        const errorMessage =
-          errorMessages[data.error as keyof typeof errorMessages] ||
-          "An error occurred. Please try again later.";
+      const data: HttpErrorResponse<LoginError> = await response.json();
 
-        notifications.notifyFailure(errorMessage);
+      switch (data.code) {
+        case LoginError.MissingCredentials:
+          error = "Please enter your email and password";
+        case LoginError.InvalidCredentials:
+          error = "Invalid email or password";
+        case LoginError.Unknown:
+          error = "An unknown error occurred";
       }
     },
   });
@@ -64,9 +53,7 @@
 <div class="flex flex-col justify-center h-full">
   <div class="text-lg py-4">
     <h1 class="font-semibold">Welcome Back!</h1>
-    <span>
-      Log in to your account to continue
-    </span>
+    <span> Log in to your account to continue </span>
   </div>
   <form class="flex flex-col py-4 space-y-4" on:submit={handleSubmit}>
     <TextField
@@ -90,11 +77,11 @@
       </label>
     </div>
     <p class="error_message" hidden={!error}>{error}</p>
-    <Button type="submit" variant="primary">
-      Log in
-    </Button>
+    <Button type="submit" variant="primary">Log in</Button>
   </form>
   <small class="text-gray-600">
-    Don't have an account? <a class="text-blue-600 underline" href="/signup">Sign up</a>
+    Don't have an account? <a class="text-blue-600 underline" href="/signup"
+      >Sign up</a
+    >
   </small>
 </div>

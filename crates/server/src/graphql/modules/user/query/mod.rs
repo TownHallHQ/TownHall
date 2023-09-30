@@ -1,12 +1,8 @@
-mod me;
 mod users;
 
 use async_graphql::{Context, Object, Result};
 use pxid::graphql::Pxid;
 
-use crate::graphql::guard::AuthenticationGuard;
-
-use self::me::Me;
 use self::users::{UserFilterInput, Users, UsersConnection};
 
 #[derive(Debug, Default)]
@@ -14,11 +10,6 @@ pub struct UserQueryRoot;
 
 #[Object]
 impl UserQueryRoot {
-    #[graphql(guard = "AuthenticationGuard::new()")]
-    async fn me(&self, ctx: &Context<'_>) -> Result<Me> {
-        Me::exec(ctx).await
-    }
-
     #[allow(clippy::too_many_arguments)]
     async fn user(
         &self,

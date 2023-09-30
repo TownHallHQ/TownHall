@@ -1,7 +1,4 @@
-import {
-  MeDocument,
-  TokenCreateDocument
-} from '$lib/graphql/schema';
+import { MeDocument, TokenCreateDocument } from '$lib/graphql/schema';
 
 import type { Client } from '@urql/core';
 import type {
@@ -63,11 +60,11 @@ export class AuthService {
         },
       )
       .toPromise();
-  
+
     if (response?.error || response?.data?.me?.error) {
       throw new Error('Failed');
     }
-  
+
     return response?.data?.me?.user;
   }
 }

@@ -105,7 +105,7 @@ export function createUIStore() {
 
       setLightColorScheme();
     }
-  }
+  };
 
   setPreferred(ColorScheme.Light);
 

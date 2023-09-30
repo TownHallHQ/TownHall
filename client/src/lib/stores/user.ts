@@ -1,10 +1,10 @@
-import { writable } from "svelte/store";
+import { writable } from 'svelte/store';
 
-import type { CurrentUserFragment } from "$lib/graphql/schema";
-import type { Unsubscriber, Writable } from "svelte/store";
-import type { Readable, Subscriber } from "svelte/motion";
-import type { Client } from "@urql/core";
-import { UserService } from "$lib/services/UserService";
+import type { CurrentUserFragment } from '$lib/graphql/schema';
+import type { Unsubscriber, Writable } from 'svelte/store';
+import type { Readable, Subscriber } from 'svelte/motion';
+import type { Client } from '@urql/core';
+import { UserService } from '$lib/services/UserService';
 
 export interface UserStoreMethods {
   /**
@@ -14,8 +14,8 @@ export interface UserStoreMethods {
 
   /**
    *
-   * @param urqlClient 
-   * @param file 
+   * @param urqlClient
+   * @param file
    *
    * Updates the avatar of this user
    */
@@ -43,4 +43,6 @@ export class UserStore implements UserStoreMethods {
   }
 }
 
-export const userStore = new UserStore() as unknown as Readable<CurrentUserFragment | null> & UserStoreMethods;
+export const userStore =
+  new UserStore() as unknown as Readable<CurrentUserFragment | null> &
+    UserStoreMethods;

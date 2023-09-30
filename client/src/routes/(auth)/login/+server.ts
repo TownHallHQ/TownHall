@@ -25,14 +25,21 @@ export const POST = async ({
     const { username, password } = parseHeader(request);
 
     if (!username || !password) {
-      return JsonResponse.error<LoginError>(StatusCode.BadRequest, LoginError.MissingCredentials);
+      return JsonResponse.error<LoginError>(
+        StatusCode.BadRequest,
+        LoginError.MissingCredentials,
+      );
     }
 
     const urqlClient = createClient({
       url: import.meta.env.VITE_GRAPHQL_URL,
       exchanges: [cacheExchange, fetchExchange],
     });
-    const tokens = await AuthService.tokenCreate(urqlClient, username, password);
+    const tokens = await AuthService.tokenCreate(
+      urqlClient,
+      username,
+      password,
+    );
 
     cookies.set('accessToken', tokens.accessToken, {
       path: '/',
@@ -47,9 +54,15 @@ export const POST = async ({
     });
   } catch (err) {
     if (err instanceof AuthError) {
-      return JsonResponse.error<LoginError>(StatusCode.Unauthorized, LoginError.InvalidCredentials);
+      return JsonResponse.error<LoginError>(
+        StatusCode.Unauthorized,
+        LoginError.InvalidCredentials,
+      );
     }
 
-    return JsonResponse.error<LoginError>(StatusCode.InternalServerError, LoginError.Unknown);
+    return JsonResponse.error<LoginError>(
+      StatusCode.InternalServerError,
+      LoginError.Unknown,
+    );
   }
 };

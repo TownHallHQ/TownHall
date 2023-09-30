@@ -12,11 +12,12 @@ resolver = "2"
 
 [workspace.dependencies]
 anyhow = "1.0.75"
-async-graphql = { version = "5.0.10", features = ["chrono", "decimal", "tracing"] }
+async-graphql = { version = "6.0.7", features = ["chrono", "decimal", "tracing"] }
 async-trait = "0.1.73"
 chrono = { version = "0.4.26" }
 dotenv = "0.15.0"
-pxid = { version = "0.2.4", features = ["async-graphql", "serde"] }
+pxid = { version = "0.3", features = ["async-graphql"] }
+rust-argon2 = "1"
 sea-orm = "0.12.1"
 sea-orm-cli = { version = "0.12.3", default-features = false }
 sea-orm-migration = "0.12.1"

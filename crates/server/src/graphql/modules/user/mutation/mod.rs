@@ -1,13 +1,15 @@
+mod user_avatar_update;
 mod user_follow;
 mod user_register;
 mod user_unfollow;
 mod user_update;
 
-use async_graphql::{Context, Object, Result};
+use async_graphql::{Context, Object, Result, Upload};
 use pxid::graphql::Pxid;
 
 use crate::graphql::guard::AuthenticationGuard;
 
+use self::user_avatar_update::UserAvatarUpdate;
 use self::user_follow::UserFollow;
 use self::user_register::{UserRegister, UserRegisterInput};
 use self::user_unfollow::UserUnfollow;
@@ -39,5 +41,14 @@ impl UserMutationRoot {
     #[graphql(guard = "AuthenticationGuard::new()")]
     async fn user_unfollow(&self, ctx: &Context<'_>, followee_id: Pxid) -> Result<UserUnfollow> {
         UserUnfollow::exec(ctx, followee_id).await
+    }
+
+    #[graphql(guard = "AuthenticationGuard::new()")]
+    async fn user_avatar_update(
+        &self,
+        ctx: &Context<'_>,
+        file: Upload,
+    ) -> Result<UserAvatarUpdate> {
+        UserAvatarUpdate::exec(ctx, file).await
     }
 }

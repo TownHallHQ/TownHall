@@ -93,8 +93,8 @@ impl ImageRepository {
             thumbnail_url: active_model.thumbnail_url,
             url: active_model.url,
             use_case: Self::into_use_case(active_model.use_case),
-            created_at: DateTime::<Utc>::from_utc(active_model.created_at, Utc),
-            updated_at: DateTime::<Utc>::from_utc(active_model.updated_at, Utc),
+            created_at: DateTime::<Utc>::from_naive_utc_and_offset(active_model.created_at, Utc),
+            updated_at: DateTime::<Utc>::from_naive_utc_and_offset(active_model.updated_at, Utc),
         }
     }
 
@@ -111,7 +111,7 @@ impl ImageRepository {
             provider_id: Set(dto.provider_id),
             ..Default::default()
         };
-
+        println!("{:?}", image_active_model);
         let image_model = image_active_model.insert(&*self.db).await.map_err(|err| {
             tracing::error!(%err, "Failed to insert Image into the database");
             ImageError::RepositoryError

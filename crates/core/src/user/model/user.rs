@@ -71,7 +71,7 @@ impl TryFrom<UserRecord> for User {
             username: Username(value.username.into()),
             email: Email(value.email.into()),
             password: Password(value.password_hash.into()),
-            avatar_id: None,
+            avatar_id: value.avatar_id.map(|id| Pxid::from_str(&id)).transpose()?,
             created_at: value.created_at,
             updated_at: value.updated_at,
             deleted_at: value.deleted_at,

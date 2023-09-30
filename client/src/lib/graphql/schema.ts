@@ -17,6 +17,7 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
   Email: { input: any; output: any; }
   Pxid: { input: any; output: any; }
+  Upload: { input: any; output: any; }
 };
 
 export type AccessToken = {
@@ -37,9 +38,15 @@ export enum AuthErrorCode {
   Unauthorized = 'UNAUTHORIZED'
 }
 
+export type Image = {
+  __typename?: 'Image';
+  id: Scalars['Pxid']['output'];
+  url: Scalars['String']['output'];
+};
+
 export type Me = {
   __typename?: 'Me';
-  error?: Maybe<UserError>;
+  error?: Maybe<AuthError>;
   user?: Maybe<User>;
 };
 
@@ -48,6 +55,7 @@ export type MutationRoot = {
   /** Creates a post authored by the user identified by the provided token */
   postCreate: PostCreate;
   tokenCreate: TokenCreate;
+  userAvatarUpdate: UserAvatarUpdate;
   userFollow: UserFollow;
   userRegister: UserRegister;
   userUnfollow: UserUnfollow;
@@ -63,6 +71,11 @@ export type MutationRootPostCreateArgs = {
 export type MutationRootTokenCreateArgs = {
   email: Scalars['Email']['input'];
   password: Scalars['String']['input'];
+};
+
+
+export type MutationRootUserAvatarUpdateArgs = {
+  file: Scalars['Upload']['input'];
 };
 
 
@@ -188,6 +201,7 @@ export type TokenCreate = {
 /** A Platform's User */
 export type User = {
   __typename?: 'User';
+  avatar?: Maybe<Image>;
   createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   id: Scalars['Pxid']['output'];
@@ -206,6 +220,12 @@ export type UserPostsArgs = {
   before?: InputMaybe<Scalars['Pxid']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UserAvatarUpdate = {
+  __typename?: 'UserAvatarUpdate';
+  error?: Maybe<UserError>;
+  user?: Maybe<User>;
 };
 
 export type UserConnection = {
@@ -235,6 +255,7 @@ export type UserError = {
 };
 
 export enum UserErrorCode {
+  AvatarUploadError = 'AVATAR_UPLOAD_ERROR',
   EmailTaken = 'EMAIL_TAKEN',
   Internal = 'INTERNAL',
   InvalidEmail = 'INVALID_EMAIL',
@@ -313,12 +334,19 @@ export type PostListQuery = { __typename?: 'QueryRoot', posts: { __typename?: 'P
 
 export type PostListFieldsFragment = { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } };
 
+export type CurrentUserFragment = { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any, avatar?: { __typename?: 'Image', id: any, url: string } | null };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'QueryRoot', me: { __typename?: 'Me', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any } | null } };
+export type MeQuery = { __typename?: 'QueryRoot', me: { __typename?: 'Me', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any, avatar?: { __typename?: 'Image', id: any, url: string } | null } | null } };
 
-export type CurrentUserFragment = { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any };
+export type UserAvatarUpdateMutationVariables = Exact<{
+  file: Scalars['Upload']['input'];
+}>;
+
+
+export type UserAvatarUpdateMutation = { __typename?: 'MutationRoot', userAvatarUpdate: { __typename?: 'UserAvatarUpdate', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any, avatar?: { __typename?: 'Image', id: any, url: string } | null } | null, error?: { __typename?: 'UserError', code: UserErrorCode, message: string } | null } };
 
 export type UserPostsListQueryVariables = Exact<{
   username?: InputMaybe<Scalars['String']['input']>;
@@ -336,39 +364,7 @@ export type UserRegisterMutationVariables = Exact<{
 }>;
 
 
-export type UserRegisterMutation = { __typename?: 'MutationRoot', userRegister: { __typename?: 'UserRegister', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any } | null, error?: { __typename?: 'UserError', code: UserErrorCode, message: string } | null } };
-
-export type GetPostsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  after?: InputMaybe<Scalars['Pxid']['input']>;
-  before?: InputMaybe<Scalars['Pxid']['input']>;
-}>;
-
-
-export type GetPostsQuery = { __typename?: 'QueryRoot', posts: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } } }>, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } }> } };
-
-export type GetUserPostsQueryVariables = Exact<{
-  username?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  after?: InputMaybe<Scalars['Pxid']['input']>;
-  before?: InputMaybe<Scalars['Pxid']['input']>;
-}>;
-
-
-export type GetUserPostsQuery = { __typename?: 'QueryRoot', user: { __typename?: 'UserConnection', edges: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } }>, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null }, nodes: Array<{ __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any, posts: { __typename?: 'PostConnection', edges: Array<{ __typename?: 'PostEdge', node: { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } } }>, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } }> } }> } };
-
-export type CurrentPostFragment = { __typename?: 'Post', id: any, authorId: any, parentId?: any | null, head: boolean, title: string, content?: string | null, createdAt: any, updatedAt: any, author: { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any } };
-
-export type GetUsersQueryVariables = Exact<{
-  filter?: InputMaybe<UserFilterInput>;
-}>;
-
-
-export type GetUsersQuery = { __typename?: 'QueryRoot', user: { __typename?: 'UserConnection', nodes: Array<{ __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any }> } };
-
-export type UserFragment = { __typename?: 'User', id: any, name: string, surname: string, username: string, email: string, createdAt: any, updatedAt: any };
+export type UserRegisterMutation = { __typename?: 'MutationRoot', userRegister: { __typename?: 'UserRegister', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any, avatar?: { __typename?: 'Image', id: any, url: string } | null } | null, error?: { __typename?: 'UserError', code: UserErrorCode, message: string } | null } };
 
 export const PostCreateFieldsFragmentDoc = gql`
     fragment PostCreateFields on Post {
@@ -415,32 +411,10 @@ export const CurrentUserFragmentDoc = gql`
   surname
   email
   username
-  createdAt
-  updatedAt
-}
-    `;
-export const CurrentPostFragmentDoc = gql`
-    fragment CurrentPost on Post {
-  id
-  authorId
-  parentId
-  head
-  title
-  author {
-    ...Author
+  avatar {
+    id
+    url
   }
-  content
-  createdAt
-  updatedAt
-}
-    ${AuthorFragmentDoc}`;
-export const UserFragmentDoc = gql`
-    fragment User on User {
-  id
-  name
-  surname
-  username
-  email
   createdAt
   updatedAt
 }
@@ -497,6 +471,19 @@ export const MeDocument = gql`
   }
 }
     ${CurrentUserFragmentDoc}`;
+export const UserAvatarUpdateDocument = gql`
+    mutation UserAvatarUpdate($file: Upload!) {
+  userAvatarUpdate(file: $file) {
+    user {
+      ...CurrentUser
+    }
+    error {
+      code
+      message
+    }
+  }
+}
+    ${CurrentUserFragmentDoc}`;
 export const UserPostsListDocument = gql`
     query UserPostsList($username: String, $first: Int, $last: Int, $after: Pxid, $before: Pxid) {
   user(filter: {username: $username}) {
@@ -541,69 +528,3 @@ export const UserRegisterDocument = gql`
   }
 }
     ${CurrentUserFragmentDoc}`;
-export const GetPostsDocument = gql`
-    query GetPosts($first: Int, $last: Int, $after: Pxid, $before: Pxid) {
-  posts(first: $first, last: $last, after: $after, before: $before) {
-    edges {
-      node {
-        ...CurrentPost
-      }
-    }
-    pageInfo {
-      hasPreviousPage
-      hasNextPage
-      startCursor
-      endCursor
-    }
-    nodes {
-      ...CurrentPost
-    }
-  }
-}
-    ${CurrentPostFragmentDoc}`;
-export const GetUserPostsDocument = gql`
-    query GetUserPosts($username: String, $first: Int, $last: Int, $after: Pxid, $before: Pxid) {
-  user(filter: {username: $username}) {
-    edges {
-      node {
-        ...Author
-      }
-    }
-    pageInfo {
-      hasPreviousPage
-      hasNextPage
-      startCursor
-      endCursor
-    }
-    nodes {
-      ...Author
-      posts(first: $first, last: $last, after: $after, before: $before) {
-        edges {
-          node {
-            ...CurrentPost
-          }
-        }
-        pageInfo {
-          hasPreviousPage
-          hasNextPage
-          startCursor
-          endCursor
-        }
-        nodes {
-          ...CurrentPost
-        }
-      }
-    }
-  }
-}
-    ${AuthorFragmentDoc}
-${CurrentPostFragmentDoc}`;
-export const GetUsersDocument = gql`
-    query GetUsers($filter: UserFilterInput) {
-  user(filter: $filter) {
-    nodes {
-      ...User
-    }
-  }
-}
-    ${UserFragmentDoc}`;

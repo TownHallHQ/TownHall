@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { writable, type Readable } from 'svelte/store';
 
 const PREFERS_COLOR_SCHEME_DARK_MEDIA_QUERY = '(prefers-color-scheme:dark)';
@@ -5,6 +6,7 @@ const PREFERS_COLOR_SCHEME_DARK_MEDIA_QUERY = '(prefers-color-scheme:dark)';
 export type UIStoreMethods = {
   openSidebar(): void;
   closeSidebar(): void;
+  setPreferred(colorScheme: ColorScheme): void;
   setDarkColorScheme(): void;
   setLightColorScheme(): void;
   syncPreferredScheme(): void;
@@ -24,6 +26,14 @@ export type UIStore = {
  * Returns the preferred color scheme based on user's operative system
  */
 export function getPreferredScheme(): ColorScheme {
+  if (browser) {
+    const localColorScheme = localStorage.getItem('colorScheme');
+
+    if (localColorScheme) {
+      return localColorScheme as ColorScheme;
+    }
+  }
+
   if (typeof window !== 'undefined') {
     return window?.matchMedia?.(PREFERS_COLOR_SCHEME_DARK_MEDIA_QUERY)?.matches
       ? ColorScheme.Dark
@@ -40,15 +50,14 @@ export function createUIStore() {
   });
 
   const syncPreferredScheme = () => {
-    // const preferredScheme = getPreferredScheme();
+    const preferredScheme = getPreferredScheme();
 
-    // if (preferredScheme === ColorScheme.Dark) {
-    //   setDarkColorScheme();
-    // } else {
-    //   setLightColorScheme();
-    // }
-    // setLightColorScheme();
-    setDarkColorScheme();
+    if (preferredScheme === ColorScheme.Dark) {
+      setDarkColorScheme();
+      return;
+    }
+
+    setLightColorScheme();
   };
 
   const closeSidebar = () =>
@@ -85,12 +94,28 @@ export function createUIStore() {
     }
   };
 
+  const setPreferred = (scheme: ColorScheme) => {
+    if (browser) {
+      localStorage.setItem('colorScheme', scheme);
+
+      if (scheme === ColorScheme.Dark) {
+        setDarkColorScheme();
+        return;
+      }
+
+      setLightColorScheme();
+    }
+  }
+
+  setPreferred(ColorScheme.Light);
+
   return {
     subscribe,
     openSidebar,
     closeSidebar,
     setDarkColorScheme,
     setLightColorScheme,
+    setPreferred,
     syncPreferredScheme,
   };
 }

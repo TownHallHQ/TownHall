@@ -19,10 +19,14 @@ export class GraphQLError<C> extends Error {
   }
 
   public static new<C>(code: C, message?: string): GraphQLError<C> {
-    return new GraphQLError<C>(this.name, code, message || `${this.name}: ${code}`);
+    return new GraphQLError<C>(
+      this.name,
+      code,
+      message || `${this.name}: ${code}`,
+    );
   }
 
-  public toObject(): { error: string, code: C; message: string } {
+  public toObject(): { error: string; code: C; message: string } {
     return {
       error: this.name,
       code: this._code,

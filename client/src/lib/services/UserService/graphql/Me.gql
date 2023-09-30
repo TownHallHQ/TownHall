@@ -5,13 +5,3 @@ query Me {
     }
   }
 }
-
-fragment CurrentUser on User {
-  id
-  name
-  surname
-  email
-  username
-  createdAt
-  updatedAt
-}

@@ -1,0 +1,13 @@
+fragment CurrentUser on User {
+  id
+  name
+  surname
+  email
+  username
+  avatar {
+    id
+    url
+  }
+  createdAt
+  updatedAt
+}

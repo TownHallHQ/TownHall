@@ -13,12 +13,11 @@ name = "libserver"
 path = "src/lib.rs"
 
 [dependencies]
-async-graphql-axum = "5.0.7"
+async-graphql-axum = "6.0.6"
 axum = "0.6.20"
 base64 = "0.21.2"
 jsonwebtoken = "8.3"
 rand = "0.8.5"
-rust-argon2 = "2.0.0"
 rust-s3 = { version = "0.33.0", features = ["tokio-rustls-tls", "fail-on-err"], default-features = false }
 tower-http = { version = "0.4.1", features = ["cors"] }
 
@@ -28,7 +27,8 @@ async-graphql = { workspace = true }
 async-trait = { workspace = true }
 chrono = { workspace = true }
 dotenv = { workspace = true }
-pxid = { workspace = true }
+pxid = { workspace = true, features = ["serde"] }
+rust-argon2 = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 thiserror = {  workspace = true }
 tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }

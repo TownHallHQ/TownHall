@@ -1,0 +1,11 @@
+mutation UserAvatarUpdate($file: Upload!) {
+  userAvatarUpdate(file: $file) {
+    user {
+      ...CurrentUser
+    }
+    error {
+      code
+      message
+    }
+  }
+}

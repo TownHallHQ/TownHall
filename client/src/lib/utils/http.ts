@@ -11,7 +11,7 @@ export type HttpErrorResponse<C> = {
   statusCode: StatusCode;
   message: string | C;
   code: C;
-}
+};
 
 export class JsonResponse {
   static error<C>(statusCode: StatusCode, code: C, message?: string): Response {

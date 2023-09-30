@@ -11,7 +11,7 @@ export type UnsplashAuthor = {
   name: string;
   username: string;
   avatar: string;
-}
+};
 
 export type UnsplashImage = {
   url: URL;
@@ -21,7 +21,9 @@ export type UnsplashImage = {
 const UNSPLASH_DAILY_BACKGROUND_COOKIE = 'UNSPLASH_DAILY_BACKGROUND';
 
 export async function GET(event: RequestEvent) {
-  const UNSPLASH_DAILY_BACKGROUND = event.cookies.get(UNSPLASH_DAILY_BACKGROUND_COOKIE);
+  const UNSPLASH_DAILY_BACKGROUND = event.cookies.get(
+    UNSPLASH_DAILY_BACKGROUND_COOKIE,
+  );
 
   if (UNSPLASH_DAILY_BACKGROUND) {
     const body = JSON.parse(UNSPLASH_DAILY_BACKGROUND);
@@ -30,7 +32,11 @@ export async function GET(event: RequestEvent) {
   }
 
   if (!UNSPLASH_ACCESS_KEY) {
-    return JsonResponse.error<UnsplashErrorCode>(StatusCode.InternalServerError, UnsplashErrorCode.MissingApiToken, 'UNSPLASH_ACCESS_KEY environment variable is not set');
+    return JsonResponse.error<UnsplashErrorCode>(
+      StatusCode.InternalServerError,
+      UnsplashErrorCode.MissingApiToken,
+      'UNSPLASH_ACCESS_KEY environment variable is not set',
+    );
   }
 
   const unsplash = createApi({
@@ -73,5 +79,9 @@ export async function GET(event: RequestEvent) {
     }
   }
 
-  return JsonResponse.error<UnsplashErrorCode>(StatusCode.InternalServerError, UnsplashErrorCode.Unknown, 'Failed to fetch Unsplash background');
+  return JsonResponse.error<UnsplashErrorCode>(
+    StatusCode.InternalServerError,
+    UnsplashErrorCode.Unknown,
+    'Failed to fetch Unsplash background',
+  );
 }

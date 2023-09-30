@@ -1,10 +1,10 @@
 import {
-  UserRegisterDocument
+  UserAvatarUpdateDocument,
+  UserRegisterDocument,
 } from '$lib/graphql/schema';
 
 import type { Client } from '@urql/core';
 import type {
-  AccessToken,
   CurrentUserFragment,
   UserErrorCode,
   UserRegisterInput,
@@ -16,7 +16,7 @@ export class UserError extends GraphQLError<UserErrorCode> {}
 export class UserService {
   static async userRegister(
     urqlClient: Client,
-    input: UserRegisterInput
+    input: UserRegisterInput,
   ): Promise<CurrentUserFragment> {
     const response = await urqlClient
       .mutation(
@@ -41,5 +41,28 @@ export class UserService {
     }
 
     return response.data.userRegister.user;
+  }
+
+  static async userAvatarUpdate(
+    urqlClient: Client,
+    file: File,
+  ): Promise<CurrentUserFragment> {
+    const response = await urqlClient
+      .mutation(UserAvatarUpdateDocument, {
+        file,
+      })
+      .toPromise();
+
+    if (response?.error || response?.data?.userAvatarUpdate?.error) {
+      if (response?.data?.userAvatarUpdate?.error) {
+        const error: UserError = response.data.userAvatarUpdate.error;
+
+        throw UserError.new(error.code, error.message);
+      }
+
+      throw response?.error;
+    }
+
+    return response.data.userAvatarUpdate.user;
   }
 }

@@ -9,7 +9,7 @@ use crate::image::repository::ImageRecord;
 
 use super::{MimeType, UseCase};
 
-pub const IMAGE_PXID_PREFIX: &str = "img";
+pub const IMAGE_PXID_PREFIX: &str = "imag";
 
 #[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub struct Image {

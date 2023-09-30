@@ -1,8 +1,8 @@
-import type { UnsplashImage } from "$routes/api/unsplash/+server";
+import type { UnsplashImage } from '$routes/api/unsplash/+server';
 
 export enum UnsplashErrorCode {
-  MissingApiToken,
-  Unknown
+  MissingApiToken = 0,
+  Unknown = 1,
 }
 
 export class UnsplashService {
@@ -13,8 +13,8 @@ export class UnsplashService {
    * to be set.
    */
   static async fetchUnsplashBackground(): Promise<UnsplashImage | null> {
-    const response = await fetch("/api/unsplash", {
-      method: "GET",
+    const response = await fetch('/api/unsplash', {
+      method: 'GET',
     });
 
     if (response.ok) {

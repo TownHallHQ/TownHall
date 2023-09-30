@@ -7,13 +7,16 @@ use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
 
 use crate::context::SharedContext;
+
 use crate::graphql::connection_details::ConnectionDetails;
 use crate::graphql::modules::post::types::Post;
+use crate::graphql::modules::Image;
 
 pub type UserPostsConnection = Connection<Pxid, Post, ConnectionDetails, EmptyFields>;
 
 #[derive(Copy, Clone, Debug, Deserialize, Enum, Eq, PartialEq, Serialize)]
 pub enum UserErrorCode {
+    AvatarUploadError,
     InvalidEmail,
     EmailTaken,
     Unauthorized,
@@ -37,10 +40,30 @@ pub struct User {
     pub email: String,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
+    #[graphql(skip)]
+    pub avatar_id: Option<Pxid>,
 }
 
 #[ComplexObject]
 impl User {
+    async fn avatar(&self, ctx: &Context<'_>) -> Result<Option<Image>> {
+        let context = ctx.data_unchecked::<SharedContext>();
+
+        if let Some(avatar_id) = self.avatar_id.as_ref() {
+            let image = context
+                .services
+                .image
+                .find_by_id(avatar_id.into_inner())
+                .await?;
+
+            if let Some(image) = image {
+                return Ok(Some(image.into()));
+            }
+        }
+
+        Ok(None)
+    }
+
     /// Lists posts authored by this user
     async fn posts(
         &self,
@@ -115,6 +138,7 @@ impl From<playa::user::model::User> for User {
             email: value.email.to_string(),
             created_at: value.created_at,
             updated_at: value.updated_at,
+            avatar_id: value.avatar_id.map(|id| id.into()),
         }
     }
 }

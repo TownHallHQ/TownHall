@@ -8,11 +8,10 @@
 
 <div>
   <Navbar />
-  <div class="flex pt-16 overflow-hidden bg-base-light text-black dark:bg-neutral-800 dark:text-white">
-    <div
-      id="main-content"
-      class="flex w-full min-h-[calc(100vh-64px)] overflow-y-auto"
-    >
+  <div
+    class="pt-16 overflow-hidden bg-base-light text-black dark:bg-neutral-800 dark:text-white"
+  >
+    <div id="main-content" class="min-h-[calc(100vh-64px)] overflow-y-auto">
       <slot />
     </div>
   </div>

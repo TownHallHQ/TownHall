@@ -366,6 +366,13 @@ export type UserRegisterMutationVariables = Exact<{
 
 export type UserRegisterMutation = { __typename?: 'MutationRoot', userRegister: { __typename?: 'UserRegister', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any, avatar?: { __typename?: 'Image', id: any, url: string } | null } | null, error?: { __typename?: 'UserError', code: UserErrorCode, message: string } | null } };
 
+export type UserUpdateMutationVariables = Exact<{
+  input: UserUpdateInput;
+}>;
+
+
+export type UserUpdateMutation = { __typename?: 'MutationRoot', userUpdate: { __typename?: 'UserUpdate', user?: { __typename?: 'User', id: any, name: string, surname: string, email: string, username: string, createdAt: any, updatedAt: any, avatar?: { __typename?: 'Image', id: any, url: string } | null } | null, error?: { __typename?: 'UserError', code: UserErrorCode, message: string } | null } };
+
 export const PostCreateFieldsFragmentDoc = gql`
     fragment PostCreateFields on Post {
   id
@@ -518,6 +525,19 @@ ${PostListFieldsFragmentDoc}`;
 export const UserRegisterDocument = gql`
     mutation UserRegister($input: UserRegisterInput!) {
   userRegister(input: $input) {
+    user {
+      ...CurrentUser
+    }
+    error {
+      code
+      message
+    }
+  }
+}
+    ${CurrentUserFragmentDoc}`;
+export const UserUpdateDocument = gql`
+    mutation UserUpdate($input: UserUpdateInput!) {
+  userUpdate(input: $input) {
     user {
       ...CurrentUser
     }

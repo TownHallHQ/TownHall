@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-import type { CurrentUserFragment } from '$lib/graphql/schema';
+import type { CurrentUserFragment, UserUpdateInput } from '$lib/graphql/schema';
 import type { Unsubscriber, Writable } from 'svelte/store';
 import type { Readable, Subscriber } from 'svelte/motion';
 import type { Client } from '@urql/core';
@@ -20,6 +20,15 @@ export interface UserStoreMethods {
    * Updates the avatar of this user
    */
   updateAvatar(urqlClient: Client, file: File): Promise<void>;
+
+  /**
+   *
+   * @param urqlClient
+   * @param input
+   *
+   * Updates the user
+   */
+  update(urqlClient: Client, input: UserUpdateInput): Promise<void>;
 }
 
 export class UserStore implements UserStoreMethods {
@@ -39,6 +48,14 @@ export class UserStore implements UserStoreMethods {
 
   public async updateAvatar(urqlClient: Client, file: File): Promise<void> {
     const user = await UserService.userAvatarUpdate(urqlClient, file);
+    this.inner.set(user);
+  }
+
+  public async update(
+    urqlClient: Client,
+    input: UserUpdateInput
+  ): Promise<void> {
+    const user = await UserService.userUpdate(urqlClient, input);
     this.inner.set(user);
   }
 }

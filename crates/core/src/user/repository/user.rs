@@ -68,9 +68,11 @@ impl UserRepository {
             email: model.email,
             password_hash: model.password_hash,
             avatar_id: model.avatar_id,
-            created_at: DateTime::from_utc(model.created_at, Utc),
-            updated_at: DateTime::from_utc(model.updated_at, Utc),
-            deleted_at: model.deleted_at.map(|naive| DateTime::from_utc(naive, Utc)),
+            created_at: DateTime::from_naive_utc_and_offset(model.created_at, Utc),
+            updated_at: DateTime::from_naive_utc_and_offset(model.updated_at, Utc),
+            deleted_at: model
+                .deleted_at
+                .map(|naive| DateTime::from_naive_utc_and_offset(naive, Utc)),
         }
     }
 

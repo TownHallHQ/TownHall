@@ -53,7 +53,7 @@ export class UserStore implements UserStoreMethods {
 
   public async update(
     urqlClient: Client,
-    input: UserUpdateInput
+    input: UserUpdateInput,
   ): Promise<void> {
     const user = await UserService.userUpdate(urqlClient, input);
     this.inner.set(user);

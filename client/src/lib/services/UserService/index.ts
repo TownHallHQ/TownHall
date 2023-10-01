@@ -18,7 +18,7 @@ export class UserError extends GraphQLError<UserErrorCode> {}
 export class UserService {
   static async userRegister(
     urqlClient: Client,
-    input: UserRegisterInput
+    input: UserRegisterInput,
   ): Promise<CurrentUserFragment> {
     const response = await urqlClient
       .mutation(
@@ -28,7 +28,7 @@ export class UserService {
         },
         {
           requestPolicy: 'network-only', // We dont want to cache this request
-        }
+        },
       )
       .toPromise();
 
@@ -47,7 +47,7 @@ export class UserService {
 
   static async userAvatarUpdate(
     urqlClient: Client,
-    file: File
+    file: File,
   ): Promise<CurrentUserFragment> {
     const response = await urqlClient
       .mutation(UserAvatarUpdateDocument, {
@@ -70,7 +70,7 @@ export class UserService {
 
   static async userUpdate(
     urqlClient: Client,
-    input: UserUpdateInput
+    input: UserUpdateInput,
   ): Promise<CurrentUserFragment> {
     const response = await urqlClient
       .mutation(UserUpdateDocument, {

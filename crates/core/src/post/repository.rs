@@ -58,8 +58,8 @@ impl PostRepository {
             head: model.head,
             title: model.title,
             content: model.content,
-            created_at: DateTime::from_utc(model.created_at, Utc),
-            updated_at: DateTime::from_utc(model.updated_at, Utc),
+            created_at: DateTime::from_naive_utc_and_offset(model.created_at, Utc),
+            updated_at: DateTime::from_naive_utc_and_offset(model.updated_at, Utc),
         }
     }
 

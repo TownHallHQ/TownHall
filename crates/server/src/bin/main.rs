@@ -1,10 +1,11 @@
+use anyhow::Result;
 use dotenv::dotenv;
 use tracing::info;
 
 use libserver::start;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<()> {
     if cfg!(debug_assertions) {
         // When running on development mode, its convenient to read environment
         // variables from a `.env` file.
@@ -14,5 +15,5 @@ async fn main() {
 
     tracing_subscriber::fmt::init();
 
-    start().await;
+    start().await
 }

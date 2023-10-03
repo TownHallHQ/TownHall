@@ -98,19 +98,10 @@ impl<P: ImageProvider> UserService<P> {
     }
 
     pub async fn find_by_id(&self, id: Pxid) -> Result<Option<User>> {
-        let qs = self
-            .repository
-            .list(
-                Some(Pagination::first()),
-                Some(UserFilter {
-                    id: Some(id),
-                    ..Default::default()
-                }),
-            )
-            .await?;
+        let maybe_user = self.repository.find_by_id(&id).await?;
 
-        if let Some(record) = qs.first() {
-            return Ok(Some(User::try_from(record.to_owned())?));
+        if let Some(record) = maybe_user {
+            return Ok(Some(User::try_from(record)?));
         }
 
         Ok(None)

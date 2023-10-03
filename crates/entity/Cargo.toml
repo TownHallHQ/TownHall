@@ -11,5 +11,5 @@ name = "entity"
 path = "src/lib.rs"
 
 [dependencies]
-sea-orm = { workspace = true, features = [ "sqlx-postgres", "runtime-tokio-rustls", "macros", "with-chrono", ] }
+sea-orm = { workspace = true, features = [ "sqlx-postgres", "runtime-tokio-rustls", "macros", "with-chrono" ] }
 serde = { workspace = true, features = ["derive"] }

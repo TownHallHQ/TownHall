@@ -216,6 +216,23 @@ impl UserRepository {
         Ok(None)
     }
 
+    pub async fn find_by_id(&self, id: &Pxid) -> Result<Option<UserRecord>> {
+        let maybe_user = entity::prelude::User::find()
+            .filter(entity::user::Column::Id.eq(id.to_string()))
+            .one(&*self.db)
+            .await
+            .map_err(|err| {
+                tracing::error!(%err, %id, "Failed to find User by ID");
+                UserError::DatabaseError
+            })?;
+
+        if let Some(user_model) = maybe_user {
+            return Ok(Some(Self::into_record(user_model)));
+        }
+
+        Ok(None)
+    }
+
     pub async fn update_avatar(&self, id: Pxid, avatar_id: Pxid) -> Result<UserRecord> {
         let maybe_user = entity::prelude::User::find()
             .filter(entity::user::Column::Id.eq(id.to_string()))

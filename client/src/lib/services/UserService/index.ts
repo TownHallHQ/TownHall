@@ -1,6 +1,7 @@
 import {
   UserAvatarUpdateDocument,
   UserRegisterDocument,
+  UserUpdateDocument,
 } from '$lib/graphql/schema';
 
 import type { Client } from '@urql/core';
@@ -8,6 +9,7 @@ import type {
   CurrentUserFragment,
   UserErrorCode,
   UserRegisterInput,
+  UserUpdateInput,
 } from '$lib/graphql/schema';
 import { GraphQLError } from '$lib/utils/graphql';
 
@@ -64,5 +66,31 @@ export class UserService {
     }
 
     return response.data.userAvatarUpdate.user;
+  }
+
+  static async userUpdate(
+    urqlClient: Client,
+    input: UserUpdateInput,
+  ): Promise<CurrentUserFragment> {
+    const response = await urqlClient
+      .mutation(UserUpdateDocument, {
+        input,
+      })
+      .toPromise();
+
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+
+    if (response.data?.userUpdate?.user) {
+      return response.data?.userUpdate?.user;
+    }
+
+    const { code, message } = response.data?.userUpdate?.error || {
+      code: 'UNKNOWN',
+      message: 'Unknown error',
+    };
+
+    throw UserError.new(code, message);
   }
 }

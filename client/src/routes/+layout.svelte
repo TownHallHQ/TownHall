@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { cacheExchange, fetchExchange } from "@urql/core";
-  import { authExchange } from "@urql/exchange-auth";
-  import { createClient, setContextClient } from "@urql/svelte";
-  import { NotificationList, Position } from "@whizzes/svelte-notifications";
+  import { cacheExchange, fetchExchange } from '@urql/core';
+  import { authExchange } from '@urql/exchange-auth';
+  import { createClient, setContextClient } from '@urql/svelte';
+  import { NotificationList, Position } from '@whizzes/svelte-notifications';
 
-  import { page } from "$app/stores";
-  import { browser } from "$app/environment";
-  import Notification from "$lib/components/Notification/Notification.svelte";
-  import ui from "$lib/stores/ui";
+  import { page } from '$app/stores';
+  import { browser } from '$app/environment';
+  import Notification from '$lib/components/Notification/Notification.svelte';
+  import ui from '$lib/stores/ui';
 
-  import "@fontsource/inter";
-  import "../app.css";
+  import '@fontsource/inter';
+  import '../app.css';
 
-  import { pwaInfo } from "virtual:pwa-info";
-  import { onMount } from "svelte";
+  import { pwaInfo } from 'virtual:pwa-info';
+  import { onMount } from 'svelte';
 
   const initializeAuthState = () => {
     const token = $page.data?.accessToken;
@@ -42,7 +42,7 @@
             });
           },
           async refreshAuth() {
-            window.location.href = "/logout";
+            window.location.href = '/logout';
           },
           willAuthError() {
             return false;
@@ -65,20 +65,20 @@
   onMount(async () => {
     if (pwaInfo) {
       // @ts-ignore
-      const { registerSW } = await import("virtual:pwa-register");
+      const { registerSW } = await import('virtual:pwa-register');
       registerSW({
         immediate: true,
         onRegistered(r: any) {
           console.log(`SW Registered: ${r}`);
         },
         onRegisterError(error: any) {
-          console.log("SW registration error", error);
+          console.log('SW registration error', error);
         },
       });
     }
   });
 
-  $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : "";
+  $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
 
 <svelte:head>
@@ -91,10 +91,14 @@
   <slot />
 </div>
 
-<NotificationList position={Position.TopRight} let:notification>
+<NotificationList
+  class="z-50 top-1 right-1"
+  position={Position.TopRight}
+  let:notification
+>
   <Notification {notification} />
 </NotificationList>
 
-{#await import("$lib/components/ReloadPrompt.svelte") then { default: ReloadPrompt }}
+{#await import('$lib/components/ReloadPrompt.svelte') then { default: ReloadPrompt }}
   <ReloadPrompt />
 {/await}

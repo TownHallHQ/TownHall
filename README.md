@@ -1,5 +1,4 @@
 <div align="center">
-  <span style="font-size: 64px;">🏖️</span>
   <h1 align="center">TownHall</h1>
   <p align="center">
     Decentralized Social Platform powered by Rust and Whizzes Contributors

@@ -71,6 +71,8 @@ impl DatabseSub {
                     model_extra_derives: Vec::default(),
                     model_extra_attributes: Vec::default(),
                     seaography: false,
+                    enum_extra_derives: Vec::default(),
+                    enum_extra_attributes: Vec::default(),
                 };
 
                 tracing::info!("Generating Database Entities");

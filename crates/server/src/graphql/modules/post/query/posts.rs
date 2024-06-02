@@ -1,6 +1,6 @@
 use async_graphql::connection::{query, Connection, Edge, EmptyFields};
 use async_graphql::{Context, Result};
-use pxid::graphql::Pxid;
+use pxid::Pxid;
 
 use townhall::shared::pagination::Pagination;
 
@@ -33,12 +33,7 @@ impl Posts {
              before: Option<Pxid>,
              first: Option<usize>,
              last: Option<usize>| async move {
-                let pagination = Pagination::new(
-                    after.map(|id| id.into_inner()),
-                    before.map(|id| id.into_inner()),
-                    first,
-                    last,
-                )?;
+                let pagination = Pagination::new(after, before, first, last)?;
                 let query_set = context.services.post.list(Some(pagination), None).await?;
                 let total_count = query_set.count();
                 let posts = query_set.records();

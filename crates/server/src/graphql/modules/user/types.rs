@@ -1,7 +1,7 @@
 use async_graphql::connection::{query, Connection, Edge, EmptyFields};
 use async_graphql::{ComplexObject, Context, Enum, Result, SimpleObject};
 use chrono::{DateTime, Utc};
-use pxid::graphql::Pxid;
+use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 use townhall::post::repository::PostFilter;
 use townhall::shared::pagination::Pagination;
@@ -53,7 +53,7 @@ impl User {
             let image = context
                 .services
                 .image
-                .find_by_id(avatar_id.into_inner())
+                .find_by_id(avatar_id.to_owned())
                 .await?;
 
             if let Some(image) = image {
@@ -86,19 +86,14 @@ impl User {
              before: Option<Pxid>,
              first: Option<usize>,
              last: Option<usize>| async move {
-                let pagination = Pagination::new(
-                    after.map(|id| id.into_inner()),
-                    before.map(|id| id.into_inner()),
-                    first,
-                    last,
-                )?;
+                let pagination = Pagination::new(after, before, first, last)?;
                 let query_set = context
                     .services
                     .post
                     .list(
                         Some(pagination),
                         Some(PostFilter {
-                            author_id: Some(self.id.into_inner()),
+                            author_id: Some(self.id),
                         }),
                     )
                     .await?;
@@ -131,14 +126,14 @@ impl User {
 impl From<townhall::user::model::User> for User {
     fn from(value: townhall::user::model::User) -> Self {
         User {
-            id: value.id.into(),
+            id: value.id,
             name: value.name,
             surname: value.surname,
             username: value.username.to_string(),
             email: value.email.to_string(),
             created_at: value.created_at,
             updated_at: value.updated_at,
-            avatar_id: value.avatar_id.map(|id| id.into()),
+            avatar_id: value.avatar_id,
         }
     }
 }

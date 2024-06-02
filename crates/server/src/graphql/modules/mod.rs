@@ -3,7 +3,7 @@ pub mod post;
 pub mod user;
 
 use async_graphql::{MergedObject, SimpleObject};
-use pxid::graphql::Pxid;
+use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
 use self::auth::mutation::AuthMutationRoot;
@@ -28,7 +28,7 @@ pub struct Image {
 impl From<townhall::image::model::Image> for Image {
     fn from(value: townhall::image::model::Image) -> Self {
         Image {
-            id: Pxid::from(value.id),
+            id: value.id,
             url: value.url,
         }
     }

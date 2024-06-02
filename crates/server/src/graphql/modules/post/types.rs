@@ -1,6 +1,6 @@
 use async_graphql::{ComplexObject, Context, Enum, SimpleObject};
 use chrono::{DateTime, Utc};
-use pxid::graphql::Pxid;
+use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
 use townhall::shared::pagination::Pagination;
@@ -46,7 +46,7 @@ impl Post {
             .list(
                 Some(Pagination::first()),
                 Some(UserFilter {
-                    id: Some(self.author_id.into_inner()),
+                    id: Some(self.author_id),
                     ..Default::default()
                 }),
             )
@@ -61,9 +61,9 @@ impl Post {
 impl From<townhall::post::model::Post> for Post {
     fn from(value: townhall::post::model::Post) -> Self {
         Post {
-            id: value.id.into(),
-            author_id: value.author_id.into(),
-            parent_id: value.parent_id.map(|id| id.into()),
+            id: value.id,
+            author_id: value.author_id,
+            parent_id: value.parent_id,
             head: value.head,
             title: value.title,
             content: value.content,

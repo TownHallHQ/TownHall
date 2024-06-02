@@ -1,5 +1,5 @@
 use async_graphql::{Context, Result, SimpleObject};
-use pxid::graphql::Pxid;
+use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
 use townhall::user::service::FollowPeers;
@@ -22,8 +22,8 @@ impl UserFollow {
             .services
             .user
             .follow(FollowPeers {
+                followee_id,
                 follower_id: user_id,
-                followee_id: followee_id.into_inner(),
             })
             .await
         {

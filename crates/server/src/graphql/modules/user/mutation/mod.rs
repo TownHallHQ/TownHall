@@ -5,7 +5,7 @@ mod user_unfollow;
 mod user_update;
 
 use async_graphql::{Context, Object, Result, Upload};
-use pxid::graphql::Pxid;
+use pxid::Pxid;
 
 use crate::graphql::guard::AuthenticationGuard;
 

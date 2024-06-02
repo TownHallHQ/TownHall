@@ -1,7 +1,7 @@
 mod posts;
 
 use async_graphql::{Context, Object, Result};
-use pxid::graphql::Pxid;
+use pxid::Pxid;
 
 use self::posts::{Posts, PostsConnection};
 

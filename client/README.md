@@ -9,9 +9,9 @@
 <div align="center">
 
 [![Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/yde6mcgs2C)
-![Build](https://github.com/whizzes/townhall/workflows/build/badge.svg)
-![Tests](https://github.com/whizzes/townhall/workflows/test/badge.svg)
-![Lint](https://github.com/whizzes/townhall/workflows/lint/badge.svg)
+![Build](https://github.com/TownHall-HQ/TownHall/workflows/build/badge.svg)
+![Tests](https://github.com/TownHall-HQ/TownHall/workflows/test/badge.svg)
+![Lint](https://github.com/TownHall-HQ/TownHall/workflows/lint/badge.svg)
 
 </div>
 

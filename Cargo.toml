@@ -11,20 +11,28 @@ default-members = ["crates/cli"]
 resolver = "2"
 
 [workspace.dependencies]
-anyhow = "1.0.75"
-async-graphql = { version = "6.0.7", features = ["chrono", "decimal", "tracing"] }
-async-trait = "0.1.73"
-chrono = { version = "0.4.26" }
+anyhow = "1.0.86"
+async-graphql = { version = "7.0.5", features = ["chrono", "decimal", "tracing"] }
+async-graphql-axum = "7.0.5"
+async-trait = "0.1.80"
+axum = "0.7.5"
+base64 = "0.22.1"
+chrono = "0.4.38"
 dotenv = "0.15.0"
-pxid = { version = "0.3", features = ["async-graphql"] }
-rust-argon2 = "1"
-sea-orm = "0.12.1"
-sea-orm-cli = { version = "0.12.3", default-features = false }
-sea-orm-migration = "0.12.1"
-serde = { version = "1.0.188" }
-serde_json = { version = "1.0.104" }
+fake = "2.9.2"
+jsonwebtoken = "9.3"
+pxid = { version = "0.5", features = ["async-graphql"] }
+rand = "0.8.5"
+rust-argon2 = "2.1.0"
+rust-s3 = { version = "0.33.0", features = ["tokio-rustls-tls", "fail-on-err"], default-features = false }
+sea-orm = "0.12"
+sea-orm-cli = { version = "0.12", default-features = false }
+sea-orm-migration = "0.12"
+serde = "1.0"
+serde_json = "1.0"
 thiserror = "1.0.38"
-tokio = { version = "1.33.0", features = ["rt", "macros"] }
-tracing = "0.1.37"
-tracing-subscriber = "0.3.15"
-url = { version = "2.4.1", features = ["serde"] }
+tokio = { version = "1.38", features = ["rt", "macros"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+tower-http = { version = "0.5", features = ["cors"] }
+url = { version = "2.5", features = ["serde"] }

@@ -1,5 +1,6 @@
-use std::ops::Deref;
+use std::fmt::{self, Formatter};
 use std::str::FromStr;
+use std::{fmt::Display, ops::Deref};
 
 use async_graphql::{InputValueError, InputValueResult, Scalar, ScalarType, Value};
 use serde::{Deserialize, Serialize};
@@ -66,9 +67,9 @@ impl ScalarType for Email {
     }
 }
 
-impl ToString for Email {
-    fn to_string(&self) -> String {
-        self.0.to_string()
+impl Display for Email {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        write!(f, "{}", self.0)
     }
 }
 

@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use anyhow::{Error, Result};
 use argon2::verify_encoded;
 use chrono::{Duration, Utc};
@@ -26,9 +28,9 @@ impl Token {
     }
 }
 
-impl ToString for Token {
-    fn to_string(&self) -> String {
-        self.raw.clone()
+impl Display for Token {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.raw)
     }
 }
 

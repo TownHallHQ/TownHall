@@ -12,6 +12,7 @@ use async_graphql::{EmptySubscription, Schema};
 use axum::http::{header, HeaderValue, Method};
 use axum::routing::get;
 use axum::{Extension, Router};
+use tokio::net::TcpListener;
 use tower_http::cors::CorsLayer;
 
 use crate::context::Context;
@@ -20,6 +21,7 @@ use crate::graphql::schema::{MutationRoot, QueryRoot};
 pub async fn start() -> Result<()> {
     let config = config::Config::new();
     let addr = SocketAddr::from(([127, 0, 0, 1], config.server_port));
+    let tcp_listener = TcpListener::bind(addr).await?;
     let context = Context::new(&config).await?;
     let context = Arc::new(context);
     let schema = Schema::build(
@@ -45,9 +47,7 @@ pub async fn start() -> Result<()> {
 
     tracing::info!("GraphQL Playground available on http://{}/graphql", addr);
 
-    axum::Server::bind(&addr)
-        .serve(app.into_make_service())
-        .await?;
+    axum::serve(tcp_listener, app.into_make_service()).await?;
 
     Ok(())
 }

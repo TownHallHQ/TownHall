@@ -1,5 +1,5 @@
 use async_graphql::{Context, InputObject, Result, SimpleObject};
-use pxid::graphql::Pxid;
+use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
 use townhall::post::service::CreatePostDto;
@@ -27,7 +27,7 @@ impl PostCreate {
         let token = ctx.data_unchecked::<Token>();
 
         let claims = context.services.auth.verify_token(token).unwrap();
-        let parent_id = input.parent_id.map(|id| id.into_inner());
+        let parent_id = input.parent_id;
         let dto = CreatePostDto {
             author_id: claims.uid,
             parent_id,

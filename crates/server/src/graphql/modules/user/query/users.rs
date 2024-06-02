@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use async_graphql::connection::{query, Connection, Edge, EmptyFields};
 use async_graphql::{Context, InputObject, Result};
-use pxid::graphql::Pxid;
+use pxid::Pxid;
 
 use townhall::shared::pagination::Pagination;
 use townhall::user::model::{Email, Username};
@@ -24,7 +24,7 @@ pub struct UserFilterInput {
 impl From<UserFilterInput> for UserFilter {
     fn from(value: UserFilterInput) -> Self {
         UserFilter {
-            id: value.id.map(|id| id.into_inner()),
+            id: value.id,
             email: value.email.and_then(|s| Email::from_str(&s).ok()),
             username: value.username.and_then(|s| Username::from_str(&s).ok()),
         }
@@ -55,12 +55,7 @@ impl Users {
              before: Option<Pxid>,
              first: Option<usize>,
              last: Option<usize>| async move {
-                let pagination = Pagination::new(
-                    after.map(|id| id.into_inner()),
-                    before.map(|id| id.into_inner()),
-                    first,
-                    last,
-                )?;
+                let pagination = Pagination::new(after, before, first, last)?;
                 let query_set = context
                     .services
                     .user

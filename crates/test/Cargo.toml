@@ -9,15 +9,13 @@ name = "test"
 path = "src/lib.rs"
 
 [dependencies]
-fake = "2.8.0"
-rand = "0.8.5"
-
-# Workspace Dependencies
 anyhow = { workspace = true }
 async-graphql = { workspace = true }
 chrono = { workspace = true }
 dotenv = { workspace = true }
+fake = { workspace = true }
 pxid = { workspace = true }
+rand = { workspace = true }
 serde_json = { workspace = true }
 tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
 

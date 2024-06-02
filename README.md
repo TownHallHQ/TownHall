@@ -1,8 +1,5 @@
 <div align="center">
   <h1 align="center">TownHall</h1>
-  <p align="center">
-    Decentralized Social Platform powered by Rust and Whizzes Contributors
-  </p>
 </div>
 
 <div align="center">

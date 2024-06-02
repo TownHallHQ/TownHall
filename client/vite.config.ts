@@ -17,8 +17,8 @@ const config: UserConfig = {
     sveltekit(),
     SvelteKitPWA({
       manifest: {
-        name: "Playa",
-        short_name: "Playa",
+        name: "townhall",
+        short_name: "townhall",
         background_color: "#fff",
         theme_color: "#448aff",
         start_url: "/",

@@ -33,11 +33,11 @@
     </div>
     <footer class="footer">
       <small>
-        playa is an MIT Licensed solution
+        townhall is an MIT Licensed solution
         <br />
         Contribute to the project on{" "}
         <a
-          href="https://github.com/whizzes/playa"
+          href="https://github.com/whizzes/townhall"
           class="text-blue-600 underline"
           target="_blank"
         >
@@ -56,7 +56,7 @@
       on
       <a
         class="underline font-medium"
-        href="https://unsplash.com/?utm_source=playa&utm_medium=referral"
+        href="https://unsplash.com/?utm_source=townhall&utm_medium=referral"
       >
         Unsplash</a
       ></small

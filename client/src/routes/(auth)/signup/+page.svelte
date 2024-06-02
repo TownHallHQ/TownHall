@@ -59,7 +59,7 @@
 {:else}
   <div class="flex flex-col justify-center h-full">
     <div class="text-lg py-4">
-      <h1 class="font-semibold">Welcome to playa!</h1>
+      <h1 class="font-semibold">Welcome to townhall!</h1>
       <span> Create an account to continue </span>
     </div>
     <form class="flex flex-col py-4 space-y-4" on:submit={handleSubmit}>

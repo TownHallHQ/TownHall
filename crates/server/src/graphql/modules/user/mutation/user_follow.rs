@@ -2,7 +2,7 @@ use async_graphql::{Context, Result, SimpleObject};
 use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
 
-use playa::user::service::FollowPeers;
+use townhall::user::service::FollowPeers;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{UserError, UserErrorCode};

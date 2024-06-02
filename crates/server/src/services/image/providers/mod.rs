@@ -4,8 +4,8 @@ use std::sync::Arc;
 
 use async_trait::async_trait;
 
-use playa::image::error::Result;
-use playa::image::service::{ImageProvider, ImageProviderResource};
+use townhall::image::error::Result;
+use townhall::image::service::{ImageProvider, ImageProviderResource};
 
 use crate::services::Config;
 

@@ -1,6 +1,6 @@
 <div align="center">
   <span style="font-size: 64px;">🏖️</span>
-  <h1 align="center">playa</h1>
+  <h1 align="center">townhall</h1>
   <p align="center">
     Decentralized Social Platform powered by Rust and Whizzes Contributors
   </p>
@@ -9,15 +9,15 @@
 <div align="center">
 
   [![Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/yde6mcgs2C)
-  ![Build](https://github.com/whizzes/playa/workflows/build/badge.svg)
-  ![Clippy](https://github.com/whizzes/playa/workflows/clippy/badge.svg)
-  ![Formatter](https://github.com/whizzes/playa/workflows/fmt/badge.svg)
+  ![Build](https://github.com/whizzes/townhall/workflows/build/badge.svg)
+  ![Clippy](https://github.com/whizzes/townhall/workflows/clippy/badge.svg)
+  ![Formatter](https://github.com/whizzes/townhall/workflows/fmt/badge.svg)
 
 </div>
 
 ### Collab Strategy 
 
-Playa is collaborative project for novice-to-intermediate Rust (backend) and JS/TS (frontend) web developers. We’re learning-by-doing together, in the making of a community platform modeled after the likes of Discord (chat) and Discourse (forum).
+townhall is collaborative project for novice-to-intermediate Rust (backend) and JS/TS (frontend) web developers. We’re learning-by-doing together, in the making of a community platform modeled after the likes of Discord (chat) and Discourse (forum).
 
 The project leader and default mentor for new contributors is @EstebanBorai. New mentors and mentees alike are always welcome!
 
@@ -36,11 +36,11 @@ The project leader and default mentor for new contributors is @EstebanBorai. New
 cargo install just
 
 # clone this repository
-git clone https://github.com/whizzes/playa.git
+git clone https://github.com/whizzes/townhall.git
 
 
 # step into repository directory
-cd ./playa
+cd ./townhall
 
 # open a termital window and spin up Docker Containers
 just dev
@@ -64,7 +64,7 @@ the services.
 
 <div align="center">
 
-  ![softarq](https://github.com/whizzes/playa/assets/34756077/86abfb8d-8e96-4e93-9677-4e0864f53da6)
+  ![softarq](https://github.com/whizzes/townhall/assets/34756077/86abfb8d-8e96-4e93-9677-4e0864f53da6)
 
 </div>
 
@@ -128,7 +128,7 @@ Teardown containers using `just undev`.
           </sub>
         </a>
         <br />
-        <a href="https://github.com/whizzes/playa/commits?author=EstebanBorai" title="Code">💻</a>
+        <a href="https://github.com/whizzes/townhall/commits?author=EstebanBorai" title="Code">💻</a>
       </td>
       <td align="center" valign="top" width="14.28%">
         <a href="https://github.com/Michael-Liendo">
@@ -139,7 +139,7 @@ Teardown containers using `just undev`.
           </sub>
         </a>
         <br />
-        <a href="https://github.com/whizzes/playa/commits?author=Michael-Liendo" title="Code">💻</a>
+        <a href="https://github.com/whizzes/townhall/commits?author=Michael-Liendo" title="Code">💻</a>
       </td>
       <td align="center" valign="top" width="14.28%">
         <a href="https://github.com/Dave136">
@@ -150,7 +150,7 @@ Teardown containers using `just undev`.
           </sub>
         </a>
         <br />
-        <a href="https://github.com/whizzes/playa/commits?author=Dave136" title="Code">💻</a>
+        <a href="https://github.com/whizzes/townhall/commits?author=Dave136" title="Code">💻</a>
       </td>
       <td align="center" valign="top" width="14.28%">
         <a href="https://github.com/CudiLala">
@@ -161,7 +161,7 @@ Teardown containers using `just undev`.
           </sub>
         </a>
         <br />
-        <a href="https://github.com/whizzes/playa/commits?author=CudiLala" title="Code">💻</a>
+        <a href="https://github.com/whizzes/townhall/commits?author=CudiLala" title="Code">💻</a>
       </td>
       <td align="center" valign="top" width="14.28%">
         <a href="https://github.com/PalyZambrano">
@@ -172,7 +172,7 @@ Teardown containers using `just undev`.
           </sub>
         </a>
         <br />
-        <a href="https://github.com/whizzes/playa/commits?author=PalyZambrano" title="Code">💻</a>
+        <a href="https://github.com/whizzes/townhall/commits?author=PalyZambrano" title="Code">💻</a>
       </td>
       <td align="center" valign="top" width="14.28%">
         <a href="https://github.com/Phosphorus-M">
@@ -183,7 +183,7 @@ Teardown containers using `just undev`.
           </sub>
         </a>
         <br />
-        <a href="https://github.com/whizzes/playa/commits?author=Phosphorus-M" title="Code">💻</a>
+        <a href="https://github.com/whizzes/townhall/commits?author=Phosphorus-M" title="Code">💻</a>
       </td>
       <td align="center" valign="top" width="14.28%">
         <a href="https://github.com/dararod">
@@ -194,7 +194,7 @@ Teardown containers using `just undev`.
           </sub>
         </a>
         <br />
-        <a href="https://github.com/whizzes/playa/commits?author=dararod" title="Code">💻</a>
+        <a href="https://github.com/whizzes/townhall/commits?author=dararod" title="Code">💻</a>
       </td>
     </tr>
   </tbody>

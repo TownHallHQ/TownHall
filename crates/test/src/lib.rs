@@ -8,7 +8,7 @@ use libserver::context::Context;
 use libserver::graphql::schema::{build_schema_with_context, GraphQLSchema};
 use libserver::services::auth::Token;
 use migration::{Migrator, MigratorTrait};
-use playa::shared::database::Database;
+use townhall::shared::database::Database;
 
 pub const TEST_ADMIN_EMAIL: &str = "admin@whizzes.io";
 pub const TEST_ADMIN_PASSWORD: &str = "R00tP@ssw0rd";

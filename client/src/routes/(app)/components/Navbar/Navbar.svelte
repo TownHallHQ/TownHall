@@ -8,7 +8,7 @@
 >
   <a href="/" class="flex items-center justify-center">
     <span class="text-2xl">🏖️</span>
-    <strong class="text-xl font-semibold">playa</strong>
+    <strong class="text-xl font-semibold">townhall</strong>
   </a>
   <div class="flex gap-4">
     {#if $userStore}

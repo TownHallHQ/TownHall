@@ -1,10 +1,10 @@
 use async_graphql::connection::{query, Connection, Edge, EmptyFields};
 use async_graphql::{ComplexObject, Context, Enum, Result, SimpleObject};
 use chrono::{DateTime, Utc};
-use playa::post::repository::PostFilter;
-use playa::shared::pagination::Pagination;
 use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
+use townhall::post::repository::PostFilter;
+use townhall::shared::pagination::Pagination;
 
 use crate::context::SharedContext;
 
@@ -128,8 +128,8 @@ impl User {
     }
 }
 
-impl From<playa::user::model::User> for User {
-    fn from(value: playa::user::model::User) -> Self {
+impl From<townhall::user::model::User> for User {
+    fn from(value: townhall::user::model::User) -> Self {
         User {
             id: value.id.into(),
             name: value.name,

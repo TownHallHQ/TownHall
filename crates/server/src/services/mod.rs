@@ -5,14 +5,14 @@ use std::sync::Arc;
 
 use anyhow::Result;
 
-use playa::image::repository::ImageRepository;
-use playa::image::service::ImageService;
-use playa::post::repository::PostRepository;
-use playa::post::service::PostService;
-use playa::shared::database::Database;
-use playa::user::repository::follower::UserFollowersRepository;
-use playa::user::repository::user::UserRepository;
-use playa::user::service::UserService;
+use townhall::image::repository::ImageRepository;
+use townhall::image::service::ImageService;
+use townhall::post::repository::PostRepository;
+use townhall::post::service::PostService;
+use townhall::shared::database::Database;
+use townhall::user::repository::follower::UserFollowersRepository;
+use townhall::user::repository::user::UserRepository;
+use townhall::user::service::UserService;
 
 use crate::config::Config;
 

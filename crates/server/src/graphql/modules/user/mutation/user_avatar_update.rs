@@ -5,7 +5,7 @@ use async_graphql::{Context, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 use tracing::instrument;
 
-use playa::user::service::UploadAvatarDto;
+use townhall::user::service::UploadAvatarDto;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{UserError, UserErrorCode};

@@ -1,7 +1,7 @@
 use async_graphql::{Context, InputObject, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 
-use playa::user::repository::user::UpdateUserDto;
+use townhall::user::repository::user::UpdateUserDto;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{User, UserError, UserErrorCode};

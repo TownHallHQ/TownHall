@@ -1,11 +1,11 @@
 use std::str::FromStr;
 
 use async_graphql::{Request, Variables};
-use playa::user::{
+use serde_json::json;
+use townhall::user::{
     model::{Email, Password, Username},
     service::CreateUserDto,
 };
-use serde_json::json;
 
 use libserver::graphql::guard::{GENERIC_FORBIDDEN_ERROR, GENERIC_FORBIDDEN_ERROR_CODE};
 

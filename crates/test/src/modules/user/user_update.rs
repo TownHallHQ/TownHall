@@ -3,8 +3,8 @@ use std::str::FromStr;
 use async_graphql::{Request, Variables};
 use serde_json::json;
 
-use playa::user::model::{Email, Password, Username};
-use playa::user::service::CreateUserDto;
+use townhall::user::model::{Email, Password, Username};
+use townhall::user::service::CreateUserDto;
 
 use crate::TestUtil;
 

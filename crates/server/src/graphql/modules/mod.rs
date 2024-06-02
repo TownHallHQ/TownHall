@@ -25,8 +25,8 @@ pub struct Image {
     url: String,
 }
 
-impl From<playa::image::model::Image> for Image {
-    fn from(value: playa::image::model::Image) -> Self {
+impl From<townhall::image::model::Image> for Image {
+    fn from(value: townhall::image::model::Image) -> Self {
         Image {
             id: Pxid::from(value.id),
             url: value.url,

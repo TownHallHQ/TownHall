@@ -1,6 +1,6 @@
 
 <div>
-  <h1 align="center">playa Frontend</h1>
+  <h1 align="center">townhall Frontend</h1>
   <h4 align="center">
     A "Host Yourself" Chat powered by Rust and Whizzes Contributors
   </h4>
@@ -9,9 +9,9 @@
 <div align="center">
 
 [![Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/yde6mcgs2C)
-![Build](https://github.com/whizzes/playa/workflows/build/badge.svg)
-![Tests](https://github.com/whizzes/playa/workflows/test/badge.svg)
-![Lint](https://github.com/whizzes/playa/workflows/lint/badge.svg)
+![Build](https://github.com/whizzes/townhall/workflows/build/badge.svg)
+![Tests](https://github.com/whizzes/townhall/workflows/test/badge.svg)
+![Lint](https://github.com/whizzes/townhall/workflows/lint/badge.svg)
 
 </div>
 
@@ -22,10 +22,10 @@
 
 ```bash
 # clone repository
-git clone git@github.com:whizzes/playa.git
+git clone git@github.com:whizzes/townhall.git
 
 # cd into the new directory
-cd ./playa/client
+cd ./townhall/client
 
 # create a `.env` file by copying contents from `.env.example`
 cp .env.example .env
@@ -33,7 +33,7 @@ cp .env.example .env
 # install dependencies
 bun i
 
-# optional: make sure playa server is running
+# optional: make sure townhall server is running
 lsof -i -P -n | grep LISTEN
 
 # run on development mode

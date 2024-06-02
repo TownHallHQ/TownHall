@@ -2,7 +2,7 @@ use async_graphql::connection::{query, Connection, Edge, EmptyFields};
 use async_graphql::{Context, Result};
 use pxid::graphql::Pxid;
 
-use playa::shared::pagination::Pagination;
+use townhall::shared::pagination::Pagination;
 
 use crate::context::SharedContext;
 use crate::graphql::connection_details::ConnectionDetails;

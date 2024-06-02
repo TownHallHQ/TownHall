@@ -3,8 +3,8 @@ use chrono::{DateTime, Utc};
 use pxid::graphql::Pxid;
 use serde::{Deserialize, Serialize};
 
-use playa::shared::pagination::Pagination;
-use playa::user::repository::user::UserFilter;
+use townhall::shared::pagination::Pagination;
+use townhall::user::repository::user::UserFilter;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::User;
@@ -54,12 +54,12 @@ impl Post {
             .unwrap();
         let user = qs.first().unwrap().to_owned();
 
-        User::try_from(user).unwrap()
+        User::from(user)
     }
 }
 
-impl From<playa::post::model::Post> for Post {
-    fn from(value: playa::post::model::Post) -> Self {
+impl From<townhall::post::model::Post> for Post {
+    fn from(value: townhall::post::model::Post) -> Self {
         Post {
             id: value.id.into(),
             author_id: value.author_id.into(),

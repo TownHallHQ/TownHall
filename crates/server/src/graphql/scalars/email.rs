@@ -4,7 +4,7 @@ use std::str::FromStr;
 use async_graphql::{InputValueError, InputValueResult, Scalar, ScalarType, Value};
 use serde::{Deserialize, Serialize};
 
-use playa::user::model::Email as CoreEmail;
+use townhall::user::model::Email as CoreEmail;
 
 use crate::graphql::modules::user::types::{UserError, UserErrorCode};
 

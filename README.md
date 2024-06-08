@@ -80,9 +80,11 @@ Directory | Description
 `crates/` | Contains GraphQL Server Logic, CLI and Domain libraries. Rust is the predominant language.
 `crates/cli` | CLI used to manage the Server instance. run database migrations and other developer tasks
 `crates/core` | Domain Logic, includes Models, Value Objects, Repositories and Services
+`crates/entity` | Entities generated from database
+`crates/migration` | Database migrations
 `crates/server` | HTTP Server Logic, uses Axum and GraphQL
-`crates/entities` | Entities generated from database
-`crates/migrations` | Database migrations
+`crates/test` | E2E Tests for the GraphQL Server
+`crates/web` | Web UI, written in Leptos
 
 ## Testing
 

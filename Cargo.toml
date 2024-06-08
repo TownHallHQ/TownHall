@@ -21,6 +21,7 @@ chrono = "0.4.38"
 dotenv = "0.15.0"
 fake = "2.9.2"
 jsonwebtoken = "9.3"
+lazy_static = "1.4.0"
 pxid = { version = "0.5", features = ["async-graphql"] }
 rand = "0.8.5"
 rust-argon2 = "2.1.0"

@@ -5,6 +5,7 @@ use std::sync::Arc;
 
 use anyhow::Result;
 
+use townhall::auth::service::AuthService;
 use townhall::image::repository::ImageRepository;
 use townhall::image::service::ImageService;
 use townhall::post::repository::PostRepository;
@@ -16,7 +17,6 @@ use townhall::user::service::UserService;
 
 use crate::config::Config;
 
-use self::auth::AuthService;
 use self::image::providers::ImageServiceProvider;
 
 pub type SharedServices = Arc<Services>;
@@ -34,14 +34,15 @@ impl Services {
         let db_pool = Database::new(&config.database_url)
             .await
             .expect("Failed to create a new database pool");
-        let auth_service = AuthService::new(&config.jwt_secret);
         let image_repository = ImageRepository::new(&db_pool);
         let image_provider = ImageServiceProvider::new(config).await?;
         let image_service = ImageService::new(image_repository, image_provider);
         let user_repository = UserRepository::new(&db_pool);
         let user_followers_repository = UserFollowersRepository::new(&db_pool);
+        let auth_service = AuthService::new(&config.jwt_secret);
         let user_service = UserService::new(
             user_repository,
+            auth_service.clone(),
             user_followers_repository,
             image_service.clone(),
         );

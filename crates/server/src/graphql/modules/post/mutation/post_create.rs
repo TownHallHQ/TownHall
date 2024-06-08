@@ -2,11 +2,11 @@ use async_graphql::{Context, InputObject, Result, SimpleObject};
 use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
+use townhall::auth::service::Token;
 use townhall::post::service::CreatePostDto;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::post::types::{Post, PostError, PostErrorCode};
-use crate::services::auth::Token;
 
 #[derive(Debug, InputObject)]
 pub struct PostCreateInput {

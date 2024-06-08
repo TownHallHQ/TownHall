@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use chrono::{DateTime, Utc};
 use pxid::Pxid;
 use serde::{Deserialize, Serialize};
@@ -49,6 +51,29 @@ pub struct UpdateUserDto {
     pub surname: Option<String>,
 }
 
+impl TryFrom<entity::user::Model> for User {
+    type Error = UserError;
+
+    fn try_from(model: entity::user::Model) -> Result<Self> {
+        let username = Username::from_str(&model.username)?;
+        let email = Email::from_str(&model.email)?;
+
+        Ok(User {
+            id: Pxid::from_str(&model.id)?,
+            name: model.name,
+            surname: model.surname,
+            username,
+            email,
+            avatar_id: model.avatar_id.map(|id| Pxid::from_str(&id)).transpose()?,
+            created_at: DateTime::from_naive_utc_and_offset(model.created_at, Utc),
+            updated_at: DateTime::from_naive_utc_and_offset(model.updated_at, Utc),
+            deleted_at: model
+                .deleted_at
+                .map(|naive| DateTime::from_naive_utc_and_offset(naive, Utc)),
+        })
+    }
+}
+
 #[derive(Clone)]
 pub struct UserRepository {
     db: Database,
@@ -76,9 +101,9 @@ impl UserRepository {
         }
     }
 
-    pub async fn insert(&self, dto: InsertUserDto) -> Result<UserRecord> {
+    pub async fn insert(&self, dto: InsertUserDto) -> Result<User> {
         let active_model = entity::user::ActiveModel {
-            id: Set(User::generate_id()?.to_string()),
+            id: Set(User::pxid()?.to_string()),
             name: Set(dto.name),
             surname: Set(dto.surname),
             username: Set(dto.username.to_string()),
@@ -108,7 +133,7 @@ impl UserRepository {
             }
         })?;
 
-        Ok(UserRepository::into_record(model))
+        User::try_from(model)
     }
 
     pub async fn update(&self, id: Pxid, dto: UpdateUserDto) -> Result<UserRecord> {
@@ -211,6 +236,23 @@ impl UserRepository {
 
         if let Some(user_model) = maybe_user {
             return Ok(Some(Self::into_record(user_model)));
+        }
+
+        Ok(None)
+    }
+
+    pub async fn find_password_hash_by_email(&self, email: &Email) -> Result<Option<String>> {
+        let maybe_user = entity::prelude::User::find()
+            .filter(entity::user::Column::Email.eq(email.to_string()))
+            .one(&*self.db)
+            .await
+            .map_err(|err| {
+                tracing::error!(%err, %email, "Failed to find User by email");
+                UserError::DatabaseError
+            })?;
+
+        if let Some(user_model) = maybe_user {
+            return Ok(Some(user_model.password_hash));
         }
 
         Ok(None)

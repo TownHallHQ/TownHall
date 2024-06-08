@@ -2,7 +2,7 @@ use anyhow::Result;
 use axum::http::header::AUTHORIZATION;
 use axum::http::HeaderMap;
 
-use crate::services::auth::{AuthService, Token};
+use townhall::auth::service::{AuthService, Token};
 
 const HTTP_AUTHORIZATION_SCHEME: &str = "jwt";
 

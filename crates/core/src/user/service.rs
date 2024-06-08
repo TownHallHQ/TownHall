@@ -1,5 +1,6 @@
 use pxid::Pxid;
 
+use crate::auth::service::AuthService;
 use crate::image::model::UseCase;
 use crate::image::service::{ImageProvider, ImageService, UploadImageDto};
 use crate::shared::pagination::Pagination;
@@ -43,6 +44,7 @@ pub struct UploadAvatarDto {
 #[derive(Clone)]
 pub struct UserService<P: ImageProvider> {
     repository: Box<UserRepository>,
+    auth_service: AuthService,
     user_followers: Box<UserFollowersRepository>,
     image_service: ImageService<P>,
 }
@@ -50,10 +52,12 @@ pub struct UserService<P: ImageProvider> {
 impl<P: ImageProvider> UserService<P> {
     pub fn new(
         repository: UserRepository,
+        auth_service: AuthService,
         user_followers: UserFollowersRepository,
         image_service: ImageService<P>,
     ) -> Self {
         Self {
+            auth_service,
             repository: Box::new(repository),
             user_followers: Box::new(user_followers),
             image_service,
@@ -61,20 +65,16 @@ impl<P: ImageProvider> UserService<P> {
     }
 
     pub async fn create(&self, dto: CreateUserDto) -> Result<User> {
-        let record = self
-            .repository
+        self.repository
             .insert(InsertUserDto {
-                id: User::generate_id()?.to_string(),
+                id: User::pxid()?.to_string(),
                 name: dto.name,
                 surname: dto.surname,
                 username: dto.username.to_string(),
                 email: dto.email.to_string(),
                 password_hash: dto.password.to_string(),
             })
-            .await?;
-        let user = User::try_from(record)?;
-
-        Ok(user)
+            .await
     }
 
     pub async fn list(
@@ -115,6 +115,23 @@ impl<P: ImageProvider> UserService<P> {
         }
 
         Ok(None)
+    }
+
+    /// Verifies a users credentials by checking if the provided email and password
+    /// match the stored password hash.
+    pub async fn verify_credentials(&self, email: &Email, password: &String) -> Result<bool> {
+        let maybe_password_hash = self.repository.find_password_hash_by_email(email).await?;
+
+        if let Some(password_hash) = maybe_password_hash {
+            if self
+                .auth_service
+                .validate_password(&password_hash, password)
+            {
+                return Ok(true);
+            }
+        }
+
+        Ok(false)
     }
 
     /// Uploads a new avatar for the user. If the user already holds an avatar,

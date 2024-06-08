@@ -832,6 +832,7 @@ dependencies = [
  "async-trait",
  "chrono",
  "entity",
+ "jsonwebtoken",
  "lazy_static",
  "pxid",
  "rand",

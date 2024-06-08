@@ -10,7 +10,6 @@ path = "src/lib.rs"
 
 [dependencies]
 chrono = { version = "0.4.26", features = ["serde"] }
-lazy_static = "1.4.0"
 rand = "0.8.5"
 regex = "1.9.3"
 serde = { version = "1.0.188", features = ["derive"] }
@@ -19,6 +18,8 @@ tracing = "0.1.37"
 
 # Workspace Dependencies
 async-trait = { workspace = true }
+jsonwebtoken = { workspace = true }
+lazy_static = { workspace = true }
 sea-orm = { workspace = true, features = [ "sqlx-postgres", "runtime-tokio-rustls", "macros", "with-chrono", "mock" ] }
 rust-argon2 = { workspace = true }
 thiserror = { workspace = true }

@@ -1,7 +1,8 @@
 use async_graphql::{Context, Error, ErrorExtensions, Guard, Result};
 
+use townhall::auth::service::Token;
+
 use crate::context::SharedContext;
-use crate::services::auth::Token;
 
 pub const GENERIC_FORBIDDEN_ERROR: &str = "You must authenticate to perform this request. Use the `tokenCreate` mutation and set the token as the Authorization HTTP Header E.g. `JWT <TOKEN>`";
 pub const GENERIC_FORBIDDEN_ERROR_CODE: &str = "UNAUTHORIZED";

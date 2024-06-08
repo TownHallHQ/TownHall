@@ -2,11 +2,11 @@ use async_graphql::{Context, Result, SimpleObject};
 use pxid::Pxid;
 use serde::{Deserialize, Serialize};
 
+use townhall::auth::service::Token;
 use townhall::user::service::FollowPeers;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{UserError, UserErrorCode};
-use crate::services::auth::Token;
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
 pub struct UserFollow {

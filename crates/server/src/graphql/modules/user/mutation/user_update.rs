@@ -1,11 +1,11 @@
 use async_graphql::{Context, InputObject, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 
+use townhall::auth::service::Token;
 use townhall::user::repository::user::UpdateUserDto;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{User, UserError, UserErrorCode};
-use crate::services::auth::Token;
 
 #[derive(Debug, Default, InputObject)]
 pub struct UserUpdateInput {

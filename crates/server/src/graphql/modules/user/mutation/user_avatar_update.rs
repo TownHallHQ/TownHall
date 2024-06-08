@@ -5,11 +5,11 @@ use async_graphql::{Context, Result, SimpleObject};
 use serde::{Deserialize, Serialize};
 use tracing::instrument;
 
+use townhall::auth::service::Token;
 use townhall::user::service::UploadAvatarDto;
 
 use crate::context::SharedContext;
 use crate::graphql::modules::user::types::{UserError, UserErrorCode};
-use crate::services::auth::Token;
 
 #[derive(Debug, Default, Deserialize, Serialize, SimpleObject)]
 pub struct UserAvatarUpdate {

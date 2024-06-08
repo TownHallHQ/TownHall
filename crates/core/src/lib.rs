@@ -8,5 +8,5 @@ use lazy_static::lazy_static;
 use pxid::Factory;
 
 lazy_static! {
-    static ref PXID_GENERATOR: Factory = { Factory::new().expect("Failed to create Pxid factory") };
+    static ref PXID_GENERATOR: Factory = Factory::new().expect("Failed to create Pxid factory");
 }

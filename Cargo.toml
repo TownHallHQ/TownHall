@@ -5,7 +5,8 @@ members = [
     "crates/entity",
     "crates/migration",
     "crates/server",
-    "crates/test"
+    "crates/test",
+    "crates/web"
 ]
 default-members = ["crates/cli"]
 resolver = "2"
@@ -22,6 +23,9 @@ dotenv = "0.15.0"
 fake = "2.9.2"
 jsonwebtoken = "9.3"
 lazy_static = "1.4.0"
+leptos = "0.6"
+leptos_meta = "0.6"
+leptos_router = "0.6"
 pxid = { version = "0.5", features = ["async-graphql"] }
 rand = "0.8.5"
 rust-argon2 = "2.1.0"

@@ -1,0 +1,21 @@
+[package]
+name = "web"
+version = "0.0.0"
+edition = "2021"
+authors = ["Esteban Borai <estebanborai@gmail.com>"]
+publish = false
+description = "Web Front-End for TownHall"
+license = "MIT"
+
+[lib]
+name = "web"
+path = "src/lib.rs"
+
+[[bin]]
+name = "townhall-web"
+path = "src/bin/main.rs"
+
+[dependencies]
+leptos =  { workspace = true, features = ["csr"] }
+leptos_meta = { workspace = true }
+leptos_router = { workspace = true, features = ["csr"] }

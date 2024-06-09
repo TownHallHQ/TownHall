@@ -11,11 +11,14 @@
 
 </div>
 
-### Collab Strategy
+### Collab Strategy and Knowledge Sharing
 
-townhall is collaborative project for novice-to-intermediate Rust (backend) and JS/TS (frontend) web developers. We’re learning-by-doing together, in the making of a community platform modeled after the likes of Discord (chat) and Discourse (forum).
+TownHall is collaborative project for novice-to-intermediate Rust developers.
+We’re learning-by-doing together, in the making of a community platform modeled
+after the likes of Reddit _space oriented_ and X (formerly Twitter) microblogging platform.
 
-The project leader and default mentor for new contributors is @EstebanBorai. New mentors and mentees alike are always welcome!
+The project leader and default mentor for new contributors is @EstebanBorai.
+New mentors and mentees alike are always welcome!
 
 ## Development
 

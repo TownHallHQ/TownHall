@@ -4,10 +4,10 @@
 
 <div align="center">
 
-  [![Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/yde6mcgs2C)
-  ![Build](https://github.com/TownHall-HQ/TownHall/workflows/build/badge.svg)
-  ![Clippy](https://github.com/TownHall-HQ/TownHall/workflows/clippy/badge.svg)
-  ![Formatter](https://github.com/TownHall-HQ/TownHall/workflows/fmt/badge.svg)
+[![Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/yde6mcgs2C)
+![Build](https://github.com/TownHall-HQ/TownHall/workflows/build/badge.svg)
+![Clippy](https://github.com/TownHall-HQ/TownHall/workflows/clippy/badge.svg)
+![Formatter](https://github.com/TownHall-HQ/TownHall/workflows/fmt/badge.svg)
 
 </div>
 
@@ -53,6 +53,8 @@ cargo run serve
 
 > Note: As of today migrations runs when bootstrapping the server automatically
 
+### To read the documentation of the web [here](crates/web/README.md)
+
 ## Software Architecture
 
 ### Layers
@@ -63,7 +65,7 @@ the services.
 
 <div align="center">
 
-  ![softarq](https://github.com/TownHall-HQ/TownHall/assets/34756077/86abfb8d-8e96-4e93-9677-4e0864f53da6)
+![softarq](https://github.com/TownHall-HQ/TownHall/assets/34756077/86abfb8d-8e96-4e93-9677-4e0864f53da6)
 
 </div>
 
@@ -77,17 +79,17 @@ present but are not 100% accurate to the original Domain Driven Design architect
 
 The client and server solution is available in this repository.
 
-Directory | Description
---- | ---
-`client` | Web Front-End, written in SvelteKit & TypeScript
-`crates/` | Contains GraphQL Server Logic, CLI and Domain libraries. Rust is the predominant language.
-`crates/cli` | CLI used to manage the Server instance. run database migrations and other developer tasks
-`crates/core` | Domain Logic, includes Models, Value Objects, Repositories and Services
-`crates/entity` | Entities generated from database
-`crates/migration` | Database migrations
-`crates/server` | HTTP Server Logic, uses Axum and GraphQL
-`crates/test` | E2E Tests for the GraphQL Server
-`crates/web` | Web UI, written in Leptos
+| Directory          | Description                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------ |
+| `client`           | Web Front-End, written in SvelteKit & TypeScript                                           |
+| `crates/`          | Contains GraphQL Server Logic, CLI and Domain libraries. Rust is the predominant language. |
+| `crates/cli`       | CLI used to manage the Server instance. run database migrations and other developer tasks  |
+| `crates/core`      | Domain Logic, includes Models, Value Objects, Repositories and Services                    |
+| `crates/entity`    | Entities generated from database                                                           |
+| `crates/migration` | Database migrations                                                                        |
+| `crates/server`    | HTTP Server Logic, uses Axum and GraphQL                                                   |
+| `crates/test`      | E2E Tests for the GraphQL Server                                                           |
+| `crates/web`       | Web UI, written in Leptos                                                                  |
 
 ## Testing
 
@@ -113,7 +115,6 @@ just e2e_test
 ```
 
 Teardown containers using `just undev`.
-
 
 ## Contributors
 

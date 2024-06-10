@@ -1,9 +1,0 @@
-fragment Author on User {
-  id
-  name
-  surname
-  username
-  email
-  createdAt
-  updatedAt
-}

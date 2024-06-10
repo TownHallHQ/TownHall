@@ -49,7 +49,7 @@ async fn create_post() {
     let user = context
         .services
         .user
-        .create(CreateUserDto {
+        .register(CreateUserDto {
             name: "John".to_string(),
             surname: "Appleseed".to_string(),
             username,
@@ -97,7 +97,7 @@ async fn creates_post_with_parent() {
     let user = context
         .services
         .user
-        .create(CreateUserDto {
+        .register(CreateUserDto {
             name: "John".to_string(),
             surname: "Appleseed".to_string(),
             username,

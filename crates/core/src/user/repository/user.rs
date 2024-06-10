@@ -15,6 +15,9 @@ use crate::shared::query_set::QuerySet;
 use crate::user::error::{Result, UserError};
 use crate::user::model::{Email, User, Username};
 
+const UNIQUE_USERNAME_CONSTRAINT: &str = "user_username_key";
+const UNIQUE_EMAIL_CONSTRAINT: &str = "user_email_key";
+
 #[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
 pub struct UserFilter {
     pub id: Option<Pxid>,
@@ -118,11 +121,11 @@ impl UserRepository {
                 sea_orm::DbErr::Query(sea_orm::RuntimeErr::SqlxError(err)) => {
                     if let Some(db_err) = err.into_database_error() {
                         if let Some(constraint) = db_err.constraint() {
-                            if constraint == "user_username_key" {
+                            if constraint == UNIQUE_USERNAME_CONSTRAINT {
                                 return UserError::UsernameTakenError(dto.username);
                             }
 
-                            if constraint == "user_email_key" {
+                            if constraint == UNIQUE_EMAIL_CONSTRAINT {
                                 return UserError::EmailTakenError(dto.email);
                             }
                         }

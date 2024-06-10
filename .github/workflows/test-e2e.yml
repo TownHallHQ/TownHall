@@ -47,8 +47,8 @@ jobs:
         run: cargo run database migrate
 
       - name: Runs E2E tests
-        run: just e2e_test
-        
+        run: just e2e_tests
+
       - name: Stop containers
         if: always()
         run: docker compose down

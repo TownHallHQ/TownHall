@@ -64,7 +64,7 @@ impl<P: ImageProvider> UserService<P> {
         }
     }
 
-    pub async fn create(&self, dto: CreateUserDto) -> Result<User> {
+    pub async fn register(&self, dto: CreateUserDto) -> Result<User> {
         self.repository
             .insert(InsertUserDto {
                 id: User::pxid()?.to_string(),

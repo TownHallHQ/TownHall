@@ -24,7 +24,7 @@ serve:
   cargo run serve
 
 # Runs E2E Tests and optionally runs a specific test requires `e2e_test_dev` to be executed first.
-e2e_test *args='':
+e2e_tests *args='':
   cargo test --package test -- --test-threads=1 $1
 
 # Runs formatting tool against Leptos source

@@ -38,7 +38,7 @@ impl UserRegister {
             password,
         };
 
-        match context.services.user.create(dto).await {
+        match context.services.user.register(dto).await {
             Ok(user) => Ok(Self {
                 user: Some(User::from(user)),
                 error: None,

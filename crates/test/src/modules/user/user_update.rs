@@ -16,7 +16,7 @@ async fn updates_a_user() {
     let user = context
         .services
         .user
-        .create(CreateUserDto {
+        .register(CreateUserDto {
             name: "Augustine".into(),
             surname: "Madu".into(),
             email: Email::from_str("augustine@gmail.com").unwrap(),

@@ -100,10 +100,10 @@ process.
 The dedicated E2E Database will be builded along with other containers when running `just dev`.
 
 You can also execute a single E2E Test by specifying the name of the test
-function along with the `just e2e_test` command:
+function along with the `just e2e_tests` command:
 
 ```bash
-just e2e_test my_super_test_function_name
+just e2e_tests my_super_test_function_name
 ```
 
 To run every test just execute:

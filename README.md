@@ -53,6 +53,8 @@ cargo run serve
 
 > Note: As of today migrations runs when bootstrapping the server automatically
 
+### To read the documentation of the web [here](crates/web/README.md)
+
 ## Software Architecture
 
 ### Layers

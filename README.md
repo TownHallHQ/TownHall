@@ -81,7 +81,6 @@ The client and server solution is available in this repository.
 
 | Directory          | Description                                                                                |
 | ------------------ | ------------------------------------------------------------------------------------------ |
-| `client`           | Web Front-End, written in SvelteKit & TypeScript                                           |
 | `crates/`          | Contains GraphQL Server Logic, CLI and Domain libraries. Rust is the predominant language. |
 | `crates/cli`       | CLI used to manage the Server instance. run database migrations and other developer tasks  |
 | `crates/core`      | Domain Logic, includes Models, Value Objects, Repositories and Services                    |

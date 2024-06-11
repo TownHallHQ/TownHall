@@ -4,7 +4,7 @@
 
 <div align="center">
 
-[![Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/yde6mcgs2C)
+![Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/UFfqHpcTwV)
 ![Build](https://github.com/TownHall-HQ/TownHall/workflows/build/badge.svg)
 ![Clippy](https://github.com/TownHall-HQ/TownHall/workflows/clippy/badge.svg)
 ![Formatter](https://github.com/TownHall-HQ/TownHall/workflows/fmt/badge.svg)
@@ -81,7 +81,6 @@ The client and server solution is available in this repository.
 
 | Directory          | Description                                                                                |
 | ------------------ | ------------------------------------------------------------------------------------------ |
-| `client`           | Web Front-End, written in SvelteKit & TypeScript                                           |
 | `crates/`          | Contains GraphQL Server Logic, CLI and Domain libraries. Rust is the predominant language. |
 | `crates/cli`       | CLI used to manage the Server instance. run database migrations and other developer tasks  |
 | `crates/core`      | Domain Logic, includes Models, Value Objects, Repositories and Services                    |

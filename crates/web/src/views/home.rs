@@ -1,3 +1,4 @@
+use crate::components::text_field::TextField;
 use leptos::{component, view, IntoView};
 
 use crate::components::button::{Button, ButtonVariant};
@@ -11,6 +12,7 @@ pub fn Home() -> impl IntoView {
             <Button variant={ButtonVariant::Text}>{"Text"}</Button>
             <Button variant={ButtonVariant::Contained}>{"Contained"}</Button>
             <Button variant={ButtonVariant::Outlined}>{"Outlined"}</Button>
+            <TextField placeholder="hola" />
         </section>
     }
 }

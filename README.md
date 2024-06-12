@@ -4,7 +4,7 @@
 
 <div align="center">
 
-![Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/UFfqHpcTwV)
+![[Discord](https://img.shields.io/discord/1011702194925490186?color=blue&label=discord&logo=discord)](https://discord.gg/UFfqHpcTwV)
 ![Build](https://github.com/TownHall-HQ/TownHall/workflows/build/badge.svg)
 ![Clippy](https://github.com/TownHall-HQ/TownHall/workflows/clippy/badge.svg)
 ![Formatter](https://github.com/TownHall-HQ/TownHall/workflows/fmt/badge.svg)

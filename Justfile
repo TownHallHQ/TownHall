@@ -29,7 +29,7 @@ e2e_tests *args='':
 
 # Runs formatting tool against Leptos source
 web-fmt:
-	leptosfmt ./crates/web/src/*.rs
+  leptosfmt ./crates/web/src/*.rs
 
 # Runs Web UI for Development
 web-dev:
@@ -38,3 +38,7 @@ web-dev:
 # Builds Web UI for Production
 web-build:
   cd ./crates/web && trunk build --release --locked --config ./Trunk.toml
+
+# Runs Web Crate Tests
+web-test:
+  cd ./crates/web && wasm-pack test --headless --firefox

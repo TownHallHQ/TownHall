@@ -1,0 +1,10 @@
+{
+  "moz:firefoxOptions": {
+    "args": [
+      "-headless"
+    ],
+    "log": {
+      "level": "trace"
+    }
+  }
+}

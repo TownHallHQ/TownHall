@@ -19,3 +19,8 @@ path = "src/bin/main.rs"
 leptos =  { workspace = true, features = ["csr"] }
 leptos_meta = { workspace = true }
 leptos_router = { workspace = true, features = ["csr"] }
+
+[dev-dependencies]
+wasm-bindgen = "0.2"
+wasm-bindgen-test = "0.3"
+web-sys = "0.3"

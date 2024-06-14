@@ -1,3 +1,4 @@
+pub mod components;
 pub mod views;
 
 use leptos::{component, view, IntoView};

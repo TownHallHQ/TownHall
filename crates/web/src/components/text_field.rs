@@ -10,7 +10,7 @@ pub fn TextField(
 ) -> impl IntoView {
     view! {
       <>
-      <input type=r#type name=name value=value id=id placeholder=placeholder class="p-5 w-full font-semibold text-black bg-black rounded" />
+        <input type=r#type name=name value=value id=id placeholder=placeholder class="p-5 w-full font-semibold text-black bg-black rounded" />
       <>
     }
 }

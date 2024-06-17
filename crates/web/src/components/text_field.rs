@@ -1,33 +1,44 @@
 use std::collections::HashSet;
 
-use leptos::{component, create_memo, view, IntoView, MaybeProp, SignalGet};
+use leptos::{component, create_memo, view, IntoView, MaybeProp, SignalGet, TextProp};
+
+#[derive(Clone, Debug, Default)]
+pub enum TextFieldVariant {
+    #[default]
+    Primary,
+}
 
 #[component]
 pub fn TextField(
-    #[prop(optional, into)] name: String,
-    #[prop(optional, into)] id: String,
-    #[prop(optional, into)] placeholder: String,
-    #[prop(optional, into)] value: String,
-    #[prop(optional, into)] label: String,
+    #[prop(optional, into)] name: TextProp,
+    #[prop(optional, into)] id: TextProp,
+    #[prop(optional, into)] placeholder: TextProp,
+    #[prop(optional, into)] value: TextProp,
+    #[prop(optional, into)] label: TextProp,
+    #[prop(optional, into)] variant: MaybeProp<TextFieldVariant>,
     #[prop(optional, into, default = "text".to_string())] r#type: String,
     #[prop(optional, into)] disabled: MaybeProp<bool>,
     #[prop(optional, into)] full_width: MaybeProp<bool>,
 ) -> impl IntoView {
-    println!("label {}", label);
     let class_names = create_memo(move |_| {
         let mut classes: HashSet<&str> = HashSet::new();
 
+        match variant.get().unwrap_or_default() {
+            TextFieldVariant::Primary => {
+                classes.insert("px-3.5");
+                classes.insert("py-2");
+                classes.insert("rounded");
+                classes.insert("font-semibold");
+                classes.insert("placeholder:text-purple-200");
+                classes.insert("border-2");
+                classes.insert("border-purple-300");
+                classes.insert("text-purple-400");
+                classes.insert("focus:border-purple-400");
+                classes.insert("focus:ring-purple-500/60");
+            }
+        }
+
         // Default Classes
-        classes.insert("px-3.5");
-        classes.insert("py-2");
-        classes.insert("rounded");
-        classes.insert("font-semibold");
-        classes.insert("placeholder:text-purple-200");
-        classes.insert("border-2");
-        classes.insert("border-purple-300");
-        classes.insert("text-purple-400");
-        classes.insert("focus:border-purple-400");
-        classes.insert("focus:ring-purple-500/60");
 
         if let Some(is_full_width) = full_width.get() {
             if is_full_width {
@@ -45,9 +56,9 @@ pub fn TextField(
         classes.into_iter().collect::<Vec<&str>>().join(" ")
     });
     view! {
-      <div>
-        <label class="block mb-2 text-sm font-medium text-purple-500" for=&id>{label}</label>
-        <input type=r#type name=name value=value id=id placeholder=placeholder class=class_names  disabled=disabled />
-      </div>
+            <div>
+            <label class="block mb-2 text-sm font-medium text-purple-500" for=id.clone()>{label}</label>
+            <input type=r#type name=name value=value id=id placeholder=placeholder class=class_names  disabled=disabled />
+            </div>
     }
 }

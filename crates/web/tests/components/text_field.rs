@@ -8,7 +8,7 @@ use web::components::text_field::TextField;
 wasm_bindgen_test_configure!(run_in_browser);
 
 #[wasm_bindgen_test]
-fn default_text_text_field_class_names_integrity() {
+fn default_text_field_class_names_integrity() {
     let document = leptos::document();
     let test_wrapper = document.create_element("div").unwrap();
     let _ = document.body().unwrap().append_child(&test_wrapper);

@@ -8,6 +8,18 @@ pub enum TextFieldVariant {
     Primary,
 }
 
+#[derive(Clone, Debug, Default)]
+pub enum TextFieldTypes {
+    #[default]
+    Text,
+    Email,
+    Password,
+    Number,
+    Search,
+    Tel,
+    Url,
+}
+
 #[component]
 pub fn TextField(
     #[prop(optional, into)] name: TextProp,
@@ -16,7 +28,7 @@ pub fn TextField(
     #[prop(optional, into)] value: TextProp,
     #[prop(optional, into)] label: TextProp,
     #[prop(optional, into)] variant: MaybeProp<TextFieldVariant>,
-    #[prop(optional, into, default = "text".to_string())] r#type: String,
+    #[prop(optional, into)] r#type: TextFieldTypes,
     #[prop(optional, into)] disabled: MaybeProp<bool>,
     #[prop(optional, into)] full_width: MaybeProp<bool>,
 ) -> impl IntoView {
@@ -58,7 +70,7 @@ pub fn TextField(
     view! {
             <div>
             <label class="block mb-2 text-sm font-medium text-purple-500" for=id.clone()>{label}</label>
-            <input type=r#type name=name value=value id=id placeholder=placeholder class=class_names  disabled=disabled />
+            <input type=format!("{:?}", r#type).to_lowercase() name=name value=value id=id placeholder=placeholder class=class_names  disabled=disabled />
             </div>
     }
 }

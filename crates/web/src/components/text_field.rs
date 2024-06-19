@@ -9,7 +9,7 @@ pub enum TextFieldVariant {
 }
 
 #[derive(Clone, Debug, Default)]
-pub enum TextFieldTypes {
+pub enum TextFieldType {
     #[default]
     Text,
     Email,
@@ -28,7 +28,7 @@ pub fn TextField(
     #[prop(optional, into)] value: TextProp,
     #[prop(optional, into)] label: TextProp,
     #[prop(optional, into)] variant: MaybeProp<TextFieldVariant>,
-    #[prop(optional, into)] r#type: TextFieldTypes,
+    #[prop(optional, into)] r#type: TextFieldType,
     #[prop(optional, into)] disabled: MaybeProp<bool>,
     #[prop(optional, into)] full_width: MaybeProp<bool>,
 ) -> impl IntoView {

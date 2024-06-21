@@ -1,6 +1,7 @@
-use std::collections::HashSet;
+use core::fmt;
+use std::{collections::HashSet, fmt::Debug};
 
-use leptos::{component, create_memo, view, IntoView, MaybeProp, SignalGet, TextProp};
+use leptos::{component, create_memo, logging, view, IntoView, MaybeProp, SignalGet, TextProp};
 
 #[derive(Clone, Debug, Default)]
 pub enum TextFieldVariant {
@@ -14,10 +15,16 @@ pub enum TextFieldType {
     Text,
     Email,
     Password,
-    Number,
-    Search,
-    Tel,
-    Url,
+}
+
+impl fmt::Display for TextFieldType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            TextFieldType::Text => write!(f, "text"),
+            TextFieldType::Email => write!(f, "email"),
+            TextFieldType::Password => write!(f, "password"),
+        }
+    }
 }
 
 #[component]
@@ -67,10 +74,13 @@ pub fn TextField(
 
         classes.into_iter().collect::<Vec<&str>>().join(" ")
     });
+
+    logging::log!("{}", r#type);
+
     view! {
             <div>
             <label class="block mb-2 text-sm font-medium text-purple-500" for=id.clone()>{label}</label>
-            <input type=format!("{:?}", r#type).to_lowercase() name=name value=value id=id placeholder=placeholder class=class_names  disabled=disabled />
+            <input type=format!("{}", r#type) name=name value=value id=id placeholder=placeholder class=class_names  disabled=disabled />
             </div>
     }
 }

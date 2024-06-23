@@ -75,8 +75,6 @@ pub fn TextField(
         classes.into_iter().collect::<Vec<&str>>().join(" ")
     });
 
-    logging::log!("{}", r#type);
-
     view! {
             <div>
             <label class="block mb-2 text-sm font-medium text-purple-500" for=id.clone()>{label}</label>

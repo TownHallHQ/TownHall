@@ -3,7 +3,7 @@ use leptos::{mount_to, view};
 use wasm_bindgen::JsCast;
 use wasm_bindgen_test::*;
 
-use web::components::text_field::TextField;
+use web::components::text_field::{TextField, TextFieldType};
 
 wasm_bindgen_test_configure!(run_in_browser);
 
@@ -42,4 +42,11 @@ fn default_text_field_class_names_integrity() {
     for class_name in want_class_names.iter() {
         assert!(have_class_names.contains(class_name));
     }
+}
+
+#[wasm_bindgen_test]
+fn text_field_types() {
+    assert_eq!(TextFieldType::Text.to_string(), "text");
+    assert_eq!(TextFieldType::Email.to_string(), "email");
+    assert_eq!(TextFieldType::Password.to_string(), "password");
 }

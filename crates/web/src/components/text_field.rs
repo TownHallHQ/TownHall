@@ -9,7 +9,7 @@ pub enum TextFieldVariant {
     Primary,
 }
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub enum TextFieldType {
     #[default]
     Text,

@@ -15,12 +15,16 @@ pub enum ButtonVariant {
 #[component]
 pub fn Button(
     #[prop(optional, into)] id: TextProp,
+    #[prop(optional, into)] class: TextProp,
     #[prop(optional, into)] disabled: MaybeProp<bool>,
     #[prop(optional, into)] variant: MaybeProp<ButtonVariant>,
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
+    let custom_classes = class.get();
     let class_names = create_memo(move |_| {
         let mut classes: HashSet<&str> = HashSet::new();
+
+        classes.insert(&custom_classes.as_str());
 
         // Default Classes
         classes.insert("px-4");

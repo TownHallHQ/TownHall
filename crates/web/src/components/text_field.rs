@@ -1,7 +1,7 @@
 use core::fmt;
 use std::{collections::HashSet, fmt::Debug};
 
-use leptos::{component, create_memo, logging, view, IntoView, MaybeProp, SignalGet, TextProp};
+use leptos::{component, create_memo, view, IntoView, MaybeProp, SignalGet, TextProp};
 
 #[derive(Clone, Debug, Default)]
 pub enum TextFieldVariant {

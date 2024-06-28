@@ -34,13 +34,17 @@ pub fn TextField(
     #[prop(optional, into)] placeholder: TextProp,
     #[prop(optional, into)] value: TextProp,
     #[prop(optional, into)] label: TextProp,
+    #[prop(optional, into)] class: TextProp,
     #[prop(optional, into)] variant: MaybeProp<TextFieldVariant>,
     #[prop(optional, into)] r#type: TextFieldType,
     #[prop(optional, into)] disabled: MaybeProp<bool>,
     #[prop(optional, into)] full_width: MaybeProp<bool>,
 ) -> impl IntoView {
+    let custom_classes = class.get();
     let class_names = create_memo(move |_| {
         let mut classes: HashSet<&str> = HashSet::new();
+
+        classes.insert(&custom_classes.as_str());
 
         match variant.get().unwrap_or_default() {
             TextFieldVariant::Primary => {

@@ -11,10 +11,10 @@ pub fn Login() -> impl IntoView {
           <div class="flex justify-center items-center z-20">
             <div>
               <h1 class="text-5xl text-center font-bold text-white">TownHall</h1>
-              <form class="mt-14">
+              <form class="mt-14 w-96">
                 <TextField name="email" placeholder="Email" />
                 <TextField name="password" r#type=TextFieldType::Password placeholder="Password" />
-                <Button variant={ButtonVariant::Contained}>Log in</Button>
+                <Button class="w-full my-3" variant={ButtonVariant::Contained}>Log in</Button>
               </form>
             </div>
         </div>

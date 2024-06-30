@@ -12,8 +12,8 @@ pub fn Login() -> impl IntoView {
             <div class="w-full">
               <h1 class="text-6xl text-center font-bold text-white mb-16">TownHall</h1>
               <form class="w-96">
-                <TextField name="email" placeholder="Email" />
-                <TextField name="password" r#type=TextFieldType::Password placeholder="Password" />
+                <TextField class="w-full" name="email" placeholder="Email" />
+                <TextField class="w-full" name="password" r#type=TextFieldType::Password placeholder="Password" />
                 <Button class="w-full mt-3" variant={ButtonVariant::Contained}>Log in</Button>
               </form>
               <div class="text-center w-full text-white mt-3">{"Don't have an account? "}<a class="underline" href="/signup">Sign up!</a></div>

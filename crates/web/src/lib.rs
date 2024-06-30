@@ -4,6 +4,7 @@ pub mod views;
 use leptos::{component, view, IntoView};
 use leptos_meta::{provide_meta_context, Title};
 use leptos_router::{Route, Router, Routes};
+use views::login::Login;
 
 use crate::views::home::Home;
 
@@ -16,6 +17,7 @@ pub fn App() -> impl IntoView {
         <Router>
             <Routes>
                 <Route path="/" view=Home/>
+                <Route path="/login" view=Login/>
             </Routes>
         </Router>
     }

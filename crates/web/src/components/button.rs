@@ -24,7 +24,7 @@ pub fn Button(
     let class_names = create_memo(move |_| {
         let mut classes: HashSet<&str> = HashSet::new();
 
-        classes.insert(&custom_classes.as_str());
+        classes.insert(custom_classes.as_str());
 
         // Default Classes
         classes.insert("px-4");

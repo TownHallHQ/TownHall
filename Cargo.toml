@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "crates/cli",
+    "crates/client",
     "crates/core",
     "crates/entity",
     "crates/migration",
@@ -21,6 +22,7 @@ base64 = "0.22.1"
 chrono = "0.4.38"
 dotenv = "0.15.0"
 fake = "2.9.2"
+graphql_client = "0.14.0"
 jsonwebtoken = "9.3"
 lazy_static = "1.4.0"
 leptos = "0.6"

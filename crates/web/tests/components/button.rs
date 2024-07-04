@@ -24,7 +24,7 @@ fn default_text_button_class_names_integrity() {
         .expect("Button Element not found")
         .unchecked_into::<web_sys::HtmlButtonElement>();
 
-    let want_class_names = vec![
+    let want_class_names = [
         "px-4",
         "py-2",
         "rounded-md",
@@ -59,7 +59,7 @@ fn default_text_button_custom_class_names_integrity() {
         .expect("Button Element not found")
         .unchecked_into::<web_sys::HtmlButtonElement>();
 
-    let want_class_names = vec![
+    let want_class_names = [
         "custom-class",
         "px-4",
         "py-2",

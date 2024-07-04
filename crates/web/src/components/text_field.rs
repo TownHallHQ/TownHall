@@ -44,7 +44,7 @@ pub fn TextField(
     let class_names = create_memo(move |_| {
         let mut classes: HashSet<&str> = HashSet::new();
 
-        classes.insert(&custom_classes.as_str());
+        classes.insert(custom_classes.as_str());
 
         match variant.get().unwrap_or_default() {
             TextFieldVariant::Primary => {

@@ -1,0 +1,14 @@
+[package]
+name = "client"
+version = "0.1.0"
+edition = "2021"
+authors = ["Esteban Borai <estebanborai@gmail.com>"]
+
+[lib]
+name = "townhall_client"
+path = "src/lib.rs"
+
+[dependencies]
+graphql_client = { workspace = true, features = ["reqwest"] }
+reqwest = { version = "0.11", features = ["blocking", "json"] }
+serde = { workspace = true }

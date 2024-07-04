@@ -24,7 +24,7 @@ fn default_text_field_class_names_integrity() {
         .expect("text_field Element not found")
         .unchecked_into::<web_sys::HtmlInputElement>();
 
-    let want_class_names = vec![
+    let want_class_names = [
         "px-3.5",
         "py-2",
         "rounded",
@@ -61,7 +61,7 @@ fn default_text_field_custom_class_names_integrity() {
         .expect("text_field Element not found")
         .unchecked_into::<web_sys::HtmlInputElement>();
 
-    let want_class_names = vec![
+    let want_class_names = [
         "w-full",
         "px-3.5",
         "py-2",

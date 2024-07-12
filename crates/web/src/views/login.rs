@@ -1,6 +1,6 @@
 use leptos::{component, create_action, create_signal, view, IntoView, Show, SignalGet, SignalSet};
 
-use townhall_client::auth::token_create::token_create;
+use townhall_client::Client;
 
 use crate::components::text_field::{TextField, TextFieldType};
 
@@ -9,7 +9,11 @@ pub fn Login() -> impl IntoView {
     let (error_getter, error_setter) = create_signal::<Option<String>>(None);
 
     let submit = create_action(move |_| async move {
-        let res = token_create("john@test.com".into(), "12345".into()).await;
+        let client = Client::new();
+        let res = client
+            .auth
+            .token_create("john@test.com".into(), "12345".into())
+            .await;
 
         if let Some(ref error) = res.error {
             error_setter.set(Some(error.message.to_owned()));

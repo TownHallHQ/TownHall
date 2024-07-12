@@ -876,7 +876,10 @@ dependencies = [
 name = "client"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "core",
  "graphql_client",
+ "pxid",
  "reqwest",
  "serde",
 ]

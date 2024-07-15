@@ -19,7 +19,7 @@ async-graphql-axum = { workspace = true }
 async-trait = { workspace = true }
 axum = { workspace = true }
 base64 = { workspace = true }
-chrono = { workspace = true }
+chrono = "0.4.38"
 dotenv = { workspace = true }
 jsonwebtoken = { workspace = true }
 pxid = { workspace = true, features = ["async-graphql", "serde"] }

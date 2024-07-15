@@ -22,5 +22,5 @@ jobs:
       - name: Install Just
         uses: extractions/setup-just@v2
 
-      - name: Creates a Dotenv file
-        run: just web-dev
+      - name: Build Web Crate
+        run: just web-build

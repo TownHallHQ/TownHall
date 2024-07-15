@@ -1,4 +1,4 @@
-name: fmt
+name: Build Web
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Code Formatting
+    name: Builds
     runs-on: 'ubuntu-latest'
 
     steps:
@@ -17,7 +17,10 @@ jobs:
       - name: Setup Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          components: rustfmt
+          targets: wasm32-unknown-unknown
 
-      - name: Execute `cargo fmt`
-        run: cargo fmt
+      - name: Install Just
+        uses: extractions/setup-just@v2
+
+      - name: Creates a Dotenv file
+        run: just web-dev

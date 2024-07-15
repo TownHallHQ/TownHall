@@ -24,18 +24,13 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Rust Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Setup Rust Cache
         uses: Swatinem/rust-cache@v2
 
       - name: Install Just
-        uses: extractions/setup-just@v1
-        with:
-          just-version: '1.13.0'
+        uses: extractions/setup-just@v2
 
       - name: Creates a Dotenv file
         run: just dotenv

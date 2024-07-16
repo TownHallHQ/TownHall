@@ -9,14 +9,10 @@ name = "townhall_client"
 path = "src/lib.rs"
 
 [dependencies]
+chrono = { workspace = true, features = ["js-sys", "wasmbind"] }
 graphql_client = { workspace = true, features = ["reqwest"] }
 pxid = { workspace = true, features = ["serde"] }
-reqwest = { version = "0.11", features = ["blocking", "json"] }
+reqwest = { workspace = true, features = ["blocking", "json"] }
 serde = { workspace = true }
 
-core = { path = "../core" }
-
-[dependencies.chrono]
-version = "0.4.38"
-default-features = false
-features = ["wasmbind", "js-sys"]
+types = { path = "../types" }

@@ -3,7 +3,7 @@ use graphql_client::GraphQLQuery;
 use pxid::Pxid;
 use reqwest::Client;
 
-use townhall::user::model::Email;
+use townhall_types::user::Email;
 use user_register::{UserRegisterUserRegisterError, UserRegisterUserRegisterUser};
 
 pub use crate::auth::user_register::user_register::UserRegisterInput;

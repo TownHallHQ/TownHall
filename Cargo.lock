@@ -877,11 +877,11 @@ name = "client"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "core",
  "graphql_client",
  "pxid",
  "reqwest",
  "serde",
+ "types",
 ]
 
 [[package]]
@@ -4833,6 +4833,20 @@ name = "typenum"
 version = "1.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "497961ef93d974e23eb6f433eb5fe1b7930b659f06d12dec6fc44a8f554c0bba"
+
+[[package]]
+name = "types"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "pxid",
+ "regex",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tracing",
+ "url",
+]
 
 [[package]]
 name = "ucd-trie"

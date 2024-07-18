@@ -16,12 +16,13 @@ name = "townhall-web"
 path = "src/bin/main.rs"
 
 [dependencies]
-leptos =  { workspace = true, features = ["csr"] }
+leptos = { workspace = true, features = ["csr"] }
 leptos_meta = { workspace = true, features = ["csr"] }
 leptos_router = { workspace = true, features = ["csr"] }
 
 # Local Dependencies
 client = { path = "../client" }
+types = { path = "../types" }
 
 [dev-dependencies]
 wasm-bindgen = "0.2"

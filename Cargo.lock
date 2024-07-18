@@ -5139,6 +5139,7 @@ dependencies = [
  "leptos",
  "leptos_meta",
  "leptos_router",
+ "types",
  "wasm-bindgen",
  "wasm-bindgen-test",
  "web-sys",

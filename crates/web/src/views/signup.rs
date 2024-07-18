@@ -45,7 +45,7 @@ pub fn Signup() -> impl IntoView {
                 <TextField class="w-full" name="username" placeholder="Username" />
                 <TextField class="w-full" name="email" placeholder="Email" />
                 <TextField class="w-full" name="password" r#type=TextFieldType::Password placeholder="Password" />
-                <button type="button" on:click={move |_| submit.dispatch(())} class="bg-blue-700 text-white font-bold w-full mt-3 rounded-md py-3 px-4">Login</button>
+                <button type="button" on:click={move |_| submit.dispatch(())} class="bg-blue-700 text-white font-bold w-full mt-3 rounded-md py-3 px-4">Sign up</button>
                 <Show when=move ||error_getter.get().is_some()>
                   <div class="bg-rose-600 text-white p-2 rounded-md">
                       {error_getter.get().unwrap()}

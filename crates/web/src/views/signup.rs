@@ -9,16 +9,22 @@ use townhall_types::user::Email;
 pub fn Signup() -> impl IntoView {
     let (error_getter, error_setter) = create_signal::<Option<String>>(None);
 
+    let (name_getter, name_setter) = create_signal::<String>(String::from(""));
+    let (surname_getter, surname_setter) = create_signal::<String>(String::from(""));
+    let (username_getter, username_setter) = create_signal::<String>(String::from(""));
+    let (email_getter, email_setter) = create_signal::<String>(String::from(""));
+    let (password_getter, password_setter) = create_signal::<String>(String::from(""));
+
     let submit = create_action(move |_| async move {
         let client = Client::new();
         let res = client
             .auth
             .user_register(townhall_client::auth::user_register::UserRegisterInput {
-                name: "John".into(),
-                surname: "Doe".into(),
-                username: "johndoe".into(),
-                email: Email::from_str("john@test.com").unwrap(),
-                password: "12345".into(),
+                name: name_getter.get().into(),
+                surname: surname_getter.get().into(),
+                username: username_getter.get().into(),
+                email: Email::from_str(email_getter.get().as_str()).unwrap(),
+                password: password_getter.get().into(),
             })
             .await;
 

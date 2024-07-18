@@ -2,8 +2,8 @@ use core::fmt;
 use std::{collections::HashSet, fmt::Debug};
 
 use leptos::{
-    component, create_memo, event_target_value, view, Callable, Callback, IntoView, MaybeProp,
-    SignalGet, TextProp,
+    component, create_memo, event_target_value, leptos_dom::logging::console_log, logging, view,
+    IntoView, MaybeProp, SignalGet, TextProp,
 };
 
 #[derive(Clone, Debug, Default)]
@@ -86,7 +86,7 @@ pub fn TextField(
     view! {
             <div>
             <label class="block mb-2 text-sm font-medium text-purple-500" for=id.clone()>{label}</label>
-            <input type=format!("{}", r#type) name=name value=value id=id placeholder=placeholder class=class_names  disabled=disabled on:change=move |ev| {on_input.get().unwrap().call(event_target_value(&ev))}  />
+            <input type=format!("{}", r#type) name=name value=value id=id placeholder=placeholder class=class_names  disabled=disabled on:change=move |ev| {console_log(event_target_value(&ev).as_str())}  />
             </div>
     }
 }

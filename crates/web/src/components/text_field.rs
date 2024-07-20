@@ -65,7 +65,6 @@ pub fn TextField(
         }
 
         // Default Classes
-
         if let Some(is_full_width) = full_width.get() {
             if is_full_width {
                 classes.insert("w-full");

@@ -1,4 +1,4 @@
-use leptos::{mount_to, view};
+use leptos::{create_rw_signal, mount_to, view};
 
 use wasm_bindgen::JsCast;
 use wasm_bindgen_test::*;
@@ -12,10 +12,11 @@ fn default_text_field_class_names_integrity() {
     let document = leptos::document();
     let test_wrapper = document.create_element("div").unwrap();
     let _ = document.body().unwrap().append_child(&test_wrapper);
+    let value = create_rw_signal(String::new());
 
     mount_to(
         test_wrapper.clone().unchecked_into(),
-        || view! { <TextField id="text-field" /> },
+        move || view! { <TextField id="text-field" value /> },
     );
 
     let text_field_el = test_wrapper
@@ -49,10 +50,11 @@ fn default_text_field_custom_class_names_integrity() {
     let document = leptos::document();
     let test_wrapper = document.create_element("div").unwrap();
     let _ = document.body().unwrap().append_child(&test_wrapper);
+    let value = create_rw_signal(String::new());
 
     mount_to(
         test_wrapper.clone().unchecked_into(),
-        || view! { <TextField class="w-full" id="text-field" /> },
+        move || view! { <TextField class="w-full" id="text-field" value /> },
     );
 
     let text_field_el = test_wrapper

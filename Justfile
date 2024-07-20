@@ -29,7 +29,7 @@ e2e_tests *args='':
 
 # Runs formatting tool against Leptos source
 web-fmt:
-  leptosfmt ./crates/web/src/*.rs
+  leptosfmt ./crates/web/src/**/*.rs
 
 # Runs Web UI for Development
 web-dev:

@@ -1,7 +1,10 @@
 use core::fmt;
 use std::{collections::HashSet, fmt::Debug};
 
-use leptos::{component, create_memo, view, IntoView, MaybeProp, SignalGet, TextProp};
+use leptos::{
+    component, create_memo, event_target_value, view, Callable, Callback, IntoView, MaybeProp,
+    SignalGet, TextProp,
+};
 
 #[derive(Clone, Debug, Default)]
 pub enum TextFieldVariant {
@@ -36,6 +39,7 @@ pub fn TextField(
     #[prop(optional, into)] label: TextProp,
     #[prop(optional, into)] class: TextProp,
     #[prop(optional, into)] variant: MaybeProp<TextFieldVariant>,
+    #[prop(optional, into)] on_input: MaybeProp<Callback<String>>,
     #[prop(optional, into)] r#type: TextFieldType,
     #[prop(optional, into)] disabled: MaybeProp<bool>,
     #[prop(optional, into)] full_width: MaybeProp<bool>,
@@ -82,7 +86,7 @@ pub fn TextField(
     view! {
             <div>
             <label class="block mb-2 text-sm font-medium text-purple-500" for=id.clone()>{label}</label>
-            <input type=format!("{}", r#type) name=name value=value id=id placeholder=placeholder class=class_names  disabled=disabled />
+            <input type=format!("{}", r#type) name=name value=value id=id placeholder=placeholder class=class_names  disabled=disabled on:change=move |ev| {on_input.get().unwrap().call(event_target_value(&ev))}  />
             </div>
     }
 }

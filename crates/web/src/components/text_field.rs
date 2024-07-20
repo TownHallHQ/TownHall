@@ -51,16 +51,16 @@ pub fn TextField(
 
         match variant.get().unwrap_or_default() {
             TextFieldVariant::Primary => {
-                classes.insert("px-3.5");
-                classes.insert("py-2");
-                classes.insert("rounded");
-                classes.insert("font-semibold");
+                classes.insert("bg-gray-100");
+                classes.insert("rounded-md");
                 classes.insert("placeholder:text-purple-200");
-                classes.insert("border-2");
-                classes.insert("border-purple-300");
-                classes.insert("text-purple-400");
-                classes.insert("focus:border-purple-400");
-                classes.insert("focus:ring-purple-500/60");
+                classes.insert("border");
+                classes.insert("border-gray-100");
+                classes.insert("px-2");
+                classes.insert("py-1");
+                classes.insert("text-md");
+                classes.insert("focus:border-indigo-400");
+                classes.insert("focus:ring-indigo-500/60");
             }
         }
 
@@ -91,9 +91,6 @@ pub fn TextField(
 
     view! {
         <div>
-            <label class="block mb-2 text-sm font-medium text-purple-500" for=id.clone()>
-                {label}
-            </label>
             <input
                 type=format!("{}", r#type)
                 name=name

@@ -1,7 +1,10 @@
 use std::str::FromStr;
 
 use crate::components::text_field::{TextField, TextFieldType};
-use leptos::{component, create_action, create_signal, view, IntoView, Show, SignalGet, SignalSet};
+use leptos::{
+    component, create_action, create_rw_signal, create_signal, view, IntoView, Show, SignalGet,
+    SignalSet,
+};
 use townhall_client::Client;
 use townhall_types::user::Email;
 
@@ -9,22 +12,22 @@ use townhall_types::user::Email;
 pub fn Signup() -> impl IntoView {
     let (error_getter, error_setter) = create_signal::<Option<String>>(None);
 
-    let (name_getter, name_setter) = create_signal::<String>(String::from(""));
-    let (surname_getter, surname_setter) = create_signal::<String>(String::from(""));
-    let (username_getter, username_setter) = create_signal::<String>(String::from(""));
-    let (email_getter, email_setter) = create_signal::<String>(String::from(""));
-    let (password_getter, password_setter) = create_signal::<String>(String::from(""));
+    let name_value = create_rw_signal(String::default());
+    let surname_value = create_rw_signal(String::default());
+    let username_value = create_rw_signal(String::default());
+    let email_value = create_rw_signal(String::default());
+    let password_value = create_rw_signal(String::default());
 
     let submit = create_action(move |_| async move {
         let client = Client::new();
         let res = client
             .auth
             .user_register(townhall_client::auth::user_register::UserRegisterInput {
-                name: name_getter.get().into(),
-                surname: surname_getter.get().into(),
-                username: username_getter.get().into(),
-                email: Email::from_str(email_getter.get().as_str()).unwrap(),
-                password: password_getter.get().into(),
+                name: name_value.get().into(),
+                surname: surname_value.get().into(),
+                username: username_value.get().into(),
+                email: Email::from_str(email_value.get().as_str()).unwrap(),
+                password: password_value.get().into(),
             })
             .await;
 
@@ -40,11 +43,11 @@ pub fn Signup() -> impl IntoView {
             <div class="w-full">
               <h1 class="text-6xl text-center font-bold text-white mb-16">TownHall</h1>
               <form class="w-96">
-                <TextField class="w-full" name="name" placeholder="Name" />
-                <TextField class="w-full" name="surname" placeholder="Surname" />
-                <TextField class="w-full" name="username" placeholder="Username" />
-                <TextField class="w-full" name="email" placeholder="Email" />
-                <TextField class="w-full" name="password" r#type=TextFieldType::Password placeholder="Password" />
+                <TextField class="w-full" name="name" placeholder="Name" value=name_value  />
+                <TextField class="w-full" name="surname" placeholder="Surname" value=surname_value/>
+                <TextField class="w-full" name="username" placeholder="Username" value=username_value/>
+                <TextField class="w-full" name="email" placeholder="Email" value=email_value/>
+                <TextField class="w-full" name="password" r#type=TextFieldType::Password placeholder="Password" value=password_value />
                 <button type="button" on:click={move |_| submit.dispatch(())} class="bg-blue-700 text-white font-bold w-full mt-3 rounded-md py-3 px-4">Sign up</button>
                 <Show when=move ||error_getter.get().is_some()>
                   <div class="bg-rose-600 text-white p-2 rounded-md">

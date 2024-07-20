@@ -63,7 +63,7 @@ pub fn Button(
     });
 
     view! {
-        <button id={id} class={class_names} disabled=move || disabled.get()>
+        <button id=id class=class_names disabled=move || disabled.get()>
             <MaybeChildren value=children let:children>
                 {children()}
             </MaybeChildren>

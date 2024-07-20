@@ -2,8 +2,8 @@ use core::fmt;
 use std::{collections::HashSet, fmt::Debug};
 
 use leptos::{
-    component, create_memo, event_target_value, view, Callable, Callback, IntoView, MaybeProp,
-    SignalGet, TextProp,
+    component, create_memo, event_target_value, view, IntoView, MaybeProp, RwSignal, SignalGet,
+    SignalSet, TextProp,
 };
 
 #[derive(Clone, Debug, Default)]
@@ -32,14 +32,13 @@ impl fmt::Display for TextFieldType {
 
 #[component]
 pub fn TextField(
+    #[prop(into)] value: RwSignal<String>,
     #[prop(optional, into)] name: TextProp,
-    #[prop(optional, into)] id: TextProp,
+    #[prop(optional, into)] id: MaybeProp<TextProp>,
     #[prop(optional, into)] placeholder: TextProp,
-    #[prop(optional, into)] value: TextProp,
     #[prop(optional, into)] label: TextProp,
     #[prop(optional, into)] class: TextProp,
     #[prop(optional, into)] variant: MaybeProp<TextFieldVariant>,
-    #[prop(optional, into)] on_input: MaybeProp<Callback<String>>,
     #[prop(optional, into)] r#type: TextFieldType,
     #[prop(optional, into)] disabled: MaybeProp<bool>,
     #[prop(optional, into)] full_width: MaybeProp<bool>,
@@ -66,7 +65,6 @@ pub fn TextField(
         }
 
         // Default Classes
-
         if let Some(is_full_width) = full_width.get() {
             if is_full_width {
                 classes.insert("w-full");
@@ -83,10 +81,30 @@ pub fn TextField(
         classes.into_iter().collect::<Vec<&str>>().join(" ")
     });
 
+    let handle_change = move |ev| {
+        value.set(event_target_value(&ev));
+    };
+
+    let handle_input = move |ev| {
+        value.set(event_target_value(&ev));
+    };
+
     view! {
-            <div>
-            <label class="block mb-2 text-sm font-medium text-purple-500" for=id.clone()>{label}</label>
-            <input type=format!("{}", r#type) name=name value=value id=id placeholder=placeholder class=class_names  disabled=disabled on:change=move |ev| {on_input.get().unwrap().call(event_target_value(&ev))}  />
-            </div>
+        <div>
+            <label class="block mb-2 text-sm font-medium text-purple-500" for=id.clone()>
+                {label}
+            </label>
+            <input
+                type=format!("{}", r#type)
+                name=name
+                value=value
+                id=id
+                placeholder=placeholder
+                class=class_names
+                disabled=disabled
+                on:change=handle_change
+                on:input=handle_input
+            />
+        </div>
     }
 }

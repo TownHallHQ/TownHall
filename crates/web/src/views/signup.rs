@@ -37,27 +37,58 @@ pub fn Signup() -> impl IntoView {
     });
 
     view! {
-      <div class="min-h-screen relative flex justify-center items-center bg-no-repeat bg-cover bg-slate-800 bg-[url('https://images.unsplash.com/photo-1580192985016-7e15ef081dd8?q=80&w=1961&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')]">
-          <div class="absolute bg-black rounded-[50%] w-full h-full blur-[23rem]"></div>
-          <div class="flex justify-center items-center z-20">
-            <div class="w-full">
-              <h1 class="text-6xl text-center font-bold text-white mb-16">TownHall</h1>
-              <form class="w-96">
-                <TextField class="w-full" name="name" placeholder="Name" value=name_value  />
-                <TextField class="w-full" name="surname" placeholder="Surname" value=surname_value/>
-                <TextField class="w-full" name="username" placeholder="Username" value=username_value/>
-                <TextField class="w-full" name="email" placeholder="Email" value=email_value/>
-                <TextField class="w-full" name="password" r#type=TextFieldType::Password placeholder="Password" value=password_value />
-                <button type="button" on:click={move |_| submit.dispatch(())} class="bg-blue-700 text-white font-bold w-full mt-3 rounded-md py-3 px-4">Sign up</button>
-                <Show when=move ||error_getter.get().is_some()>
-                  <div class="bg-rose-600 text-white p-2 rounded-md">
-                      {error_getter.get().unwrap()}
-                  </div>
-                </Show>
-              </form>
-              <div class="text-center w-full text-white mt-3">{"Do you have an account? "}<a class="underline" href="/login">Log In</a></div>
+        <div class="min-h-screen relative flex justify-center items-center bg-no-repeat bg-cover bg-slate-800 bg-[url('https://images.unsplash.com/photo-1580192985016-7e15ef081dd8?q=80&w=1961&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')]">
+            <div class="absolute bg-black rounded-[50%] w-full h-full blur-[23rem]"></div>
+            <div class="flex justify-center items-center z-20">
+                <div class="w-full">
+                    <h1 class="text-6xl text-center font-bold text-white mb-16">TownHall</h1>
+                    <form class="w-96">
+                        <TextField class="w-full" name="name" placeholder="Name" value=name_value/>
+                        <TextField
+                            class="w-full"
+                            name="surname"
+                            placeholder="Surname"
+                            value=surname_value
+                        />
+                        <TextField
+                            class="w-full"
+                            name="username"
+                            placeholder="Username"
+                            value=username_value
+                        />
+                        <TextField
+                            class="w-full"
+                            name="email"
+                            placeholder="Email"
+                            value=email_value
+                        />
+                        <TextField
+                            class="w-full"
+                            name="password"
+                            r#type=TextFieldType::Password
+                            placeholder="Password"
+                            value=password_value
+                        />
+                        <button
+                            type="button"
+                            on:click=move |_| submit.dispatch(())
+                            class="bg-blue-700 text-white font-bold w-full mt-3 rounded-md py-3 px-4"
+                        >
+                            Sign up
+                        </button>
+                        <Show when=move || error_getter.get().is_some()>
+                            <div class="bg-rose-600 text-white p-2 rounded-md">
+                                {error_getter.get().unwrap()}
+                            </div>
+                        </Show>
+                    </form>
+                    <div class="text-center w-full text-white mt-3">
+                        {"Do you have an account? "} <a class="underline" href="/login">
+                            Log In
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-      </div>
     }
 }

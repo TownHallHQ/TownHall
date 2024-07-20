@@ -1,5 +1,5 @@
 use crate::components::text_field::{TextField, TextFieldType};
-use leptos::{component, view, IntoView};
+use leptos::{component, leptos_dom::logging, view, IntoView};
 
 use crate::components::button::{Button, ButtonVariant};
 
@@ -13,7 +13,7 @@ pub fn Home() -> impl IntoView {
             <Button variant={ButtonVariant::Contained}>{"Contained"}</Button>
             <Button variant={ButtonVariant::Outlined}>{"Outlined"}</Button>
             <TextField r#type=TextFieldType::Text placeholder="Simple" />
-            <TextField placeholder="Label" label="Input Label" id="label" />
+            <TextField placeholder="Label" label="Input Label" id="label" on_input=|val: String| logging::console_log(&val) />
             <TextField placeholder="Disabled" disabled={true}/>
         </section>
     }

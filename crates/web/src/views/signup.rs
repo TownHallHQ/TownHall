@@ -3,7 +3,7 @@ use std::str::FromStr;
 use crate::components::text_field::{TextField, TextFieldType};
 use leptos::{
     component, create_action, create_rw_signal, create_signal, view, IntoView, Show, SignalGet,
-    SignalSet,
+    SignalGetUntracked, SignalSet,
 };
 use townhall_client::Client;
 use townhall_types::user::Email;
@@ -23,11 +23,11 @@ pub fn Signup() -> impl IntoView {
         let res = client
             .auth
             .user_register(townhall_client::auth::user_register::UserRegisterInput {
-                name: name_value.get().into(),
-                surname: surname_value.get().into(),
-                username: username_value.get().into(),
-                email: Email::from_str(email_value.get().as_str()).unwrap(),
-                password: password_value.get().into(),
+                name: name_value.get_untracked().into(),
+                surname: surname_value.get_untracked().into(),
+                username: username_value.get_untracked().into(),
+                email: Email::from_str(email_value.get_untracked().as_str()).unwrap(),
+                password: password_value.get_untracked().into(),
             })
             .await;
 

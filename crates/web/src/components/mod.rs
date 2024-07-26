@@ -1,5 +1,6 @@
 mod helper;
 
+pub mod auth;
 pub mod button;
 pub mod feed;
 pub mod icons;

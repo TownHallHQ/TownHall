@@ -1,6 +1,6 @@
-use leptos::{component, create_rw_signal, view, IntoView, Show, SignalGet, SignalSet};
+use leptos::{component, create_rw_signal, view, IntoView, SignalSet};
 
-use crate::components::{auth::register::SignupModal, icons::home::Home};
+use crate::components::{auth::register::SignupCard, icons::home::Home, modal::Modal};
 
 #[component]
 pub fn Header() -> impl IntoView {
@@ -22,8 +22,8 @@ pub fn Header() -> impl IntoView {
                     </button>
                 </div>
             </header>
-            <Show when=move || is_open_auth_modal.get()>
-                <SignupModal  modal_status=is_open_auth_modal/>
-            </Show>
+            <Modal modal_status=is_open_auth_modal>
+                <SignupCard />
+            </Modal >
     }
 }

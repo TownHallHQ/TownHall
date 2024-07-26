@@ -2,20 +2,16 @@ use std::str::FromStr;
 
 use crate::components::text_field::{TextField, TextFieldType};
 use leptos::{
-    component, create_action, create_node_ref, create_rw_signal, create_signal, html::Div, view,
-    IntoView, RwSignal, Show, SignalGet, SignalGetUntracked, SignalSet,
+    component, create_action, create_rw_signal, create_signal, view, IntoView, Show, SignalGet,
+    SignalGetUntracked, SignalSet,
 };
 
-use leptos_use::on_click_outside;
 use townhall_client::Client;
 use townhall_types::user::Email;
 
 #[component]
-pub fn SignupModal(#[prop(into)] modal_status: RwSignal<bool>) -> impl IntoView {
+pub fn SignupCard() -> impl IntoView {
     let (error_getter, error_setter) = create_signal::<Option<String>>(None);
-
-    let modal_ref = create_node_ref::<Div>();
-    on_click_outside(modal_ref, move |_event| modal_status.set(false));
 
     let name_value = create_rw_signal(String::default());
     let surname_value = create_rw_signal(String::default());
@@ -42,8 +38,8 @@ pub fn SignupModal(#[prop(into)] modal_status: RwSignal<bool>) -> impl IntoView 
     });
 
     view! {
-      <div class="fixed right-0 top-0 z-10 flex h-screen w-screen flex-col items-center justify-center drop-shadow-lg backdrop-blur-[2px] bg-[#00000055]">
-        <div node_ref=modal_ref class="w-96 p-6 bg-white border border-gray-200 rounded-lg shadow">
+
+        <div class="w-96 p-6 bg-white border border-gray-200 rounded-lg shadow">
         <h1 class="text-2xl mb-3 text-center">Sign up</h1>
               <form class="space-y-2">
               <TextField class="w-full" name="name" placeholder="Name" value=name_value/>
@@ -95,6 +91,7 @@ pub fn SignupModal(#[prop(into)] modal_status: RwSignal<bool>) -> impl IntoView 
               </a>
           </div>
               </div>
-        </div>
+
+
     }
 }

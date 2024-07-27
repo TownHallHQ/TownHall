@@ -15,6 +15,7 @@ resolver = "2"
 
 [workspace.dependencies]
 anyhow = "1.0.86"
+http-auth-basic = "0.3.3"
 async-graphql = { version = "7.0.5", features = ["chrono", "decimal", "tracing"] }
 async-graphql-axum = "7.0.5"
 async-trait = "0.1.80"
@@ -34,7 +35,7 @@ rand = "0.8.5"
 regex = "1.9.3"
 reqwest = "0.11"
 rust-argon2 = "2.1.0"
-rust-s3 = { version = "0.33.0", features = ["tokio-rustls-tls", "fail-on-err"], default-features = false }
+rust-s3 = { version = "0.34.0", features = ["tokio-rustls-tls", "fail-on-err"], default-features = false }
 sea-orm = "0.12"
 sea-orm-cli = { version = "0.12", default-features = false }
 sea-orm-migration = "0.12"

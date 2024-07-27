@@ -9,11 +9,8 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use async_graphql::{EmptySubscription, Schema};
-use axum::http::{header, HeaderValue, Method};
-use axum::routing::get;
-use axum::{Extension, Router};
+use handlers::router;
 use tokio::net::TcpListener;
-use tower_http::cors::CorsLayer;
 
 use crate::context::Context;
 use crate::graphql::schema::{MutationRoot, QueryRoot};
@@ -31,19 +28,7 @@ pub async fn start() -> Result<()> {
     )
     .data(Arc::clone(&context))
     .finish();
-    let app = Router::new()
-        .route(
-            "/graphql",
-            get(handlers::graphql::playground).post(handlers::graphql::schema),
-        )
-        .layer(Extension(context))
-        .layer(Extension(schema))
-        .layer(
-            CorsLayer::new()
-                .allow_origin("*".parse::<HeaderValue>().unwrap())
-                .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION])
-                .allow_methods([Method::GET, Method::POST]),
-        );
+    let app = router(context, schema);
 
     tracing::info!("GraphQL Playground available on http://{}/graphql", addr);
 

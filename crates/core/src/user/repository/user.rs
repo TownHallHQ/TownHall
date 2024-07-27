@@ -140,7 +140,7 @@ impl UserRepository {
     }
 
     pub async fn update(&self, id: Pxid, dto: UpdateUserDto) -> Result<UserRecord> {
-        let user = entity::prelude::User::find_by_id(&id.to_string())
+        let user = entity::prelude::User::find_by_id(id.to_string())
             .one(&*self.db)
             .await
             .map_err(|_| UserError::DatabaseError)?;

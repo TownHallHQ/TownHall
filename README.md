@@ -81,13 +81,14 @@ The client and server solution is available in this repository.
 
 | Directory          | Description                                                                                |
 | ------------------ | ------------------------------------------------------------------------------------------ |
-| `crates/`          | Contains GraphQL Server Logic, CLI and Domain libraries. Rust is the predominant language. |
 | `crates/cli`       | CLI used to manage the Server instance. run database migrations and other developer tasks  |
+| `crates/client`    | HTTP Client used as bridge library between client interface and application services       |
 | `crates/core`      | Domain Logic, includes Models, Value Objects, Repositories and Services                    |
 | `crates/entity`    | Entities generated from database                                                           |
 | `crates/migration` | Database migrations                                                                        |
 | `crates/server`    | HTTP Server Logic, uses Axum and GraphQL                                                   |
 | `crates/test`      | E2E Tests for the GraphQL Server                                                           |
+| `crates/types`     | Plain types shared between different application layers                                    |
 | `crates/web`       | Web UI, written in Leptos                                                                  |
 
 ## Testing

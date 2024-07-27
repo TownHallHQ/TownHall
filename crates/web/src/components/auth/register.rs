@@ -1,6 +1,5 @@
 use std::str::FromStr;
 
-use crate::components::text_field::{TextField, TextFieldType};
 use leptos::{
     component, create_action, create_rw_signal, create_signal, view, IntoView, Show, SignalGet,
     SignalGetUntracked, SignalSet,
@@ -8,6 +7,8 @@ use leptos::{
 
 use townhall_client::Client;
 use townhall_types::user::Email;
+
+use crate::components::text_field::{TextField, TextFieldType};
 
 #[component]
 pub fn SignupCard() -> impl IntoView {

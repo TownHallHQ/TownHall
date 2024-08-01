@@ -93,9 +93,7 @@ pub fn TextField(
     view! {
         <div>
             <Show when=move || label_cloned.get().is_some() fallback=move || ()>
-                <label class="block mb-2 text-sm font-medium text-gray-900">
-                    {label.get()}
-                </label>
+                <label class="block mb-2 text-sm font-medium text-gray-900">{label.get()}</label>
             </Show>
             <input
                 type=format!("{}", r#type)

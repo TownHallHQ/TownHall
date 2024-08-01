@@ -37,7 +37,7 @@ pub fn LoginCard(
     view! {
 
         <div class="w-96 p-6 bg-white border border-gray-200 rounded-lg shadow">
-        <h1 class="text-2xl mb-3 text-center">Sign up</h1>
+        <h1 class="text-2xl mb-3 text-center">Log in</h1>
               <form class="space-y-2" on:submit=move |_| handle_submit.dispatch(())>
               <TextField
                   class="w-full"
@@ -58,7 +58,7 @@ pub fn LoginCard(
                   type="submit"
                   class="bg-blue-700 text-white font-bold w-full mt-3 rounded-md py-3 px-4"
               >
-                  Sign up
+                  Log in
               </button>
               <Show when=move || error_getter.get().is_some()>
                   <div class="bg-rose-600 text-white p-2 rounded-md">

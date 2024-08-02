@@ -2,8 +2,8 @@ use core::fmt;
 use std::{collections::HashSet, fmt::Debug};
 
 use leptos::{
-    component, create_memo, event_target_value, view, IntoView, MaybeProp, RwSignal, SignalGet,
-    SignalSet, TextProp,
+    component, create_memo, event_target_value, view, IntoView, MaybeProp, RwSignal, Show,
+    SignalGet, SignalSet, TextProp,
 };
 
 #[derive(Clone, Debug, Default)]
@@ -36,13 +36,14 @@ pub fn TextField(
     #[prop(optional, into)] name: TextProp,
     #[prop(optional, into)] id: MaybeProp<TextProp>,
     #[prop(optional, into)] placeholder: TextProp,
-    #[prop(optional, into)] label: TextProp,
+    #[prop(optional, into)] label: MaybeProp<TextProp>,
     #[prop(optional, into)] class: TextProp,
     #[prop(optional, into)] variant: MaybeProp<TextFieldVariant>,
     #[prop(optional, into)] r#type: TextFieldType,
     #[prop(optional, into)] disabled: MaybeProp<bool>,
     #[prop(optional, into)] full_width: MaybeProp<bool>,
 ) -> impl IntoView {
+    let label_cloned = label.clone();
     let custom_classes = class.get();
     let class_names = create_memo(move |_| {
         let mut classes: HashSet<&str> = HashSet::new();
@@ -91,6 +92,9 @@ pub fn TextField(
 
     view! {
         <div>
+            <Show when=move || label_cloned.get().is_some() fallback=move || ()>
+                <label class="block mb-2 text-sm font-medium text-gray-900">{label.get()}</label>
+            </Show>
             <input
                 type=format!("{}", r#type)
                 name=name

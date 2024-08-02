@@ -1,8 +1,8 @@
 use std::str::FromStr;
 
 use leptos::{
-    component, create_action, create_rw_signal, create_signal, view, IntoView, Show, SignalGet,
-    SignalGetUntracked, SignalSet,
+    component, create_action, create_rw_signal, create_signal, view, IntoView, RwSignal, Show,
+    SignalGet, SignalGetUntracked, SignalSet,
 };
 
 use townhall_client::Client;
@@ -11,7 +11,10 @@ use townhall_types::user::Email;
 use crate::components::text_field::{TextField, TextFieldType};
 
 #[component]
-pub fn SignupCard() -> impl IntoView {
+pub fn SignupCard(
+    #[prop(into)] signup_status: RwSignal<bool>,
+    #[prop(into)] login_status: RwSignal<bool>,
+) -> impl IntoView {
     let (error_getter, error_setter) = create_signal::<Option<String>>(None);
 
     let name_value = create_rw_signal(String::default());
@@ -37,6 +40,11 @@ pub fn SignupCard() -> impl IntoView {
             error_setter.set(Some(error.message.to_owned()));
         }
     });
+
+    let handle_switch = move |_| {
+        signup_status.set(false);
+        login_status.set(true);
+    };
 
     view! {
 
@@ -87,9 +95,9 @@ pub fn SignupCard() -> impl IntoView {
               </Show>
           </form>
           <div class="text-center mt-3">
-              {"Do you have an account? "} <a class="underline" href="/login">
+              {"Do you have an account? "} <button on:click=handle_switch class="underline" >
                   Log In
-              </a>
+              </button>
           </div>
               </div>
 

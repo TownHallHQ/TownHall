@@ -30,7 +30,7 @@ pub fn Header() -> impl IntoView {
             </header>
             <Modal modal_status=is_open_auth_signup_modal>
                 <Show when=move || is_open_auth_signup_modal.get() fallback=move || ()>
-                <SignupCard />
+                <SignupCard login_status=is_open_auth_login_modal signup_status=is_open_auth_signup_modal />
                 </Show>
                 </Modal >
                 <Modal modal_status=is_open_auth_login_modal >

@@ -18,8 +18,10 @@ async-graphql = { workspace = true }
 async-graphql-axum = { workspace = true }
 async-trait = { workspace = true }
 axum = { workspace = true }
+axum-extra = { workspace = true, features = ["cookie"] }
 base64 = { workspace = true }
 chrono = "0.4.38"
+cookie = { workspace = true }
 dotenv = { workspace = true }
 http-auth-basic = { workspace = true }
 jsonwebtoken = { workspace = true }
@@ -28,6 +30,7 @@ rand = { workspace = true }
 rust-argon2 = { workspace = true }
 rust-s3 = { workspace = true, features = ["tokio-rustls-tls", "fail-on-err"], default-features = false }
 serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
 thiserror = {  workspace = true }
 tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
 tower-http = { workspace = true, features = ["cors"] }

@@ -56,5 +56,5 @@ impl IntoResponse for ApiError {
 }
 
 pub fn api() -> Router {
-    Router::new().nest("/api/v1", v1::v1())
+    Router::new().nest("/v1", v1::v1())
 }

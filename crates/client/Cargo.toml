@@ -11,6 +11,7 @@ path = "src/lib.rs"
 [dependencies]
 chrono = { workspace = true, features = ["js-sys", "wasmbind"] }
 graphql_client = { workspace = true, features = ["reqwest"] }
+http-auth-basic = { workspace = true }
 pxid = { workspace = true, features = ["serde"] }
 reqwest = { workspace = true, features = ["blocking", "json"] }
 serde = { workspace = true }

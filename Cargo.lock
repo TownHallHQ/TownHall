@@ -612,6 +612,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "axum-extra"
+version = "0.9.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0be6ea09c9b96cb5076af0de2e383bd2bc0c18f827cf1967bdd353e0b910d733"
+dependencies = [
+ "axum",
+ "axum-core",
+ "bytes",
+ "cookie",
+ "futures-util",
+ "http 1.1.0",
+ "http-body 1.0.1",
+ "http-body-util",
+ "mime",
+ "pin-project-lite",
+ "serde",
+ "tower",
+ "tower-layer",
+ "tower-service",
+ "tracing",
+]
+
+[[package]]
 name = "backtrace"
 version = "0.3.73"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -917,6 +940,7 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "graphql_client",
+ "http-auth-basic",
  "pxid",
  "reqwest",
  "serde",
@@ -4023,8 +4047,10 @@ dependencies = [
  "async-graphql-axum",
  "async-trait",
  "axum",
+ "axum-extra",
  "base64 0.22.1",
  "chrono",
+ "cookie",
  "core",
  "dotenv",
  "jsonwebtoken",
@@ -4033,6 +4059,7 @@ dependencies = [
  "rust-argon2",
  "rust-s3",
  "serde",
+ "serde_json",
  "thiserror",
  "tokio",
  "tower-http",

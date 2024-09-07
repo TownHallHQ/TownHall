@@ -21,8 +21,9 @@ pub fn router(context: Arc<Context>, schema: GraphQLSchema) -> Router {
         .layer(Extension(schema))
         .layer(
             CorsLayer::new()
-                .allow_origin("*".parse::<HeaderValue>().unwrap())
-                .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION])
+                .allow_credentials(true)
+                .allow_origin("http://localhost:8080".parse::<HeaderValue>().unwrap())
+                .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION, header::COOKIE])
                 .allow_methods([Method::GET, Method::POST]),
         )
 }

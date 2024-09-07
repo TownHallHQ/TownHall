@@ -17,7 +17,7 @@ pub struct TokenCreate {
 
 pub async fn token_create(client: &Client, email: String, password: String) -> TokenCreate {
     let variables = token_create::Variables { email, password };
-    let res = post_graphql::<TokenCreate, _>(client, "http://127.0.0.1:7878/graphql", variables)
+    let res = post_graphql::<TokenCreate, _>(client, "/graphql", variables)
         .await
         .unwrap();
     let data = res.data.unwrap().token_create;

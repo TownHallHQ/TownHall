@@ -23,7 +23,7 @@ pub struct UserRegister {
 
 pub async fn user_register(client: &Client, input: UserRegisterInput) -> UserRegister {
     let variables = user_register::Variables { input };
-    let res = post_graphql::<UserRegister, _>(client, "http://127.0.0.1:7878/graphql", variables)
+    let res = post_graphql::<UserRegister, _>(client, "/graphql", variables)
         .await
         .unwrap();
     let data = res.data.unwrap().user_register;

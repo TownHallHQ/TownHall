@@ -50,3 +50,11 @@ open = false
 
 # Protocol used for autoreload WebSockets connection.
 ws_protocol = "ws"
+
+[[proxy]]
+backend = "http://127.0.0.1:7878/api/"
+rewrite = "/api/"
+
+[[proxy]]
+backend = "http://127.0.0.1:7878/graphql"
+rewrite = "/graphql"

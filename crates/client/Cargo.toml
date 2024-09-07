@@ -9,6 +9,7 @@ name = "townhall_client"
 path = "src/lib.rs"
 
 [dependencies]
+anyhow = { workspace = true }
 chrono = { workspace = true, features = ["js-sys", "wasmbind"] }
 graphql_client = { workspace = true, features = ["reqwest"] }
 http-auth-basic = { workspace = true }

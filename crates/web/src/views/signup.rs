@@ -4,6 +4,7 @@ use leptos::{
     component, create_action, create_rw_signal, create_signal, view, IntoView, Show, SignalGet,
     SignalGetUntracked, SignalSet,
 };
+use leptos::wasm_bindgen::UnwrapThrowExt;
 
 use townhall_client::{auth::user_register::UserRegisterInput, Client};
 use townhall_types::user::Email;
@@ -19,7 +20,7 @@ pub fn SignUp() -> impl IntoView {
     let email_value = create_rw_signal(String::default());
     let password_value = create_rw_signal(String::default());
     let handle_submit = create_action(move |_| async move {
-        let client = Client::new();
+        let client = Client::new("http://127.0.0.1:8080").unwrap();
         let Ok(email) = Email::from_str(email_value.get_untracked().as_str()) else {
             error_setter.set(Some(String::from("Email is not valid")));
             return;
@@ -33,7 +34,8 @@ pub fn SignUp() -> impl IntoView {
                 username: username_value.get_untracked(),
                 password: password_value.get_untracked(),
             })
-            .await;
+            .await
+            .unwrap_throw();
 
         if let Some(err) = user_register.error {
             error_setter.set(Some(err.message));

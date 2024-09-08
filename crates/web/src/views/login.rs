@@ -13,7 +13,7 @@ pub fn Login() -> impl IntoView {
     let email_value = create_rw_signal(String::default());
     let password_value = create_rw_signal(String::default());
     let handle_submit = create_action(move |_| async move {
-        let client = Client::new();
+        let client = Client::new("http://127.0.0.1:8080").unwrap();
         let res = client
             .auth
             .login(email_value.get_untracked(), password_value.get_untracked())

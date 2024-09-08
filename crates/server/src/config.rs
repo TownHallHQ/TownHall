@@ -1,5 +1,7 @@
 use std::env;
 
+pub const ACCESS_TOKEN_COOKIE_NAME: &str = "access-token";
+
 pub struct Config {
     pub database_url: String,
     pub jwt_secret: String,

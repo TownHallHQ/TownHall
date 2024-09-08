@@ -1,10 +1,10 @@
 use std::str::FromStr;
 
+use leptos::wasm_bindgen::UnwrapThrowExt;
 use leptos::{
     component, create_action, create_rw_signal, create_signal, view, IntoView, Show, SignalGet,
     SignalGetUntracked, SignalSet,
 };
-use leptos::wasm_bindgen::UnwrapThrowExt;
 
 use townhall_client::{auth::user_register::UserRegisterInput, Client};
 use townhall_types::user::Email;

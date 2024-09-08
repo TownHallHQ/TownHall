@@ -1,10 +1,11 @@
+pub mod me;
 pub mod token_create;
 pub mod user_register;
 
-use anyhow::{Result, anyhow};
+use anyhow::{anyhow, Result};
 use http_auth_basic::Credentials;
-use reqwest::{Client, Url};
 use reqwest::header::{HeaderValue, AUTHORIZATION};
+use reqwest::{Client, Url};
 
 pub struct AuthClient {
     client: Client,
@@ -35,7 +36,11 @@ impl AuthClient {
         Ok(())
     }
 
-    pub async fn token_create(&self, email: String, password: String) -> Result<token_create::TokenCreate> {
+    pub async fn token_create(
+        &self,
+        email: String,
+        password: String,
+    ) -> Result<token_create::TokenCreate> {
         token_create::token_create(self, email, password).await
     }
 
@@ -44,5 +49,9 @@ impl AuthClient {
         input: user_register::UserRegisterInput,
     ) -> Result<user_register::UserRegister> {
         user_register::user_register(self, input).await
+    }
+
+    pub async fn me(&self) -> Result<me::Me> {
+        me::me(self).await
     }
 }

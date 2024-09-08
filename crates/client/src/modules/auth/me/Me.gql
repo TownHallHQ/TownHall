@@ -1,0 +1,21 @@
+query Me {
+  me {
+    user {
+      id
+      name
+      surname
+      username
+      email
+      createdAt
+      updatedAt
+      avatar {
+        id
+        url
+      }
+    }
+    error {
+      code
+      message
+    }
+  }
+}

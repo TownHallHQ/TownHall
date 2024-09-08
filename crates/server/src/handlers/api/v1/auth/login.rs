@@ -6,7 +6,6 @@ use axum::http::header::{AUTHORIZATION, SET_COOKIE};
 use axum::http::{HeaderValue, StatusCode};
 use axum::response::{IntoResponse, Response};
 use axum::{Extension, Json};
-use cookie::time::Duration;
 use cookie::{CookieBuilder, SameSite};
 use http_auth_basic::Credentials;
 use serde::Serialize;
@@ -14,9 +13,8 @@ use tracing::instrument;
 
 use townhall::user::model::Email;
 
+use crate::config::ACCESS_TOKEN_COOKIE_NAME;
 use crate::context::Context;
-
-pub const ACCESS_TOKEN_COOKIE_NAME: &str = "access-token";
 
 #[derive(Serialize)]
 struct LoginResponse {

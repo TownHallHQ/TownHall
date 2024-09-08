@@ -5339,6 +5339,7 @@ dependencies = [
 name = "web"
 version = "0.0.0"
 dependencies = [
+ "anyhow",
  "client",
  "leptos",
  "leptos-use",

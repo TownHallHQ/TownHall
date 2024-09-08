@@ -1,12 +1,28 @@
 use anyhow::Result;
 use axum::http::header::AUTHORIZATION;
 use axum::http::HeaderMap;
+use axum_extra::extract::CookieJar;
 
 use townhall::auth::service::{AuthService, Token};
+
+use crate::config::ACCESS_TOKEN_COOKIE_NAME;
 
 const HTTP_AUTHORIZATION_SCHEME: &str = "jwt";
 
 pub fn try_extract_token(auth_service: &AuthService, headers: &HeaderMap) -> Result<Option<Token>> {
+    if let Some(jwt) = get_jwt_from_access_token_cookie(headers) {
+        let token = auth_service.parse_jwt(&jwt).ok();
+
+        match token {
+            Some(token) => {
+                return Ok(Some(token));
+            }
+            None => {
+                anyhow::bail!("Failed to parse JWT");
+            }
+        }
+    }
+
     if let Some(jwt) = get_jwt_from_auth_header(headers) {
         let token = auth_service.parse_jwt(&jwt).ok();
 
@@ -21,6 +37,17 @@ pub fn try_extract_token(auth_service: &AuthService, headers: &HeaderMap) -> Res
     }
 
     Ok(None)
+}
+
+/// Retrieves the Access Token Cookie and attempts to retrieve the JSON Web Token
+fn get_jwt_from_access_token_cookie(headers: &HeaderMap) -> Option<String> {
+    let cookies = CookieJar::from_headers(headers);
+
+    if let Some(cookie) = cookies.get(ACCESS_TOKEN_COOKIE_NAME) {
+        return Some(cookie.value().to_string());
+    }
+
+    None
 }
 
 /// Retrieves the value from the Authorization HTTP Header and attempts to

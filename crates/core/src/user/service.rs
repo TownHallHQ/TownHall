@@ -139,9 +139,8 @@ impl<P: ImageProvider> UserService<P> {
     pub async fn update_avatar(&self, id: Pxid, dto: UploadAvatarDto) -> Result<User> {
         self.image_service
             .validate(&dto.bytes, UseCase::Avatar)
-            .map_err(|err| {
+            .inspect_err(|err| {
                 tracing::warn!("Provided image is not valid for uploading as user's avatar");
-                err
             })?;
 
         let Some(user) = self.find_by_id(id).await? else {

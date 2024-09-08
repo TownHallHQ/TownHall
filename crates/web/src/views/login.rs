@@ -1,6 +1,6 @@
 use leptos::{
     component, create_action, create_rw_signal, create_signal, view, IntoView, Show, SignalGet,
-    SignalGetUntracked, SignalSet,
+    SignalGetUntracked,
 };
 
 use townhall_client::Client;

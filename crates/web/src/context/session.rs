@@ -20,8 +20,10 @@ pub struct SessionContext {
 }
 
 impl SessionContext {
-    pub async fn whoami(&self) -> Result<()> {
-        if matches!(self.user.get_untracked(), UserSession::Unknown) {
+    pub async fn whoami(&self) -> Result<bool> {
+        if matches!(self.user.get_untracked(), UserSession::Unauthenticated)
+            || matches!(self.user.get_untracked(), UserSession::Unknown)
+        {
             let client = Client::new("http://127.0.0.1:8080")?;
             let res = client.auth.me().await?;
 
@@ -41,19 +43,18 @@ impl SessionContext {
                     updated_at: user.updated_at,
                     deleted_at: None,
                 }));
-            } else {
-                self.user.set(UserSession::Unauthenticated);
+
+                return Ok(true);
             }
         }
 
-        Ok(())
+        self.user.set(UserSession::Unauthenticated);
+        Ok(false)
     }
 
-    pub async fn login(&self, email: String, password: String) -> Result<()> {
+    pub async fn login(&self, email: String, password: String) -> Result<bool> {
         let client = Client::new("http://127.0.0.1:8080")?;
-
         client.auth.login(email, password).await?;
-        self.whoami().await?;
-        Ok(())
+        self.whoami().await
     }
 }

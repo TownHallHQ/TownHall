@@ -1,8 +1,8 @@
 mod header;
 
 use leptos::{
-    component, create_render_effect, create_slice, expect_context, spawn_local, view, IntoView,
-    SignalGet, SignalGetUntracked,
+    component, create_render_effect, expect_context, spawn_local, view, IntoView,
+    SignalGetUntracked,
 };
 use leptos_router::{use_navigate, Outlet};
 
@@ -13,32 +13,14 @@ use self::header::Header;
 #[component]
 pub fn AppLayout() -> impl IntoView {
     let app_context = expect_context::<AppContext>();
-    let (session_getter, _) = create_slice(
-        app_context,
-        |app_ctx| app_ctx.session.user.get(),
-        |_, _: ()| unimplemented!(),
-    );
 
     create_render_effect(move |_| {
-        let app_context = app_context;
-
         spawn_local(async move {
-            let navigate = use_navigate();
-
-            match app_context.get_untracked().session.whoami().await {
-                Ok(_) => match session_getter.get() {
-                    UserSession::Unknown | UserSession::Unauthenticated => {
-                        navigate("/auth/login", Default::default())
-                    }
-                    _ => {}
-                },
-                Err(e) => {
-                    leptos::logging::log!(
-                        "AppLayout: app_context.get_untracked().session.whoami().await = {:?}",
-                        e
-                    );
-                    navigate("/auth/login", Default::default())
-                }
+            if let UserSession::Unauthenticated =
+                app_context.get_untracked().session.user.get_untracked()
+            {
+                let navigate = use_navigate();
+                navigate("/auth/login", Default::default());
             }
         });
     });

@@ -1,31 +1,25 @@
 use leptos::{
     component, create_render_effect, create_slice, expect_context, spawn_local, view, IntoView,
-    SignalGet, SignalGetUntracked,
+    SignalGet,
 };
 use leptos_router::{use_navigate, Outlet};
 
 use crate::context::session::UserSession;
-use crate::AppContext;
+use crate::context::AppContext;
 
 #[component]
 pub fn AuthLayout() -> impl IntoView {
     let app_context = expect_context::<AppContext>();
-    let (session_getter, _) = create_slice(
-        app_context,
-        |app_ctx| app_ctx.session.user.get(),
-        |_, _: ()| unimplemented!(),
-    );
+    let (session_getter, _) =
+        create_slice(app_context, |ctx| ctx.session.user.get(), |_, _: ()| {});
 
     create_render_effect(move |_| {
-        let app_context = app_context;
+        let session = move || session_getter.get();
 
         spawn_local(async move {
-            let navigate = use_navigate();
-
-            if app_context.get_untracked().session.whoami().await.is_ok() {
-                if let UserSession::Authenticated(_) = session_getter.get() {
-                    navigate("/", Default::default())
-                }
+            if let UserSession::Authenticated(_) = session() {
+                let navigate = use_navigate();
+                navigate("/", Default::default());
             }
         });
     });

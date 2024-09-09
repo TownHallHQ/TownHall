@@ -1,23 +1,38 @@
 use leptos::{
-    component, create_action, create_rw_signal, create_signal, view, IntoView, Show, SignalGet,
-    SignalGetUntracked,
+    component, create_action, create_rw_signal, create_signal, expect_context, view, IntoView,
+    Show, SignalGet, SignalGetUntracked, SignalSet,
 };
+use leptos_router::use_navigate;
 
-use townhall_client::Client;
-
-use crate::components::text_field::{TextField, TextFieldType};
+use crate::{
+    components::text_field::{TextField, TextFieldType},
+    context::AppContext,
+};
 
 #[component]
 pub fn Login() -> impl IntoView {
+    let app_context = expect_context::<AppContext>();
     let (error_getter, error_setter) = create_signal::<Option<String>>(None);
     let email_value = create_rw_signal(String::default());
     let password_value = create_rw_signal(String::default());
     let handle_submit = create_action(move |_| async move {
-        let client = Client::new("http://127.0.0.1:8080").unwrap();
-        let res = client
-            .auth
-            .login(email_value.get_untracked(), password_value.get_untracked())
-            .await;
+        let navigate = use_navigate();
+        let email = email_value.get_untracked();
+        let password = password_value.get_untracked();
+
+        match app_context
+            .get_untracked()
+            .session
+            .login(email, password)
+            .await
+        {
+            Ok(_) => {
+                navigate("/", Default::default());
+            }
+            Err(err) => {
+                error_setter.set(Some(err.to_string()));
+            }
+        }
     });
 
     view! {

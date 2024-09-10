@@ -24,17 +24,19 @@ pub fn SignupCard(
     let password_value = create_rw_signal(String::default());
 
     let submit = create_action(move |_| async move {
-        let client = Client::new();
+        let client = Client::new("http://localhost:8080");
         let res = client
+            .unwrap()
             .auth
             .user_register(townhall_client::auth::user_register::UserRegisterInput {
-                name: name_value.get_untracked().into(),
-                surname: surname_value.get_untracked().into(),
-                username: username_value.get_untracked().into(),
+                name: name_value.get_untracked(),
+                surname: surname_value.get_untracked(),
+                username: username_value.get_untracked(),
                 email: Email::from_str(email_value.get_untracked().as_str()).unwrap(),
-                password: password_value.get_untracked().into(),
+                password: password_value.get_untracked(),
             })
-            .await;
+            .await
+            .unwrap();
 
         if let Some(ref error) = res.error {
             error_setter.set(Some(error.message.to_owned()));

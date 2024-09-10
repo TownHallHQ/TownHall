@@ -1,12 +1,16 @@
+use anyhow::{anyhow, Result};
 use graphql_client::reqwest::post_graphql;
 use graphql_client::GraphQLQuery;
-use reqwest::Client;
 
 use token_create::{TokenCreateTokenCreateError, TokenCreateTokenCreateToken};
 
+use crate::GRAPHQL_PATH;
+
+use super::AuthClient;
+
 #[derive(GraphQLQuery)]
 #[graphql(
-    response_derives = "Debug",
+    response_derives = "Clone,Debug",
     schema_path = "schema.json",
     query_path = "src/modules/auth/token_create/TokenCreate.gql"
 )]
@@ -15,15 +19,20 @@ pub struct TokenCreate {
     pub error: Option<TokenCreateTokenCreateError>,
 }
 
-pub async fn token_create(client: &Client, email: String, password: String) -> TokenCreate {
+pub async fn token_create(
+    auth_client: &AuthClient,
+    email: String,
+    password: String,
+) -> Result<TokenCreate> {
     let variables = token_create::Variables { email, password };
-    let res = post_graphql::<TokenCreate, _>(client, "http://127.0.0.1:7878/graphql", variables)
+    let url = auth_client.domain.join(GRAPHQL_PATH)?;
+    let res = post_graphql::<TokenCreate, _>(&auth_client.client, url, variables)
         .await
-        .unwrap();
+        .map_err(|err| anyhow!("Failed to create token. {err}"))?;
     let data = res.data.unwrap().token_create;
 
-    TokenCreate {
+    Ok(TokenCreate {
         token: data.token,
         error: data.error,
-    }
+    })
 }

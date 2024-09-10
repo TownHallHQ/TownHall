@@ -32,6 +32,7 @@ lazy_static = "1.4.0"
 leptos = "0.6"
 leptos_meta = "0.6"
 leptos_router = "0.6"
+leptos-use = "0.10"
 pxid = { version = "1", features = ["async-graphql", "serde"] }
 rand = "0.8.5"
 regex = "1.9.3"

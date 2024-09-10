@@ -18,11 +18,13 @@ pub fn LoginCard(
     let password_value = create_rw_signal(String::default());
 
     let handle_submit = create_action(move |_| async move {
-        let client = Client::new();
+        let client = Client::new("http://localhost:8080");
         let res = client
+            .unwrap()
             .auth
             .token_create(email_value.get_untracked(), password_value.get_untracked())
-            .await;
+            .await
+            .unwrap();
 
         if let Some(ref error) = res.error {
             error_setter.set(Some(error.message.to_owned()));

@@ -20,6 +20,7 @@ anyhow = { workspace = true }
 leptos =  { workspace = true, features = ["csr"] }
 leptos_meta = { workspace = true, features = ["csr"] }
 leptos_router = { workspace = true, features = ["csr"] }
+leptos-use = { workspace = true }
 
 # Local Dependencies
 client = { path = "../client" }

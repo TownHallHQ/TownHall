@@ -56,11 +56,11 @@ pub fn SignupCard(
               <div class="flex justify-between space-x-2">
               <TextField class="w-full" name="name" placeholder="Name" label="Name" value=name_value />
               <TextField
-              class="w-full"
-              label="Surname"
-              name="surname"
-              placeholder="Surname"
-              value=surname_value
+                class="w-full"
+                label="Surname"
+                name="surname"
+                placeholder="Surname"
+                value=surname_value
               />
               </div>
               <TextField

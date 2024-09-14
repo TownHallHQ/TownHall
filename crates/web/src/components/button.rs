@@ -97,7 +97,13 @@ pub fn Button(
     };
 
     view! {
-        <button type=format!("{}", r#type) id=id class=class_names disabled=move || disabled.get() on:click=handle_click>
+        <button
+            type=format!("{}", r#type)
+            id=id
+            class=class_names
+            disabled=move || disabled.get()
+            on:click=handle_click
+        >
             <MaybeChildren value=children let:children>
                 {children()}
             </MaybeChildren>

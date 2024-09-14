@@ -1,5 +1,8 @@
+use core::fmt;
 use std::collections::HashSet;
+use std::rc::Rc;
 
+use leptos::web_sys::MouseEvent;
 use leptos::{component, create_memo, view, Children, IntoView, MaybeProp, SignalGet, TextProp};
 
 use super::helper::maybe_children::MaybeChildren;
@@ -12,13 +15,32 @@ pub enum ButtonVariant {
     Outlined,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum ButtonType {
+    #[default]
+    Button,
+    Submit,
+}
+
+impl fmt::Display for ButtonType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            ButtonType::Submit => write!(f, "submit"),
+            ButtonType::Button => write!(f, "button"),
+        }
+    }
+}
+
 #[component]
 pub fn Button(
     #[prop(optional, into)] id: TextProp,
     #[prop(optional, into)] class: TextProp,
     #[prop(optional, into)] disabled: MaybeProp<bool>,
+    #[prop(optional, into)] full_width: MaybeProp<bool>,
     #[prop(optional, into)] variant: MaybeProp<ButtonVariant>,
     #[prop(optional)] children: Option<Children>,
+    #[prop(optional, into)] on_click: MaybeProp<Rc<dyn Fn(MouseEvent) -> () + 'static>>,
+    #[prop(optional, into)] r#type: ButtonType,
 ) -> impl IntoView {
     let custom_classes = class.get();
     let class_names = create_memo(move |_| {
@@ -34,6 +56,12 @@ pub fn Button(
         classes.insert("font-semibold");
         classes.insert("text-sm");
 
+        if let Some(is_full_width) = full_width.get() {
+            if is_full_width {
+                classes.insert("w-full");
+            }
+        }
+
         if let Some(is_disabled) = disabled.get() {
             if is_disabled {
                 classes.insert("opacity-70");
@@ -48,7 +76,7 @@ pub fn Button(
             }
             ButtonVariant::Contained => {
                 classes.insert("btn-contained");
-                classes.insert("bg-purple-500");
+                classes.insert("bg-blue-700");
                 classes.insert("text-white");
             }
             ButtonVariant::Outlined => {
@@ -62,8 +90,20 @@ pub fn Button(
         classes.into_iter().collect::<Vec<&str>>().join(" ")
     });
 
+    let handle_click = move |event| {
+        if let Some(on_click) = on_click.get() {
+            on_click.clone()(event);
+        }
+    };
+
     view! {
-        <button id=id class=class_names disabled=move || disabled.get()>
+        <button
+            type=format!("{}", r#type)
+            id=id
+            class=class_names
+            disabled=move || disabled.get()
+            on:click=handle_click
+        >
             <MaybeChildren value=children let:children>
                 {children()}
             </MaybeChildren>

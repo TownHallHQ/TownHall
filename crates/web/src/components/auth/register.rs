@@ -8,6 +8,7 @@ use leptos::{
 use townhall_client::Client;
 use townhall_types::user::Email;
 
+use crate::components::button::{Button, ButtonType, ButtonVariant};
 use crate::components::text_field::{TextField, TextFieldType};
 
 #[component]
@@ -83,13 +84,13 @@ pub fn SignupCard(
                   placeholder="Password"
                   value=password_value
               />
-              <button
-                  type="button"
-                  on:click=move |_| submit.dispatch(())
-                  class="bg-blue-700 text-white font-bold w-full mt-3 rounded-md py-3 px-4"
+              <Button
+              r#type=ButtonType::Button
+              on:click=move |_| submit.dispatch(())
+        full_width=true
               >
                   Sign up
-              </button>
+              </Button>
               <Show when=move || error_getter.get().is_some()>
                   <div class="bg-rose-600 text-white p-2 rounded-md">
                       {error_getter.get().unwrap()}

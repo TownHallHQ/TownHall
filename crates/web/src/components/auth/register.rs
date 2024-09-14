@@ -53,14 +53,16 @@ pub fn SignupCard(
         <div class="w-96 p-6 bg-white border border-gray-200 rounded-lg shadow">
         <h1 class="text-2xl mb-3 text-center">Sign up</h1>
               <form class="space-y-2">
-              <TextField class="w-full" name="name" placeholder="Name" value=name_value/>
+              <div class="flex justify-between space-x-2">
+              <TextField class="w-full" name="name" placeholder="Name" label="Name" value=name_value />
               <TextField
-                  class="w-full"
-                  label="Surname"
-                  name="surname"
-                  placeholder="Surname"
-                  value=surname_value
+              class="w-full"
+              label="Surname"
+              name="surname"
+              placeholder="Surname"
+              value=surname_value
               />
+              </div>
               <TextField
                   class="w-full"
                   label="Username"
@@ -72,6 +74,7 @@ pub fn SignupCard(
                   class="w-full"
                   name="email"
                   label="Email"
+                  r#type=TextFieldType::Email
                   placeholder="Email"
                   value=email_value
               />

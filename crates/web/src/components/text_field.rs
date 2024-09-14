@@ -54,7 +54,7 @@ pub fn TextField(
             TextFieldVariant::Primary => {
                 classes.insert("bg-gray-100");
                 classes.insert("rounded-md");
-                classes.insert("placeholder:text-purple-200");
+                classes.insert("placeholder:text-gray-400");
                 classes.insert("border");
                 classes.insert("border-gray-100");
                 classes.insert("px-2");

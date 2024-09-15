@@ -1,6 +1,8 @@
+pub mod post_create;
 pub mod posts;
 
 use anyhow::Result;
+use post_create::post_create::PostCreateInput;
 use pxid::Pxid;
 use reqwest::{Client, Url};
 
@@ -15,6 +17,10 @@ impl PostClient {
             domain,
             client: Client::new(),
         }
+    }
+
+    pub async fn post_create(&self, input: PostCreateInput) -> Result<post_create::PostCreate> {
+        post_create::posts(self, input).await
     }
 
     pub async fn posts(

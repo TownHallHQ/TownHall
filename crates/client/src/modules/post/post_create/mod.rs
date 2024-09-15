@@ -22,11 +22,11 @@ pub struct PostCreate {
     pub error: Option<PostCreatePostCreateError>,
 }
 
-pub async fn posts(public_client: &PostClient, input: PostCreateInput) -> Result<PostCreate> {
-    let url = public_client.domain.join(GRAPHQL_PATH)?;
+pub async fn posts(post_client: &PostClient, input: PostCreateInput) -> Result<PostCreate> {
+    let url = post_client.domain.join(GRAPHQL_PATH)?;
     let variables = Variables { input };
 
-    let res = post_graphql::<PostCreate, _>(&public_client.client, url, variables)
+    let res = post_graphql::<PostCreate, _>(&post_client.client, url, variables)
         .await
         .map_err(|err| anyhow!("Failed to create post. {err}"))?;
     let data = res.data.unwrap().post_create;

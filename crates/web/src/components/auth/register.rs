@@ -8,7 +8,7 @@ use leptos::{
 use townhall_client::Client;
 use townhall_types::user::Email;
 
-use crate::components::button::{Button, ButtonType, ButtonVariant};
+use crate::components::button::{Button, ButtonType};
 use crate::components::text_field::{TextField, TextFieldType};
 
 #[component]

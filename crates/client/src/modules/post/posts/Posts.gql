@@ -1,0 +1,34 @@
+query Posts($after: Pxid, $before: Pxid, $first: Int, $last: Int) {
+  posts(after: $after, before: $before, first: $first, last: $last) {
+    edges {
+      node {
+        id
+        title
+        content
+        createdAt
+        updatedAt
+        author {
+          id
+          name
+          surname
+          username
+          email
+          createdAt
+          updatedAt
+          avatar {
+            id
+            url
+          }
+        }
+      }
+      cursor
+    }
+    totalCount
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}

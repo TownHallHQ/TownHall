@@ -39,7 +39,7 @@ pub fn Button(
     #[prop(optional, into)] full_width: MaybeProp<bool>,
     #[prop(optional, into)] variant: MaybeProp<ButtonVariant>,
     #[prop(optional)] children: Option<Children>,
-    #[prop(optional, into)] on_click: MaybeProp<Rc<dyn Fn(MouseEvent) -> () + 'static>>,
+    #[prop(optional, into)] on_click: MaybeProp<Rc<dyn Fn(MouseEvent) + 'static>>,
     #[prop(optional, into)] r#type: ButtonType,
 ) -> impl IntoView {
     let custom_classes = class.get();

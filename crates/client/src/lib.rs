@@ -10,9 +10,11 @@ use anyhow::{anyhow, Result};
 use reqwest::Url;
 
 use auth::AuthClient;
+use post::PostClient;
 
 pub struct Client {
     pub auth: AuthClient,
+    pub post: PostClient,
 }
 
 impl Client {
@@ -24,6 +26,7 @@ impl Client {
 
         Ok(Self {
             auth: AuthClient::new(domain.clone()),
+            post: PostClient::new(domain.clone()),
         })
     }
 }

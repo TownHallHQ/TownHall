@@ -5,7 +5,7 @@ use leptos::{
 
 use townhall_client::Client;
 
-use crate::components::button::{Button, ButtonType, ButtonVariant};
+use crate::components::button::{Button, ButtonType};
 use crate::components::text_field::{TextField, TextFieldType};
 
 #[component]

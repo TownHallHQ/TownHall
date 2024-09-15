@@ -1,4 +1,4 @@
-query Posts(after: String, before: String, first: Int, last: Int) {
+query Posts($after: Pxid, $before: Pxid, $first: Int, $last: Int) {
   posts(after: $after, before: $before, first: $first, last: $last) {
     edges {
       node {

@@ -1,0 +1,31 @@
+mutation PostCreate($input: PostCreateInput!) {
+  postCreate(input: $input) {
+    post {
+      id
+      authorId
+      parentId
+      head
+      title
+      content
+      createdAt
+      updatedAt
+      author {
+        id
+        name
+        surname
+        username
+        email
+        createdAt
+        updatedAt
+        avatar {
+          id
+          url
+        }
+      }
+    }
+    error {
+      code
+      message
+    }
+  }
+}

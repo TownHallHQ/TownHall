@@ -1,10 +1,11 @@
 pub mod post_create;
 pub mod posts;
 
-use crate::post::post_create::post_create::PostCreateInput;
 use anyhow::Result;
 use pxid::Pxid;
 use reqwest::{Client, Url};
+
+use crate::post::post_create::post_create::PostCreateInput;
 
 pub struct PostClient {
     client: Client,

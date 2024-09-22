@@ -1,9 +1,9 @@
 use anyhow::{anyhow, bail, Result};
 use graphql_client::reqwest::post_graphql;
 use graphql_client::GraphQLQuery;
-use pxid::Pxid;
-
 use posts::{PostsPostsEdges, PostsPostsPageInfo, Variables};
+use pxid::Pxid;
+use serde::Serialize;
 
 use crate::{DateTime, GRAPHQL_PATH};
 
@@ -11,7 +11,7 @@ use super::PostClient;
 
 #[derive(GraphQLQuery)]
 #[graphql(
-    response_derives = "Clone,Debug,Deserialize",
+    response_derives = "Clone,Debug,Deserialize,Serializable",
     schema_path = "schema.json",
     query_path = "src/modules/post/posts/Posts.gql"
 )]

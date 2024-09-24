@@ -16,8 +16,9 @@ name = "townhall-web"
 path = "src/bin/main.rs"
 
 [dependencies]
+chrono = { workspace = true }
 anyhow = { workspace = true }
-leptos =  { workspace = true, features = ["csr"] }
+leptos = { workspace = true, features = ["csr"] }
 leptos_meta = { workspace = true, features = ["csr"] }
 leptos_router = { workspace = true, features = ["csr"] }
 leptos-use = { workspace = true }

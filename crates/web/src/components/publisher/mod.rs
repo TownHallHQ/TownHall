@@ -16,17 +16,17 @@ pub fn Publisher() -> impl IntoView {
     let send_post_action = create_action(move |data: &(String, String)| {
         let (title, content) = data;
 
-        let title = title.to_owned();
+        let title = title.trim().to_owned();
 
         if title.is_empty() {
             creation_error.set(Some("Title is required".to_owned()));
             ()
         }
 
-        let content = if content.trim().is_empty() {
+        let content = if content.is_empty() {
             None
         } else {
-            Some(content.to_owned())
+            Some(content.trim().to_owned())
         };
 
         async move {

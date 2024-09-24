@@ -51,7 +51,7 @@ pub fn Publisher() -> impl IntoView {
                             send_post_action.dispatch((title, content));
                         }>
                     <div class="w-full h-12">
-                        <TextField class="w-full" name="title" value=text_title placeholder="Title" />
+                        <TextField class="w-full" name="title" value=text_title placeholder="Title" required=true />
                     </div>
                     <div class="w-full h-12">
                         <TextField class="w-full" name="content" value=text_content placeholder="Content" />

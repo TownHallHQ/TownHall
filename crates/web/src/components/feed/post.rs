@@ -15,16 +15,18 @@ pub fn Post(post: PostsPostsEdgesNode) -> impl IntoView {
         .num_seconds();
 
     let format_string = match diff_in_seconds {
+        // More than 3 days
         _ if diff_in_seconds > 86400 * LONG_TO_SHORT_CUTOFF_DAYS => "%m/%d/%y".to_string(), // More than 3 days
         diff_in_seconds if diff_in_seconds > 86400 => {
             format!("{} Days ago", diff_in_seconds / 86400)
-        } // Within 3 days
+        }
+        // Within 3 days
         diff_in_seconds if diff_in_seconds > 3600 => {
             format!("{} hours ago", diff_in_seconds / 3600)
-        } // Within 1 day
+        } // Within 1 hour
         diff_in_seconds if diff_in_seconds > 60 => {
             format!("{} minutes ago", diff_in_seconds / 60)
-        } // Within 1 hour
+        } // Within 1 minute
         _ => format!("{} seconds ago", diff_in_seconds),
     };
 

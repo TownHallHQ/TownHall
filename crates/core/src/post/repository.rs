@@ -3,8 +3,8 @@ use std::str::FromStr;
 use chrono::{DateTime, Utc};
 use pxid::Pxid;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, EntityTrait, PaginatorTrait, QueryFilter, QuerySelect, Set,
-    TransactionTrait,
+    ActiveModelTrait, ColumnTrait, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder,
+    QuerySelect, Set, TransactionTrait,
 };
 use serde::{Deserialize, Serialize};
 
@@ -12,6 +12,12 @@ use crate::post::error::{PostError, Result};
 use crate::shared::database::Database;
 use crate::shared::pagination::Pagination;
 use crate::shared::query_set::QuerySet;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum PostSortBy {
+    CreatedAtAsc,
+    CreatedAtDesc,
+}
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
 pub struct PostRecord {
@@ -43,6 +49,7 @@ pub struct PostRepository {
 #[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
 pub struct PostFilter {
     pub author_id: Option<Pxid>,
+    pub sort_by: Option<PostSortBy>,
 }
 
 impl PostRepository {
@@ -76,6 +83,18 @@ impl PostRepository {
                     if let Some(filter) = filter {
                         if let Some(id) = filter.author_id {
                             query = query.filter(entity::post::Column::AuthorId.eq(id.to_string()));
+                        }
+
+                        match filter.sort_by {
+                            Some(PostSortBy::CreatedAtAsc) => {
+                                query = query.order_by_asc(entity::post::Column::CreatedAt);
+                            }
+                            Some(PostSortBy::CreatedAtDesc) => {
+                                query = query.order_by_desc(entity::post::Column::CreatedAt);
+                            }
+                            None => {
+                                query = query.order_by_desc(entity::post::Column::CreatedAt);
+                            }
                         }
                     }
 

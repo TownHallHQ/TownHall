@@ -94,6 +94,7 @@ impl User {
                         Some(pagination),
                         Some(PostFilter {
                             author_id: Some(self.id),
+                            sort_by: None,
                         }),
                     )
                     .await?;

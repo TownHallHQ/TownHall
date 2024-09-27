@@ -40,6 +40,7 @@ pub fn TextField(
     #[prop(optional, into)] class: TextProp,
     #[prop(optional, into)] variant: MaybeProp<TextFieldVariant>,
     #[prop(optional, into)] r#type: TextFieldType,
+    #[prop(optional, into)] required: MaybeProp<bool>,
     #[prop(optional, into)] disabled: MaybeProp<bool>,
     #[prop(optional, into)] full_width: MaybeProp<bool>,
 ) -> impl IntoView {
@@ -103,6 +104,7 @@ pub fn TextField(
                 placeholder=placeholder
                 class=class_names
                 disabled=disabled
+                required=required
                 on:change=handle_change
                 on:input=handle_input
             />

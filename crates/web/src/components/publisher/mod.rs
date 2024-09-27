@@ -30,7 +30,7 @@ pub fn Publisher() -> impl IntoView {
                 Some(content.trim().to_owned())
             };
 
-            Client::new("http://127.0.0.1:8080")
+            let result = Client::new("http://127.0.0.1:8080")
                 .unwrap()
                 .post
                 .post_create(PostCreateInput {
@@ -39,6 +39,10 @@ pub fn Publisher() -> impl IntoView {
                     parent_id: None,
                 })
                 .await;
+
+            if let Err(err) = result {
+                creation_error.set(Some(err.to_string()));
+            }
         }
     });
 
@@ -58,9 +62,7 @@ pub fn Publisher() -> impl IntoView {
                         }>
                     <div class="w-full h-12">
                         <TextField class="w-full" name="title" value=text_title placeholder="Title" required=true />
-                        <Show when=move || creation_error.get().is_some() fallback=move || ()>
-                            <p class="text-red-500 mb-3">{creation_error.get().unwrap()}</p>
-                        </Show>
+
                     </div>
                     <div class="w-full h-12">
                         <TextField class="w-full" name="content" value=text_content placeholder="Content" />
@@ -68,6 +70,9 @@ pub fn Publisher() -> impl IntoView {
                     <div class="flex justify-end items-center">
                         <button type="submit">Post</button>
                     </div>
+                    <Show when=move || creation_error.get().is_some() fallback=move || ()>
+                        <p class="text-red-500 mb-3">{creation_error.get().unwrap()}</p>
+                    </Show>
                 </form>
             </div>
         </div>

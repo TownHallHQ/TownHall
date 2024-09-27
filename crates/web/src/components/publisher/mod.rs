@@ -14,22 +14,22 @@ pub fn Publisher() -> impl IntoView {
     let creation_error: RwSignal<Option<String>> = create_rw_signal(None);
 
     let send_post_action = create_action(move |data: &(String, String)| {
-        let (title, content) = data;
-
-        let title = title.trim().to_owned();
-
-        if title.is_empty() {
-            creation_error.set(Some("Title is required".to_owned()));
-            ()
-        }
-
-        let content = if content.is_empty() {
-            None
-        } else {
-            Some(content.trim().to_owned())
-        };
+        let (title, content) = data.clone();
 
         async move {
+            let title = title.trim().to_owned();
+
+            if title.is_empty() {
+                creation_error.set(Some("Title is required".to_owned()));
+                return;
+            }
+
+            let content = if content.is_empty() {
+                None
+            } else {
+                Some(content.trim().to_owned())
+            };
+
             Client::new("http://127.0.0.1:8080")
                 .unwrap()
                 .post
@@ -38,7 +38,7 @@ pub fn Publisher() -> impl IntoView {
                     content,
                     parent_id: None,
                 })
-                .await
+                .await;
         }
     });
 

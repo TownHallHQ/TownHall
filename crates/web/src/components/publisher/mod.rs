@@ -34,8 +34,8 @@ pub fn Publisher() -> impl IntoView {
                 .unwrap()
                 .post
                 .post_create(PostCreateInput {
-                    title: title,
-                    content: content,
+                    title,
+                    content,
                     parent_id: None,
                 })
                 .await
